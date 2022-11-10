@@ -1,6 +1,6 @@
 {
     "name": "cloud-castle/equifax-report",
-    "description": "test",
+    "description": "Библиотека для генерации xml файлов кредитных отчетов для БКИ Equifax",
     "type": "library",
     "license": "MIT",
     "autoload": {
