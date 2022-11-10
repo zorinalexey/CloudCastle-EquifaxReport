@@ -1,0 +1,21 @@
+{
+    "name": "cloud-castle/equifax-report",
+    "description": "test",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CloudCastle\\EquifaxReport\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Алексей Зорин",
+            "email": "zorinalexey59292@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "cloud-castle/equifax-config": "^1.0"
+    }
+}

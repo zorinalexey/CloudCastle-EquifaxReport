@@ -1,3 +1,3 @@
-# CloudCastle-EquifaxConfig
+# CloudCastle-EquifaxReport
 
-Библиотека для конфигурирования библиотек cloud-castle/equifax-scoring и cloud-castle/equifax-report# CloudCastle-EquifaxReport
+Библиотека для генерации xml файлов кредитных отчетов для БКИ Equifax
