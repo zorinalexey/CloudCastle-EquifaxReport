@@ -15,9 +15,9 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class MaterialGuaranteeSource
 {
 
-    public function __construct($MaterialGuaranteeSource)
+    public function __construct(array $materialGuaranteeSource)
     {
-        
+
     }
 
 }

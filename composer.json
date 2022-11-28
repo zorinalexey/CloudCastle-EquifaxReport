@@ -5,12 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "CloudCastle\\EquifaxReport\\": "report/",
-            "CloudCastle\\EquifaxConfig\\":"config/",
-            "CloudCastle\\EquifaxLibrary\\":"library/",
-            "CloudCastle\\FileSystem\\":"filesystem/",
-            "CloudCastle\\Helpers\\":"helpers/",
-            "CloudCastle\\XmlGenerator\\":"xml-generator/"
+            "CloudCastle\\EquifaxReport\\": "report/"
         }
     },
     "authors": [
@@ -21,5 +16,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "cloud-castle/equifax-library": "^0.1",
+        "cloud-castle/equifax-config": "^1.0",
+        "cloud-castle/xml-generator": "^1.0",
+        "cloud-castle/file-system": "^1.0",
+        "cloud-castle/helpers": "^1.0"
     }
 }

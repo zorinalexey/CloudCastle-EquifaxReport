@@ -13,14 +13,6 @@ use CloudCastle\EquifaxReport\ReportSetters\FullCost;
 use CloudCastle\EquifaxReport\ReportSetters\ContractChanges;
 use CloudCastle\EquifaxReport\ReportSetters\CredStartDebt;
 use CloudCastle\EquifaxReport\ReportSetters\Debt;
-use CloudCastle\EquifaxReport\ReportSetters\DebtCurrent;
-use CloudCastle\EquifaxReport\ReportSetters\DebtOverdue;
-use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
-use CloudCastle\EquifaxReport\ReportSetters\Guarantees;
-use CloudCastle\EquifaxReport\ReportSetters\Collaterals;
-use CloudCastle\EquifaxReport\ReportSetters\Payments;
-use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSource;
-use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSubject;
 
 /**
  * Класс ReplyGenerator
@@ -147,101 +139,12 @@ class ReplyGenerator
             ->setFullCost($contract->full_cost, $generator)
             ->setContractChanges($contract->contract_changes, $generator)
             ->setCredStartDebt($contract->cred_start_debt, $generator)
-            ->setDebt($contract->debt, $generator)
-            ->setDebtCurrent($contract->debt_current, $generator)
-            ->setDebtOverdue($contract->debt_overdue, $generator)
-            ->setPayments($contract->payments, $generator)
-            ->setAveragePayment($contract->average_payment, $generator)
-            ->setMaterialGuaranteeSource($contract->material_guarantee_source, $generator)
-            ->setMaterialGuaranteeSubject($contract->material_guarantee_subject, $generator)
-            ->setCollaterals($contract->collaterals, $generator)
-            ->setGuarantees($contract->guarantees, $generator)
-        ;
+            ->setDebt($contract->debt, $generator);
         $generator->closeElement();
         return $this;
     }
 
-    private function setGuarantees(Guarantees $guarantees, XmlGenerator $generator): self
-    {
-        if ($guarantees) {
-            $generator->startElement('guarantees');
-            $this->setData($guarantees, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setCollaterals(Collaterals $collaterals, XmlGenerator $generator): self
-    {
-        if ($collaterals) {
-            $generator->startElement('collaterals');
-            $this->setData($collaterals, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setPayments(Payments $payments, XmlGenerator $generator): self
-    {
-        if ($payments) {
-            $generator->startElement('payments');
-            $this->setData($payments, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setMaterialGuaranteeSource(MaterialGuaranteeSource $material_guarantee_source, XmlGenerator $generator): self
-    {
-        if ($material_guarantee_source) {
-            $generator->startElement('material_guarantee_source');
-            $this->setData($material_guarantee_source, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setMaterialGuaranteeSubject(MaterialGuaranteeSubject $material_guarantee_subject, XmlGenerator $generator): self
-    {
-        if ($material_guarantee_subject) {
-            $generator->startElement('material_guarantee_subject');
-            $this->setData($material_guarantee_subject, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setAveragePayment(AveragePayment $average_payment, XmlGenerator $generator): self
-    {
-        if ($average_payment) {
-            $generator->startElement('average_payment');
-            $this->setData($average_payment, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setDebtOverdue(DebtOverdue $debt_overdue, XmlGenerator $generator): self
-    {
-        if ($debt_overdue) {
-            $generator->startElement('debt_overdue');
-            $this->setData($debt_overdue, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setDebtCurrent(DebtCurrent $debt_current, XmlGenerator $generator): self
-    {
-        if ($debt_current) {
-            $generator->startElement('debt_current');
-            $this->setData($debt_current, $generator);
-            $generator->closeElement();
-        }
-        return $this;
-    }
-
-    private function setDebt(Debt $debt, XmlGenerator $generator): self
+    private function setDebt(Debt $debt, XmlGenerator $generator)
     {
         if ($debt) {
             $generator->startElement('debt');
@@ -251,7 +154,7 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setCredStartDebt(CredStartDebt $cred_start_debt, XmlGenerator $generator): self
+    private function setCredStartDebt(CredStartDebt $cred_start_debt, XmlGenerator $generator)
     {
         if ($cred_start_debt) {
             $generator->startElement('cred_start_debt');
@@ -261,7 +164,7 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setContractChanges(ContractChanges $contract_changes, XmlGenerator $generator): self
+    private function setContractChanges(ContractChanges $contract_changes, XmlGenerator $generator)
     {
         if ($contract_changes) {
             $generator->startElement('contract_changes');
@@ -291,7 +194,7 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setJointDebtors(JointDebtors $joint_debtors, XmlGenerator $generator): self
+    private function setJointDebtors(JointDebtors $joint_debtors, XmlGenerator $generator)
     {
         if ($joint_debtors) {
             $generator->startElement('joint_debtors');
@@ -321,12 +224,11 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setData($data, XmlGenerator $generator): self
+    private function setData($data, XmlGenerator $generator)
     {
         foreach ($data as $attr => $value) {
             $generator->addElement($attr, $value);
         }
-        return $this;
     }
 
 }

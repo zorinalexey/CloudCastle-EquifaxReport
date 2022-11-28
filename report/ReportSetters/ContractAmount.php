@@ -19,7 +19,7 @@ final class ContractAmount
      * Сумма обязательства
      * @var int
      */
-    public ?int $sum = null;
+    public ?int $sum= null;
 
     /**
      * Валюта обязательства
@@ -31,7 +31,7 @@ final class ContractAmount
      * Сумма обеспечиваемого обязательства
      * @var int
      */
-    public ?int $security_sum = null;
+    public ?int $security_sum= null;
 
     public function __construct(array $contractAmount)
     {

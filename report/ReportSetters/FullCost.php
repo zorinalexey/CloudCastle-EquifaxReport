@@ -19,13 +19,13 @@ final class FullCost
      * Полная стоимость кредита (займа) в процентах годовых
      * @var int
      */
-    public ?int $percent = null;
+    public ?int $percent= null;
 
     /**
      * Полная стоимость кредита (займа) в денежном выражении
      * @var int
      */
-    public ?int $sum = null;
+    public ?int $sum= null;
 
     /**
      * Дата расчета полной стоимости кредита (займа)

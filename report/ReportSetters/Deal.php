@@ -19,7 +19,7 @@ final class Deal
      * Код вида участия в сделке
      * @var string|null
      */
-    public ?int $ratio = null;
+    public ?int $ratio= null;
 
     /**
      * Дата совершения сделки
@@ -37,19 +37,19 @@ final class Deal
      * Код типа сделки
      * @var int
      */
-    public ?int $category = null;
+    public ?int $category= null;
 
     /**
      * Код вида займа (кредита)
      * @var int
      */
-    public ?int $type = null;
+    public ?int $type= null;
 
     /**
      * Код цели займа (кредита)
      * @var int
      */
-    public ?int $purpose = null;
+    public ?int $purpose= null;
 
     /**
      * Признак потребительского кредита (займа)
@@ -61,13 +61,13 @@ final class Deal
      * Признак использования платежной карты
      * @var int
      */
-    public ?int $sign_credit_card = null;
+    public ?int $sign_credit_card= null;
 
     /**
      * Признак возникновения обязательства в результате новации
      * @var int
      */
-    public ?int $sign_renovation = null;
+    public ?int $sign_renovation= null;
 
     /**
      * Признак денежного обязательства источника

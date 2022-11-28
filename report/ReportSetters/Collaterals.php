@@ -15,9 +15,9 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class Collaterals
 {
 
-    public function __construct($Collaterals)
+    public function __construct(array $collaterals)
     {
-        
+
     }
 
 }

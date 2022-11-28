@@ -15,9 +15,9 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class Payments
 {
 
-    public function __construct($Payments)
+    public function __construct(array $payments)
     {
-        
+
     }
 
 }
