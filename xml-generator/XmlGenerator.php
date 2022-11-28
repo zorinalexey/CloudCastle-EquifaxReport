@@ -163,7 +163,7 @@ class XmlGenerator
      */
     public function addElement($name, $content, array $attribites = [], $comment = null): self
     {
-        if ($name AND $content) {
+        if ($name AND $content !== null) {
             $this->startElement($name, $attribites, $comment);
             $this->obj->text((string)$content);
             $this->closeElement();

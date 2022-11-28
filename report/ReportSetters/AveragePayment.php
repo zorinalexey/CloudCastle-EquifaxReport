@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace CloudCastle\EquifaxReport\ReportSetters;
 
+use CloudCastle\Helpers\Format;
+
 /**
  * Класс AveragePayment
  * @version 0.0.1
@@ -15,9 +17,26 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class AveragePayment
 {
 
-    public function __construct($AveragePayment)
+    /**
+     * Величина среднемесячного платежа
+     * @var int|null
+     */
+    public ?int $sum = null;
+
+    /**
+     * Дата расчета величины среднемесячного платежа
+     * @var string|null
+     */
+    public ?string $date = null;
+
+    public function __construct(array $averagePayment)
     {
-        
+        if (isset($averagePayment['date'])) {
+            $this->date = Format::date($averagePayment['date']);
+        }
+        if (isset($averagePayment['sum'])) {
+            $this->sum = (int)$averagePayment['sum'];
+        }
     }
 
 }

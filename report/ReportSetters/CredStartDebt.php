@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace CloudCastle\EquifaxReport\ReportSetters;
 
+use CloudCastle\Helpers\Format;
+
 /**
  * Класс CredStartDebt
  * @version 0.0.1
@@ -15,9 +17,15 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class CredStartDebt
 {
 
-    public function __construct($CredStartDebt)
+    /**
+     * Дата передачи финансирования субъекту или возникновения обеспечения исполнения обязательства
+     * @var string|null
+     */
+    public ?string $date = null;
+
+    public function __construct(?string $credStartDebt = null)
     {
-        
+        $this->date = Format::date($credStartDebt);
     }
 
 }

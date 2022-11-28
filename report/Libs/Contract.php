@@ -32,7 +32,7 @@ use CloudCastle\EquifaxReport\ReportSetters\Guarantees;
 class Contract
 {
 
-    private ?string $uid = null;
+    public ?string $uid = null;
     public ?Deal $deal;
     public ?ContractAmount $contract_amount;
     public ?CredStartDebt $cred_start_debt;

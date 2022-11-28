@@ -15,9 +15,27 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class FullCost
 {
 
-    public function __construct($FullCost)
+    /**
+     * Полная стоимость кредита (займа) в процентах годовых
+     * @var int
+     */
+    public ?int $percent = null;
+
+    /**
+     * Полная стоимость кредита (займа) в денежном выражении
+     * @var int
+     */
+    public ?int $sum = null;
+
+    /**
+     * Дата расчета полной стоимости кредита (займа)
+     * @var string|null
+     */
+    public ?string $date = null;
+
+    public function __construct(array $fullCost)
     {
-        
+
     }
 
 }

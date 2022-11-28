@@ -160,12 +160,22 @@ class Report
         return $this->incapacity;
     }
 
+    /**
+     * Установка данных о сделке
+     * @param string $uid
+     * @param array $contract
+     * @return self
+     */
     public function setContract(string $uid, array $contract): self
     {
         $this->contract = new Contract($uid, $contract);
         return $this;
     }
 
+    /**
+     * Получить данные о сделке
+     * @return Contract
+     */
     public function getContract(): Contract
     {
         return $this->contract;

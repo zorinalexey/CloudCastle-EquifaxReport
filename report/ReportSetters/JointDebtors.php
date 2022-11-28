@@ -15,9 +15,24 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class JointDebtors
 {
 
-    public function __construct($JointDebtors)
+    /**
+     * Признак наличия солидарных должников
+     * @var int
+     */
+    public ?int $sign = null;
+
+    /**
+     * Число солидарных должников
+     * @var int
+     */
+    public ?int $count = null;
+
+    public function __construct(int $jointDebtors = 0)
     {
-        
+        if ($jointDebtors) {
+            $this->sign = 1;
+            $this->count = $jointDebtors;
+        }
     }
 
 }

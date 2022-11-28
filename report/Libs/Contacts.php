@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
+use CloudCastle\Helpers\Format;
+
 /**
  * Класс Contacts
  * @version 0.0.1
@@ -21,9 +23,9 @@ class Contacts
 
     public function __construct(?string $phone = null, ?string $email = null, ?string $phoneComment = null)
     {
-        $this->setPhone($phone);
-        $this->setEmail($email);
-        $this->setComment($phoneComment);
+        $this->setPhone((string)$phone);
+        $this->setEmail((string)$email);
+        $this->setComment((string)$phoneComment);
     }
 
     /**
@@ -55,9 +57,7 @@ class Contacts
 
     private function setPhone($phone): void
     {
-        if ($phone) {
-            $this->phone = preg_replace('~([^\d])~ui', '', $phone);
-        }
+        $this->phone = Format::phone($phone);
     }
 
     private function setEmail($email): void

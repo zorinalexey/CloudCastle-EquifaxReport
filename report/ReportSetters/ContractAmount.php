@@ -15,9 +15,27 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class ContractAmount
 {
 
-    public function __construct($ContractAmount)
+    /**
+     * Сумма обязательства
+     * @var int
+     */
+    public ?int $sum = null;
+
+    /**
+     * Валюта обязательства
+     * @var int
+     */
+    public ?int $currency = 643;
+
+    /**
+     * Сумма обеспечиваемого обязательства
+     * @var int
+     */
+    public ?int $security_sum = null;
+
+    public function __construct(array $contractAmount)
     {
-        
+
     }
 
 }
