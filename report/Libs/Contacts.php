@@ -21,22 +21,34 @@ class Contacts
 
     public function __construct(?string $phone = null, ?string $email = null, ?string $phoneComment = null)
     {
-        $this->phone = $this->setPhone($phone);
-        $this->email = $this->setEmail($email);
-        $this->comment = $this->setComment($phoneComment);
+        $this->setPhone($phone);
+        $this->setEmail($email);
+        $this->setComment($phoneComment);
     }
 
-    public function getPhone(): string
+    /**
+     *
+     * @return string|null
+     */
+    public function getPhone()
     {
         return $this->phone;
     }
 
-    public function getEmail(): string
+    /**
+     *
+     * @return string|null
+     */
+    public function getEmail()
     {
         return $this->email;
     }
 
-    public function getComment(): string
+    /**
+     *
+     * @return string|null
+     */
+    public function getComment()
     {
         return $this->comment;
     }
@@ -50,7 +62,7 @@ class Contacts
 
     private function setEmail($email): void
     {
-        if (filter_var($email,  FILTER_VALIDATE_EMAIL)) {
+        if (preg_match('~^([\w\.-]+)@([\w\.-]+)\.([\w\.-]+)~ui', $email)) {
             $this->email = $email;
         }
     }

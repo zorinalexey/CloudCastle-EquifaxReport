@@ -35,9 +35,9 @@ class Client extends Debug implements ClientInterface
         'department_code' => null,
         'end_date' => null
     ];
-    private $birthPlace;
-    private $birthCountry;
-    private $birthDate;
+    private ?string $birthPlace;
+    private ?string $birthCountry;
+    private ?string $birthDate;
     public ?Client $history;
     private array $inn = [
         'code' => 1,

@@ -20,38 +20,35 @@ use CloudCastle\EquifaxReport\Libs\Contacts;
 class Report
 {
 
-    private array $addr_reg = [
-        'reg_code' => 1,
-        'index' => false,
-        'country' => false,
-        'fias' => false,
-        'okato' => false,
-        'other_statement' => false,
-        'street' => false,
-        'house' => false,
-        'domain' => false,
-        'block' => false,
-        'build' => false,
-        'apartment' => false,
-        'reg_date' => false,
-        'reg_place' => false,
-        'reg_department_code' => false
-    ];
-    private array $addr_fact = [
-        'index' => false,
-        'country' => false,
-        'fias' => false,
-        'okato' => false,
-        'other_statement' => false,
-        'street' => false,
-        'house' => false,
-        'domain' => false,
-        'block' => false,
-        'build' => false,
-        'apartment' => false
-    ];
+    /**
+     * Сведения о дееспособности
+     * @var Incapacity|null
+     */
     private ?Incapacity $incapacity;
+
+    /**
+     * Сведения об обязательстве субъекта кредитной истории
+     * @var Contract|null
+     */
     private ?Contract $contract;
+
+    /**
+     * Контактные данные
+     * @var Contacts|null
+     */
+    private ?Contacts $contacts;
+
+    /**
+     * Регистрация физического лица по месту жительства или пребывания
+     * @var Address|null
+     */
+    private $addr_reg;
+
+    /**
+     * Фактическое место жительства
+     * @var Address|null
+     */
+    private $addr_fact;
 
     /**
      * Установить данные об адресе регистрации
@@ -80,7 +77,7 @@ class Report
 
     /**
      * Получить адрес регистрации
-     * @return array
+     * @return  Address|null
      */
     public function getAddrReg(): Address
     {
@@ -108,15 +105,15 @@ class Report
      */
     public function setAddrFact(array $addres): self
     {
-        $this->addr_reg = new Address($addres);
+        $this->addr_fact = new Address($addres);
         return $this;
     }
 
     /**
      * Получить адрес проживания (фактический)
-     * @return array
+     * @return Address|null
      */
-    public function getAddrFact(): Address
+    public function getAddrFact()
     {
         return $this->addr_fact;
     }

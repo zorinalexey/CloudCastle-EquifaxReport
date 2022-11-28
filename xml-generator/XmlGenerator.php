@@ -161,7 +161,7 @@ class XmlGenerator
      * @param string|null $comment Коментарий элемента
      * @return self
      */
-    public function addElement(string $name, $content = false, array $attribites = [], ?string $comment = null): self
+    public function addElement($name, $content, array $attribites = [], $comment = null): self
     {
         if ($name AND $content) {
             $this->startElement($name, $attribites, $comment);

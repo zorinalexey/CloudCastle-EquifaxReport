@@ -91,8 +91,8 @@ class ReplyGenerator
     private function setContacts(Report $report, XmlGenerator $generator): self
     {
         $contacts = $report->getContacts();
-        $generator->startElement('contacts');
         $phone = $contacts->getPhone();
+        $generator->startElement('contacts');
         if ($phone) {
             $generator->startElement('phone')
                 ->addElement('number', $phone)
@@ -119,7 +119,7 @@ class ReplyGenerator
 
     private function setContract(Report $report, XmlGenerator $generator)
     {
-
+        var_dump($report->getContract());
     }
 
 }
