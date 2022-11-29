@@ -16,7 +16,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "cloud-castle/equifax-library": "^0.1",
+        "cloud-castle/equifax-library": "^1.0",
         "cloud-castle/equifax-config": "^1.0",
         "cloud-castle/xml-generator": "^1.0",
         "cloud-castle/file-system": "^1.0",
