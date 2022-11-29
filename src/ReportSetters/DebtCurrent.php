@@ -17,9 +17,15 @@ final class DebtCurrent
 
     use Helper;
 
+    public ?string $date = null;
+    public int $sum = 0,
+        $op_sum = 0,
+        $percent_sum = 0,
+        $other_sum = 0;
+
     public function __construct(array $debtCurrent)
     {
-
+        $this->setAttributes($debtCurrent);
     }
 
 }

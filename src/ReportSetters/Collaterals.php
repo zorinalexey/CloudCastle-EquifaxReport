@@ -15,9 +15,11 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class Collaterals
 {
 
+    use Helper;
+
     public function __construct(array $collaterals)
     {
-
+        $this->setAttributes($collaterals);
     }
 
 }

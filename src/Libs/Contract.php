@@ -58,27 +58,51 @@ class Contract
     public function __construct(string $uid, array $contract)
     {
         $this->uid = $uid;
-        $this->setContractInfo($contract);
+        $this->__setDefautValues();
+        $this->__setContractInfo($contract);
     }
 
-    private function setContractInfo(array $contract): void
+    private function __setContractInfo(array $contract): void
     {
         foreach ($contract as $key => $value) {
-            $className = $this->getObjName($key);
-//            var_dump($className . ' ---------- ' . $key);
+            $className = $this->__getObjName($key);
             if (class_exists($className)) {
                 $this->$key = new $className($value);
             }
         }
     }
 
-    public function getObjName(string $key): string
+    private function __getObjName(string $key): string
     {
         $name = '\CloudCastle\EquifaxReport\ReportSetters\\';
         foreach (explode('_', $key) as $value) {
             $name .= ucfirst(strtolower($value));
         }
         return $name;
+    }
+
+    private function __setDefautValues()
+    {
+        $data = [
+            'deal' => [],
+            'contract_amount' => [],
+            'cred_start_debt' => '',
+            'joint_debtors' => 0,
+            'payment_terms' => [],
+            'full_cost' => [],
+            'contract_changes' => [],
+            'debt' => [],
+            'debt_current' => [],
+            'debt_overdue' => [],
+            'payments' => [],
+            'average_payment' => [],
+            'average_payment' => [],
+            'material_guarantee_source' => [],
+            'material_guarantee_subject' => [],
+            'collaterals' => [],
+            'guarantees' => [],
+        ];
+        $this->__setContractInfo($data);
     }
 
 }

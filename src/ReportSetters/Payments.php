@@ -17,9 +17,20 @@ final class Payments
 
     use Helper;
 
+    public ?string $last_payout_date = null;
+    public ?int $last_payout_sum = 0,
+        $last_payout_op_sum = 0,
+        $last_payout_percent_sum = 0,
+        $last_payout_other_sum = 0,
+        $paid_sum = 0,
+        $paid_op_sum = 0,
+        $paid_percent_sum = 0,
+        $paid_other_sum = 0,
+        $overdue_day = 0;
+
     public function __construct(array $payments)
     {
-
+        $this->setAttributes($payments);
     }
 
 }

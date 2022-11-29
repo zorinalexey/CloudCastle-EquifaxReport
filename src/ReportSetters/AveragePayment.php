@@ -17,9 +17,12 @@ final class AveragePayment
 
     use Helper;
 
+    public int $sum = 0;
+    public ?string $date;
+
     public function __construct(array $averagePayment)
     {
-
+        $this->setAttributes($averagePayment);
     }
 
 }

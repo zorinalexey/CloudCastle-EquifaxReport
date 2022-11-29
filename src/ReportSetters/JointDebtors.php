@@ -19,13 +19,13 @@ final class JointDebtors
      * Признак наличия солидарных должников
      * @var int
      */
-    public ?int $sign= null;
+    public ?int $sign = null;
 
     /**
      * Число солидарных должников
      * @var int
      */
-    public ?int $count= null;
+    public ?int $count = null;
 
     public function __construct(int $jointDebtors = 0)
     {

@@ -218,7 +218,7 @@ $report->setAddrReg([
                 /*
                  * Код вида участия в сделке
                  */
-                'ratio' => '',
+                'ratio' => 'Заемщик',
                 /*
                  * Дата совершения сделки
                  */
@@ -226,7 +226,7 @@ $report->setAddrReg([
                 /*
                  * Код типа сделки
                  */
-                'category' => '',
+                'category' => 'Договор займа (кредита)',
                 /*
                  * Код вида займа (кредита)
                  */
@@ -296,7 +296,7 @@ $report->setAddrReg([
                 /*
                  * Дата ближайшего следующего платежа по основному долгу
                  */
-                'op_next_payout_date' => date(strtotime('+14 days')),
+                'op_next_payout_date' => date('d.m.Y', strtotime('+14 days')),
                 /*
                  * Сумма ближайшего следующего платежа по процентам
                  */
@@ -304,11 +304,11 @@ $report->setAddrReg([
                 /*
                  * Дата ближайшего следующего платежа по процентам
                  */
-                'percent_next_payout_date' => date(strtotime('+14 days')),
+                'percent_next_payout_date' => date('d.m.Y', strtotime('+14 days')),
                 /*
-                 * Код частоты платежей
+                 * Частота платежей
                  */
-                'regularity' => '4 раза в месяц',
+                'regularity' => 'Более четырех раз в месяц',
                 /*
                  * Сумма минимального платежа по кредитной карте
                  */
@@ -320,7 +320,7 @@ $report->setAddrReg([
                 /*
                  * Дата окончания беспроцентного периода
                  */
-                'grace_end_date' => date(strtotime('+15 days')),
+                'grace_end_date' => date('d.m.Y', strtotime('+15 days')),
                 /*
                  * Дата окончания срока уплаты процентов
                  */
@@ -433,9 +433,9 @@ $report->setAddrReg([
                  */
                 'other_sum' => 200,
                 /*
-                 * Признак неподтвержденного льготного периода
+                 * Признак неподтвержденного льготного периода. false - льготный период не установлен , true - льготный период установлен
                  */
-                'sign_unaccepted_grace_period' => 1
+                'sign_unaccepted_grace_period' => false
             ],
             /*
              * Сведения о срочной задолженности

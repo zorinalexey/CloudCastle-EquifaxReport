@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace CloudCastle\EquifaxReport\ReportSetters;
 
-use CloudCastle\Helpers\Format;
 use CloudCastle\EquifaxLibrary\TypesOfAmendmentOfTheContract;
 use CloudCastle\EquifaxLibrary\ReasonsForTerminationOfTheContractAmendment;
 
@@ -83,14 +82,7 @@ final class ContractChanges
 
     public function __construct(array $contractChanges)
     {
-        foreach (array_keys((array)$this) as $propperty) {
-            if (isset($contractChanges[$propperty])) {
-                $method = $this->getMethodName($propperty);
-                if (method_exists($this, $method)) {
-                    $this->$method((string)$contractChanges[$propperty]);
-                }
-            }
-        }
+        $this->setAttributes($contractChanges);
         if ($this->sign === 0) {
             foreach (array_keys((array ($this))) as $key) {
                 if ($key !== 'sign') {
@@ -113,26 +105,6 @@ final class ContractChanges
     private function __setSpecialType(string $specialType): void
     {
         $this->special_type = (int)$specialType;
-    }
-
-    private function __setDate(string $date): void
-    {
-        $this->date = Format::date($date);
-    }
-
-    private function __setApplyDate(string $date): void
-    {
-        $this->apply_date = Format::date($date);
-    }
-
-    private function __setEndDate(string $date): void
-    {
-        $this->end_date = Format::date($date);
-    }
-
-    private function __setFinishDate(string $date): void
-    {
-        $this->finish_date = Format::date($date);
     }
 
     private function __setFinish(string $finish): void

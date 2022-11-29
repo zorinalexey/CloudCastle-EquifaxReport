@@ -19,7 +19,7 @@ final class MaterialGuaranteeSubject
 
     public function __construct(array $materialGuaranteeSubject)
     {
-
+        $this->setAttributes($materialGuaranteeSubject);
     }
 
 }

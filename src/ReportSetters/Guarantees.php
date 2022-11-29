@@ -19,7 +19,7 @@ final class Guarantees
 
     public function __construct(array $guarantees)
     {
-
+        $this->setAttributes($guarantees);
     }
 
 }
