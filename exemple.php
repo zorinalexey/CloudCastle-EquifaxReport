@@ -536,17 +536,17 @@ $report->setAddrReg([
                  */
                 'paid_other_sum' => 400,
                 /*
-                 * Код соблюдения размера платежей
+                 * Соблюдение размера платежей
                  */
-                'size_payments_type' => '',
+                'size_payments_type' => 'Платеж внесен в полном размере',
                 /*
-                 * Код соблюдения срока внесения платежей
+                 * Соблюдение срока внесения платежей
                  */
                 'payments_deadline_type' => 'Своевременно',
                 /*
                  * Продолжительность просрочки в днях
                  */
-                'overdue_day' => 0
+                'overdue_day' => 10
             ],
             /*
              * Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета
@@ -696,5 +696,3 @@ $generator = new CloudCastle\EquifaxReport\Generator($config, $client);
  * Сгенерировать xml файл передав объект с информацией о КИ
  */
 $xml = $generator->create($report);
-
-var_dump($xml);

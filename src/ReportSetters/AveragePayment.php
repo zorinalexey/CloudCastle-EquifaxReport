@@ -18,7 +18,7 @@ final class AveragePayment
     use Helper;
 
     public int $sum = 0;
-    public ?string $date;
+    public ?string $date = null;
 
     public function __construct(array $averagePayment)
     {

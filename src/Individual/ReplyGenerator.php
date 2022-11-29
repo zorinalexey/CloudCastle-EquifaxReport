@@ -13,6 +13,10 @@ use CloudCastle\EquifaxReport\ReportSetters\FullCost;
 use CloudCastle\EquifaxReport\ReportSetters\ContractChanges;
 use CloudCastle\EquifaxReport\ReportSetters\CredStartDebt;
 use CloudCastle\EquifaxReport\ReportSetters\Debt;
+use CloudCastle\EquifaxReport\ReportSetters\DebtOverdue;
+use CloudCastle\EquifaxReport\ReportSetters\DebtCurrent;
+use CloudCastle\EquifaxReport\ReportSetters\Payments;
+use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
 
 /**
  * Класс ReplyGenerator
@@ -139,8 +143,52 @@ class ReplyGenerator
             ->setFullCost($contract->full_cost, $generator)
             ->setContractChanges($contract->contract_changes, $generator)
             ->setCredStartDebt($contract->cred_start_debt, $generator)
-            ->setDebt($contract->debt, $generator);
+            ->setDebt($contract->debt, $generator)
+            ->setDebtCurrent($contract->debt_current, $generator)
+            ->setDeptOverdue($contract->debt_overdue, $generator)
+            ->setPayments($contract->payments, $generator)
+            ->setAveragePayment($contract->average_payment, $generator);
         $generator->closeElement();
+        return $this;
+    }
+
+    private function setAveragePayment(AveragePayment $average_payment, XmlGenerator $generator)
+    {
+        if ($average_payment) {
+            $generator->startElement('average_payment');
+            $this->setData($average_payment, $generator);
+            $generator->closeElement();
+        }
+        return $this;
+    }
+
+    private function setPayments(Payments $payments, XmlGenerator $generator)
+    {
+        if ($payments) {
+            $generator->startElement('payments');
+            $this->setData($payments, $generator);
+            $generator->closeElement();
+        }
+        return $this;
+    }
+
+    private function setDeptOverdue(DebtOverdue $debt_overdue, XmlGenerator $generator)
+    {
+        if ($debt_overdue) {
+            $generator->startElement('debt_overdue');
+            $this->setData($debt_overdue, $generator);
+            $generator->closeElement();
+        }
+        return $this;
+    }
+
+    private function setDebtCurrent(DebtCurrent $debt_current, XmlGenerator $generator)
+    {
+        if ($debt_current) {
+            $generator->startElement('debt_current');
+            $this->setData($debt_current, $generator);
+            $generator->closeElement();
+        }
         return $this;
     }
 
