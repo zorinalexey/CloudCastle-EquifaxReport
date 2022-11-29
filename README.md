@@ -663,7 +663,7 @@ $report->setAddrReg([
 
 /**
  * Объект конфигурации требует для настройки класса генерации отчетов
- * требует json файл конфигурации
+ * json файл конфигурации
  */
 $config = new CloudCastle\EquifaxConfig\Config('config.json');
 
