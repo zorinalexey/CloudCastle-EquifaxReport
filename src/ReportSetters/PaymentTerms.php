@@ -15,6 +15,8 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class PaymentTerms
 {
 
+    use Helper;
+
     /**
      * Сумма ближайшего следующего платежа по основному долгу
      * @var int

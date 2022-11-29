@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace CloudCastle\EquifaxReport\ReportSetters;
 
+use CloudCastle\EquifaxLibrary\CurrencyCodesOKW;
+
 /**
  * Класс ContractAmount
  * @version 0.0.1
@@ -19,23 +21,31 @@ final class ContractAmount
      * Сумма обязательства
      * @var int
      */
-    public ?int $sum= null;
+    public ?int $sum = null;
 
     /**
      * Валюта обязательства
      * @var int
      */
-    public ?int $currency = 643;
+    public string $currency = 'RUB';
 
     /**
      * Сумма обеспечиваемого обязательства
      * @var int
      */
-    public ?int $security_sum= null;
+    public ?int $security_sum = null;
 
     public function __construct(array $contractAmount)
     {
-
+        if (isset($contractAmount['sum'])) {
+            $this->sum = (int)$contractAmount['sum'];
+        }
+        if (isset($contractAmount['security_sum'])) {
+            $this->security_sum = (int)$contractAmount['security_sum'];
+        }
+        if (isset($contractAmount['currency'])) {
+            $this->currency = (new CurrencyCodesOKW((string)$contractAmount['currency']))->code;
+        }
     }
 
 }

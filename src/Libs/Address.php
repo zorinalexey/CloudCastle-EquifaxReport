@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace CloudCastle\EquifaxReport\Libs;
 
 use CloudCastle\Helpers\Format;
+use CloudCastle\EquifaxLibrary\CodesOfCountriesAccordingToOKSM;
+use CloudCastle\EquifaxReport\ReportSetters\Helper;
 
 /**
  * Класс Address
@@ -17,9 +19,11 @@ use CloudCastle\Helpers\Format;
 class Address
 {
 
+    use Helper;
+
     public ?string $reg_code = null;
     public ?string $index = null;
-    public ?string $country = null;
+    public int $country = 643;
     public ?string $fias = null;
     public ?string $okato = null;
     public ?string $other_statement = null;
@@ -37,21 +41,11 @@ class Address
     public function __construct(array $addres)
     {
         foreach ($addres as $key => $value) {
-            $method = $this->getSetterName($key);
+            $method = $this->getMethodName($key);
             if (method_exists($this, $method)) {
                 $this->$method((string)$value);
             }
         }
-    }
-
-    private function getSetterName($key)
-    {
-        $str = '__set';
-        $data = explode('_', $key);
-        foreach ($data as $value) {
-            $str .= ucfirst($value);
-        }
-        return $str;
     }
 
     private function __setRegCode(string $regCode): void
@@ -67,7 +61,7 @@ class Address
     private function __setCountry(string $country): void
     {
         $this->country_text = mb_strtoupper($country);
-        $this->country = '';
+        $this->country = (int)(new CodesOfCountriesAccordingToOKSM($country))->code;
     }
 
     private function __setFias(string $fias): void

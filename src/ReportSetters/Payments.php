@@ -15,6 +15,8 @@ namespace CloudCastle\EquifaxReport\ReportSetters;
 final class Payments
 {
 
+    use Helper;
+
     public function __construct(array $payments)
     {
 

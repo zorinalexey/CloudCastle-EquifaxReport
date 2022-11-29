@@ -7,6 +7,8 @@ namespace CloudCastle\EquifaxReport\Individual;
 use CloudCastle\Helpers\Format;
 use CloudCastle\EquifaxReport\ClientInterface;
 use CloudCastle\EquifaxReport\Debug;
+use CloudCastle\EquifaxLibrary\CodesOfCountriesAccordingToOKSM;
+use CloudCastle\EquifaxLibrary\TypesOfIdentityDocuments;
 
 /**
  * Класс Client
@@ -36,7 +38,7 @@ class Client extends Debug implements ClientInterface
         'end_date' => null
     ];
     private ?string $birthPlace;
-    private ?string $birthCountry;
+    private int $birthCountry;
     private ?string $birthDate;
     public ?Client $history;
     private array $inn = [
@@ -66,7 +68,7 @@ class Client extends Debug implements ClientInterface
             $this->birthDate = Format::date($birth['date']);
         }
         if (isset($birth['birthCountry'])) {
-            $this->birthCountry = '';
+            $this->birthCountry = (int)(new CodesOfCountriesAccordingToOKSM($birth['birthCountry']))->code;
         }
         if (isset($birth['birthPlace'])) {
             $this->birthPlace = $birth['birthPlace'];
@@ -104,13 +106,13 @@ class Client extends Debug implements ClientInterface
 
     private function __setDocumentCountry(string $country)
     {
-        $this->document['country'] = '';
+        $this->document['country'] = (new CodesOfCountriesAccordingToOKSM($country))->code;
         $this->document['country_text'] = mb_strtoupper($country);
     }
 
     private function __setDocumentType(string $type)
     {
-        $this->document['type'] = '';
+        $this->document['type'] = (new TypesOfIdentityDocuments($type))->code;
         $this->document['type_text'] = mb_strtoupper($type);
     }
 
