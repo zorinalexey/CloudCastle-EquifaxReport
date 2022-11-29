@@ -666,3 +666,5 @@ $generator = new CloudCastle\EquifaxReport\Generator($config, $client);
  * Сгенерировать xml файл передав объект с информацией о КИ
  */
 $xml = $generator->create($report);
+
+var_dump($xml);
