@@ -40,7 +40,7 @@ class Client extends Debug implements ClientInterface
     private ?string $birthPlace;
     private int $birthCountry;
     private ?string $birthDate;
-    public ?Client $history;
+    public $history;
     private array $inn = [
         'code' => 1,
         'inn' => false,
