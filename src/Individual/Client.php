@@ -235,7 +235,7 @@ class Client extends Debug implements ClientInterface
      * Получить номер СНИЛС клиента
      * @return string Корректная строка номера СНИЛС клиента
      */
-    public function getSnils(): string
+    public function getSnils()
     {
         return $this->snils;
     }
