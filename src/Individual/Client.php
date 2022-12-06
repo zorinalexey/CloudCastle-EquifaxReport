@@ -225,9 +225,11 @@ class Client extends Debug implements ClientInterface
      * @param string $snils Строка с номером СНИЛС
      * @return self
      */
-    public function setSnils(string $snils): self
+    public function setSnils(?string $snils = null): self
     {
-        $this->snils = preg_replace('~([^\d])~ui', '', $snils);
+        if ($snils) {
+            $this->snils = preg_replace('~([^\d])~ui', '', $snils);
+        }
         return $this;
     }
 
