@@ -116,6 +116,13 @@ final class Generator
                 $number ++;
             }
         }
+        if ($number > 100 AND $number < 1000) {
+            $number = '0' . $number;
+        } elseif ($number > 10 AND $number < 100) {
+            $number = '00' . $number;
+        } elseif ($number < 10) {
+            $number = '000' . $number;
+        }
         $str = $this->config->getPartnerId() . '_FCH_' . date('Ymd') . '_' . $number . '.XML';
         return $str;
     }
