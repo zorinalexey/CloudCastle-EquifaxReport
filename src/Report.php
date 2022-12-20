@@ -11,6 +11,7 @@ use CloudCastle\XmlGenerator\XmlGenerator;
 use CloudCastle\XmlGenerator\Xml;
 use CloudCastle\FileSystem\FileSystem;
 use CloudCastle\EquifaxReport\Individual\ReportGenerator AS IndividualReportGenerator;
+use CloudCastle\EquifaxReport\Individual\ReplyGenerator AS IndividualReplyGenerator;
 
 /**
  * Класс ReportGenerator
@@ -26,6 +27,7 @@ final class Report
     private ?Config $config = null;
     private array $reports = [];
     private ?XmlGenerator $xml = null;
+    public static int $numberOfRecords = 0;
 
     public function __construct(Config $config, array $reports)
     {
@@ -99,7 +101,7 @@ final class Report
             $this->setCommercialInfo($report->title_part->commercial);
         }
         $this->xml->closeElement();
-        new Individual\ReplyGenerator($report->title_part->base_part, $this->xml, $report->title_part->private);
+        new IndividualReplyGenerator($report->title_part->base_part, $this->xml, $report->title_part->private);
     }
 
     public function getFileName(): string
@@ -136,7 +138,7 @@ final class Report
     {
         $this->xml->startElement('footer')
             ->addElement('subjects_count', $count)
-            ->addElement('records_count', 35)
+            ->addElement('records_count', self::$numberOfRecords)
             ->closeElement();
     }
 
