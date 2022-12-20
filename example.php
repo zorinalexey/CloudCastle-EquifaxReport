@@ -8,7 +8,7 @@ $reports = [];
 
 $countReports = 20;
 
-for ($i = 0; $i < $countReports; $i ++) {
+for ($i = 0; $i < $countReports; $i ++ ) {
     $report = new stdClass();
     $report->info = new \CloudCastle\EquifaxConfig\Info();
     $report->info->set([
@@ -708,8 +708,14 @@ for ($i = 0; $i < $countReports; $i ++) {
     $reports[] = $report;
 }
 
+/**
+ * Передаем генератору конфигурацию и массив отчетов для формирования титульной части КИ
+ */
 $generator = new CloudCastle\EquifaxReport\Report($config, $reports);
 
+/**
+ * Сгенерировать xml файл передав количество клиентов по которым производится выгрузка КИ
+ */
 $xml = $generator->create($countReports);
 
 var_dump($xml);
