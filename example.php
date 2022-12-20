@@ -8,10 +8,14 @@ $reports = [];
 
 $countReports = 20;
 
-for ($i = 0; $i < $countReports; $i ++ ) {
+for ($i = 0; $i < $countReports; $i ++) {
     $report = new stdClass();
     $report->info = new \CloudCastle\EquifaxConfig\Info();
     $report->info->set([
+        /**
+         * Id клиента в системе кредитной организации
+         */
+        'recnumber' => 1234567890,
         /*
          * Действие с кредитной историей
          * Возможные варианты :
