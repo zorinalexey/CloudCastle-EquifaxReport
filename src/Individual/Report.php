@@ -79,7 +79,7 @@ class Report
      * Получить адрес регистрации
      * @return  Address|null
      */
-    public function getAddrReg(): Address
+    public function getAddrReg()
     {
         return $this->addr_reg;
     }
@@ -135,7 +135,7 @@ class Report
      * Получить контактные данные
      * @return array
      */
-    public function getContacts(): Contacts
+    public function getContacts()
     {
         return $this->contacts;
     }
@@ -155,7 +155,7 @@ class Report
      * Сведения о дееспособности
      * @return Incapacity
      */
-    public function getIncapacity(): Incapacity
+    public function getIncapacity()
     {
         return $this->incapacity;
     }
@@ -176,7 +176,7 @@ class Report
      * Получить данные о сделке
      * @return Contract
      */
-    public function getContract(): Contract
+    public function getContract()
     {
         return $this->contract;
     }
