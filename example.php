@@ -8,7 +8,7 @@ $reports = [];
 
 $countReports = 20;
 
-for ($i = 0; $i < $countReports; $i ++) {
+for ($i = 0; $i < $countReports; $i ++ ) {
     $report = new stdClass();
     $report->info = new \CloudCastle\EquifaxConfig\Info();
     $report->info->set([
@@ -706,4 +706,6 @@ for ($i = 0; $i < $countReports; $i ++) {
 
 $generator = new CloudCastle\EquifaxReport\Report($config, $reports);
 
-var_dump($generator->create($countReports));
+$xml = $generator->create($countReports);
+
+var_dump($xml);
