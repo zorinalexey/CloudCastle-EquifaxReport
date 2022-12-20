@@ -17,7 +17,7 @@ use CloudCastle\EquifaxReport\ReportSetters\DebtOverdue;
 use CloudCastle\EquifaxReport\ReportSetters\DebtCurrent;
 use CloudCastle\EquifaxReport\ReportSetters\Payments;
 use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
-use CloudCastle\EquifaxReport\Report;
+use CloudCastle\EquifaxReport\Report AS ReportGenerator;
 
 /**
  * Класс ReplyGenerator
@@ -156,7 +156,7 @@ class ReplyGenerator
     private function setAveragePayment(AveragePayment $average_payment, XmlGenerator $generator)
     {
         if ($average_payment) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('average_payment');
             $this->setData($average_payment, $generator);
             $generator->closeElement();
@@ -167,7 +167,7 @@ class ReplyGenerator
     private function setPayments(Payments $payments, XmlGenerator $generator)
     {
         if ($payments) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('payments');
             $this->setData($payments, $generator);
             $generator->closeElement();
@@ -178,7 +178,7 @@ class ReplyGenerator
     private function setDeptOverdue(DebtOverdue $debt_overdue, XmlGenerator $generator)
     {
         if ($debt_overdue) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt_overdue');
             $this->setData($debt_overdue, $generator);
             $generator->closeElement();
@@ -189,7 +189,7 @@ class ReplyGenerator
     private function setDebtCurrent(DebtCurrent $debt_current, XmlGenerator $generator)
     {
         if ($debt_current) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt_current');
             $this->setData($debt_current, $generator);
             $generator->closeElement();
@@ -200,7 +200,7 @@ class ReplyGenerator
     private function setDebt(Debt $debt, XmlGenerator $generator)
     {
         if ($debt) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt');
             $this->setData($debt, $generator);
             $generator->closeElement();
@@ -211,7 +211,7 @@ class ReplyGenerator
     private function setCredStartDebt(CredStartDebt $cred_start_debt, XmlGenerator $generator)
     {
         if ($cred_start_debt) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('cred_start_debt');
             $this->setData($cred_start_debt, $generator);
             $generator->closeElement();
@@ -222,7 +222,7 @@ class ReplyGenerator
     private function setContractChanges(ContractChanges $contract_changes, XmlGenerator $generator)
     {
         if ($contract_changes) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('contract_changes');
             $this->setData($contract_changes, $generator);
             $generator->closeElement();
@@ -233,7 +233,7 @@ class ReplyGenerator
     private function setFullCost(FullCost $full_cost, XmlGenerator $generator): self
     {
         if ($full_cost) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('full_cost');
             $this->setData($full_cost, $generator);
             $generator->closeElement();
@@ -244,7 +244,7 @@ class ReplyGenerator
     private function setPaymentTerms(PaymentTerms $payment_terms, XmlGenerator $generator): self
     {
         if ($payment_terms) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('payment_terms');
             $this->setData($payment_terms, $generator);
             $generator->closeElement();
@@ -255,7 +255,7 @@ class ReplyGenerator
     private function setJointDebtors(JointDebtors $joint_debtors, XmlGenerator $generator)
     {
         if ($joint_debtors) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('joint_debtors');
             $this->setData($joint_debtors, $generator);
             $generator->closeElement();
@@ -266,7 +266,7 @@ class ReplyGenerator
     private function setDeal(Deal $deal, XmlGenerator $generator): self
     {
         if ($deal) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('deal');
             $this->setData($deal, $generator);
             $generator->closeElement();
@@ -277,7 +277,7 @@ class ReplyGenerator
     private function setContractAmount(ContractAmount $contractAmount, XmlGenerator $generator): self
     {
         if ($contractAmount) {
-            Report::$numberOfRecords ++;
+            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('contract_amount');
             $this->setData($contractAmount, $generator);
             $generator->closeElement();
