@@ -8,79 +8,48 @@ use CloudCastle\Helpers\Format;
 use CloudCastle\EquifaxConfig\Config;
 use CloudCastle\XmlGenerator\Config AS XmlConfig;
 use CloudCastle\XmlGenerator\XmlGenerator;
-use CloudCastle\FileSystem\FileSystem;
 use CloudCastle\XmlGenerator\Xml;
-use CloudCastle\EquifaxReport\Individual\ReportGenerator AS IndividualReport;
-use CloudCastle\EquifaxReport\Individual\ReplyGenerator AS IndividualReply;
-use CloudCastle\EquifaxReport\Individual\Client AS Individual;
+use CloudCastle\FileSystem\FileSystem;
+use CloudCastle\EquifaxReport\Individual\ReportGenerator AS IndividualReportGenerator;
 
 /**
- * Класс Create
+ * Класс ReportGenerator
  * @version 0.0.1
  * @package CloudCastle\EquifaxReport
  * @generated Зорин Алексей, please DO NOT EDIT!
  * @author Зорин Алексей <zorinalexey59292@gmail.com>
  * @copyright 2022 разработчик Зорин Алексей Евгеньевич.
  */
-final class Generator
+final class Report
 {
 
-    private Config $config;
-    private ClientInterface $client;
-    private XmlGenerator $xml;
-    private $reply;
+    private ?Config $config = null;
+    private array $reports = [];
+    private ?XmlGenerator $xml = null;
 
-    public function __construct(Config $config, ClientInterface $client)
+    public function __construct(Config $config, array $reports)
     {
         $this->config = $config;
-        $this->client = $client;
+        $this->reports = $reports;
         $generatorConfig = new XmlConfig();
         $generatorConfig->setFile($this->getFileName());
         $generatorConfig->setType('memory');
         $this->xml = new XmlGenerator($generatorConfig);
     }
 
-    public function create($reply): Xml
+    public function create(int $count = 0): Xml
     {
-        $this->reply = $reply;
         $this->xml->startDocument();
         $this->xml->startElement('fch', ['version' => $this->config::version]);
         $this->createHead()
             ->createInfo()
-            ->setTitleParts();
+            ->createFooter($count);
         $this->xml->closeElement();
         $filePatch = dirname($this->config->filesDir) . DIRECTORY_SEPARATOR .
             basename($this->config->filesDir) . DIRECTORY_SEPARATOR .
             'report' . DIRECTORY_SEPARATOR . Format::date(date('d.m.Y')) .
             DIRECTORY_SEPARATOR . $this->getFileName();
         return $this->xml->get()->save($filePatch);
-    }
-
-    public function setTitleParts(): self
-    {
-        $this->xml->startElement('title_part');
-        if ($this->client->kski_code) {
-            $this->xml->startElement('kski')
-                ->addElement('code', $this->client->kski_code)
-                ->closeElement();
-        }
-        if ($this->client instanceof Individual) {
-            $this->setIndividualReport();
-        } else {
-            $this->setCompanyReport();
-        }
-        $this->xml->closeElement();
-        return $this;
-    }
-
-    private function createInfo(): self
-    {
-        $this->xml->startElement('info');
-        foreach ($this->config->getAction() as $attr => $attrValue) {
-            $this->xml->addAttribute($attr, $attrValue);
-        }
-        $this->xml->closeElement();
-        return $this;
     }
 
     private function createHead(): self
@@ -100,6 +69,37 @@ final class Generator
         }
         $this->xml->closeElement();
         return $this;
+    }
+
+    private function createInfo(): self
+    {
+        foreach ($this->reports as $report) {
+            $this->xml->startElement('info');
+            foreach ($report->info as $attr => $attrValue) {
+                $this->xml->addAttribute($attr, $attrValue);
+            }
+            $this->setTitlePart($report);
+            $this->xml->closeElement();
+        }
+        return $this;
+    }
+
+    public function setTitlePart($report)
+    {
+        $this->xml->startElement('title_part');
+        if (isset($report->title_part->kski) AND $report->title_part->kski) {
+            $this->xml->startElement('kski')
+                ->addElement('code', $report->title_part->kski)
+                ->closeElement();
+        }
+        if (isset($report->title_part->private)) {
+            (new IndividualReportGenerator())->setPrivateInfo($report->title_part->private, $this->xml);
+        }
+        if (isset($report->title_part->commercial)) {
+            $this->setCommercialInfo($report->title_part->commercial);
+        }
+        $this->xml->closeElement();
+        new Individual\ReplyGenerator($report->title_part->base_part, $this->xml, $report->title_part->private);
     }
 
     public function getFileName(): string
@@ -127,26 +127,17 @@ final class Generator
         return $str;
     }
 
-    public function setIndividualReport(): self
+    public function setCommercialInfo($clientInfo)
     {
-        $Individualreport = new IndividualReport();
-        $Individualreport->setPrivateInfo($this->client, $this->xml);
-        new IndividualReply($this->reply, $this->xml, $this->client);
-        return $this;
+
     }
 
-    public function setCompanyReport()
+    private function createFooter(int $count)
     {
-//        $this->xml->startElement('commercial');
-//        $clientName = $this->client->getName();
-//        $this->xml->startElement('name')
-//            ->addElement('full', $clientName['full'])
-//            ->addElement('short', $clientName['short'])
-//            ->addElement('other', $clientName['other'])
-//            ->closeElement();
-//        $this->xml->closeElement();
-//        return $this;
-        return $this;
+        $this->xml->startElement('footer')
+            ->addElement('subjects_count', $count)
+            ->addElement('records_count', 35)
+            ->closeElement();
     }
 
 }
