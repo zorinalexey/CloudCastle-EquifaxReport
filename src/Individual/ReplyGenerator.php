@@ -39,24 +39,20 @@ class ReplyGenerator
         $this->reply = $report;
         $this->generator = $generator;
         $this->client = $client;
-        $this->generator->startElement('base_part');
+        $this->generator->startElement('base_part', [], 'Основная часть кредитной истории');
         $this->setReply();
         $this->generator->closeElement();
     }
 
     private function setReply(): void
     {
-        $this->setAddrReg($this->reply, $this->generator)
-            ->setAddrFact($this->reply, $this->generator)
-            ->setContacts($this->reply, $this->generator)
-            ->setOgrnIp($this->client, $this->generator)
-            ->setContract($this->reply, $this->generator);
+        $this->setContract($this->reply, $this->generator);
     }
 
-    private function setAddrReg(Report $report, XmlGenerator $generator): self
+    public static function setAddrReg(Report $report, XmlGenerator $generator): self
     {
         $addres = $report->getAddrReg();
-        $generator->startElement('addr_reg')
+        $generator->startElement('addr_reg', [], 'Регистрация физического лица по месту жительства или пребывания')
             ->addElement('reg_code', $addres->reg_code)
             ->addElement('index', $addres->index)
             ->addElement('country', $addres->country)
@@ -77,11 +73,11 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setAddrFact(Report $report, XmlGenerator $generator): self
+    private static function setAddrFact(Report $report, XmlGenerator $generator): self
     {
         $regAddrres = $report->getAddrReg();
         $addres = $report->getAddrFact();
-        $generator->startElement('addr_fact');
+        $generator->startElement('addr_fact', [], 'Фактическое место жительства');
         if (md5(json_encode($regAddrres)) !== md5(json_encode($addres))) {
             $generator->addElement('sign', 1);
         }
@@ -101,40 +97,42 @@ class ReplyGenerator
         return $this;
     }
 
-    private function setContacts(Report $report, XmlGenerator $generator): self
+    private static function setContacts(Report $report, XmlGenerator $generator): self
     {
         $contacts = $report->getContacts();
         $phone = $contacts->getPhone();
-        $generator->startElement('contacts');
+        $generator->startElement('contacts', [], 'Контактные данные');
         if ($phone) {
             $generator->startElement('phone')
-                ->addElement('number', $phone)
-                ->addElement('comment', $contacts->getComment())
+                ->addElement('number', $phone, [], 'Номер телефона')
+                ->addElement('comment', $contacts->getComment(), [], 'Комментарий')
                 ->closeElement();
         }
-        $generator->addElement('email', $contacts->getEmail());
+        $generator->addElement('email', $contacts->getEmail(), [], 'email');
         $generator->closeElement();
         return $this;
     }
 
-    private function setOgrnIp(Client $client, XmlGenerator $generator): self
+    private static function setOgrnIp(Client $client, XmlGenerator $generator): self
     {
         $inn = $client->getInn();
+        $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
         if ($inn['ogrnip']) {
-            $generator->startElement('ogrnip')
-                ->addElement('sign', 1)
+            $generator->addElement('sign', 1)
                 ->addElement('no', $inn['ogrnip'])
-                ->addElement('date', $inn['regDateIp'])
-                ->closeElement();
+                ->addElement('date', $inn['regDateIp']);
+        } else {
+            $generator->addElement('sign', 0);
         }
+        $generator->closeElement();
         return $this;
     }
 
     private function setContract(Report $report, XmlGenerator $generator): self
     {
         $contract = $report->getContract();
-        $generator->startElement('contract')
-            ->startElement('uid')
+        $generator->startElement('contract', [], 'Сведения об обязательстве субъекта кредитной истории')
+            ->startElement('uid', [], 'Уникальный идентификатор договора (сделки)')
             ->addElement('id', $contract->uid)
             ->closeElement();
         $this->setDeal($contract->deal, $generator)
@@ -157,7 +155,7 @@ class ReplyGenerator
     {
         if ($average_payment) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('average_payment');
+            $generator->startElement('average_payment', [], ' Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета');
             $this->setData($average_payment, $generator);
             $generator->closeElement();
         }
@@ -168,7 +166,7 @@ class ReplyGenerator
     {
         if ($payments) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('payments');
+            $generator->startElement('payments', [], 'Сведения о внесении платежей');
             $this->setData($payments, $generator);
             $generator->closeElement();
         }
@@ -179,7 +177,7 @@ class ReplyGenerator
     {
         if ($debt_overdue) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('debt_overdue');
+            $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
             $this->setData($debt_overdue, $generator);
             $generator->closeElement();
         }
@@ -190,7 +188,7 @@ class ReplyGenerator
     {
         if ($debt_current) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('debt_current');
+            $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
             $this->setData($debt_current, $generator);
             $generator->closeElement();
         }
@@ -201,7 +199,7 @@ class ReplyGenerator
     {
         if ($debt) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('debt');
+            $generator->startElement('debt', [], 'Сведения о задолженности');
             $this->setData($debt, $generator);
             $generator->closeElement();
         }
@@ -212,7 +210,7 @@ class ReplyGenerator
     {
         if ($cred_start_debt) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('cred_start_debt');
+            $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства');
             $this->setData($cred_start_debt, $generator);
             $generator->closeElement();
         }
@@ -223,7 +221,7 @@ class ReplyGenerator
     {
         if ($contract_changes) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('contract_changes');
+            $generator->startElement('contract_changes', [], 'Сведения об изменении договора');
             $this->setData($contract_changes, $generator);
             $generator->closeElement();
         }
@@ -234,7 +232,7 @@ class ReplyGenerator
     {
         if ($full_cost) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('full_cost');
+            $generator->startElement('full_cost', [], 'Полная стоимость потребительского кредита (займа)');
             $this->setData($full_cost, $generator);
             $generator->closeElement();
         }
@@ -245,7 +243,7 @@ class ReplyGenerator
     {
         if ($payment_terms) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('payment_terms');
+            $generator->startElement('payment_terms', [], 'Сведения об условиях платежей');
             $this->setData($payment_terms, $generator);
             $generator->closeElement();
         }
@@ -267,7 +265,7 @@ class ReplyGenerator
     {
         if ($deal) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('deal');
+            $generator->startElement('deal', [], 'Общие сведения о сделке');
             $this->setData($deal, $generator);
             $generator->closeElement();
         }
@@ -278,7 +276,7 @@ class ReplyGenerator
     {
         if ($contractAmount) {
             ReportGenerator::$numberOfRecords ++;
-            $generator->startElement('contract_amount');
+            $generator->startElement('contract_amount', [], 'Сумма и валюта обязательства');
             $this->setData($contractAmount, $generator);
             $generator->closeElement();
         }

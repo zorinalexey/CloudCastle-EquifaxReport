@@ -28,6 +28,7 @@ final class Report
     private array $reports = [];
     private ?XmlGenerator $xml = null;
     public static int $numberOfRecords = 0;
+    private ?string $fileNumber = '';
 
     public function __construct(Config $config, array $reports)
     {
@@ -61,7 +62,7 @@ final class Report
             ->addElement('source_ogrn', $this->config->getOgrn())
             ->addElement('date', Format::date(date('d.m.Y')))
             ->addElement('file_reg_date', Format::date(date('d.m.Y')))
-            ->addElement('file_reg_num', $this->getFileName());
+            ->addElement('file_reg_num', $this->fileNumber);
         $action = $this->config->getAction();
         if (isset($action->file_reg_num) AND isset($action->file_reg_date)) {
             $this->xml->startElement('prev_file')
@@ -125,6 +126,7 @@ final class Report
         } elseif ($number < 10) {
             $number = '000' . $number;
         }
+        $this->fileNumber = (string)$number;
         $str = $this->config->getPartnerId() . '_FCH_' . date('Ymd') . '_' . $number . '.XML';
         return $str;
     }

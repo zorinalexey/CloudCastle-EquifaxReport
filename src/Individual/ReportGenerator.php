@@ -19,7 +19,7 @@ class ReportGenerator
 
     public function setPrivateInfo(Client $client, XmlGenerator $generator): void
     {
-        $generator->startElement('private');
+        $generator->startElement('private', [], 'Титульная часть СКИ ФЛ');
         $this->setIndividualName($client, $generator)
             ->setIndividualDocument($client, $generator)
             ->setIndividualBirth($client, $generator)
@@ -34,8 +34,11 @@ class ReportGenerator
         $document = $client->getDocument();
         $generator->startElement('doc');
         if ($history) {
+            $generator->addComment('Документ, ранее удостоверявший личность');
             $document = $client->history->getDocument();
-            $generator->addElement('hist_doc_sign', 1);
+            #$generator->addElement('hist_doc_sign', 0);
+        } else {
+            $generator->addComment('Документ, удостоверяющий личность');
         }
         $generator->addElement('country', $document['country'])
             ->addElement('country_text', $document['country_text'])
@@ -53,12 +56,15 @@ class ReportGenerator
 
     private function setIndividualName(Client $client, XmlGenerator $generator, bool $history = false): self
     {
-        $generator->startElement('name');
+        $generator->startElement('name',);
         if ($history) {
+            $generator->addComment('Предыдущее Имя');
             $document = $client->getDocument();
             $client = $client->history;
-            $generator->addElement('hist_name_sign', 1);
+            #$generator->addElement('hist_name_sign', 1);
             $generator->addElement('doc_date', $document['date']);
+        } else {
+            $generator->addComment('Имя');
         }
         $clientName = $client->getName();
         $generator->addElement('last', $clientName['last'])
@@ -71,7 +77,7 @@ class ReportGenerator
     private function setIndividualBirth(Client $client, XmlGenerator $generator): self
     {
         $birth = $client->getBirth();
-        $generator->startElement('birth')
+        $generator->startElement('birth', [], 'Дата и место рождения')
             ->addElement('date', $birth['date'])
             ->addElement('country', $birth['country'])
             ->addElement('place', $birth['place'])
@@ -94,7 +100,7 @@ class ReportGenerator
     {
         $inn = $client->getInn();
         if ($inn['inn']) {
-            $generator->startElement('inn')
+            $generator->startElement('inn', [], 'Номер налогоплательщика и регистрационный номер')
                 ->addElement('code', $inn['code'])
                 ->addElement('no', $inn['inn']);
             if ($inn['ogrnip']) {
@@ -109,7 +115,7 @@ class ReportGenerator
     {
         $snils = $client->getSnils();
         if ($snils) {
-            $generator->startElement('snils')
+            $generator->startElement('snils', [], 'СНИЛС')
                 ->addElement('no', $snils)
                 ->closeElement();
         }
