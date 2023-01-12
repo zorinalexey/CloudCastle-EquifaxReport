@@ -76,8 +76,6 @@ class ReplyGenerator
         );
         $this->setOgrnIp($this->client, $generator);
         BasePartsGenerator::incapacity($report, $generator);
-        BasePartsGenerator::bankruptcy($report, $generator);
-        BasePartsGenerator::bankruptcyFinish($report, $generator);
     }
 
     private function setContract(Report $report, XmlGenerator $generator): self
@@ -197,11 +195,13 @@ class ReplyGenerator
 
     private function setJointDebtors(JointDebtors $joint_debtors, XmlGenerator $generator)
     {
-        if ($joint_debtors) {
-            $generator->startElement('joint_debtors');
-            $this->setData($joint_debtors, $generator);
-            $generator->closeElement();
+        $generator->startElement('joint_debtors');
+        if ($joint_debtors && $joint_debtors->count > 0) {
+            $generator->addElement('count', $joint_debtors->count);
+        } else {
+            $generator->addElement('sign', 0);
         }
+        $generator->closeElement();
         return $this;
     }
 

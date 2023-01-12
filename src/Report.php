@@ -82,8 +82,8 @@ final class Report
                 $this->xml->addAttribute($attr, $attrValue);
             }
             $this->setTitlePart($report);
-            $this->xml->closeElement();
             Individual\BasePartsGenerator::addPart($report, $this->config, $this->xml);
+            $this->xml->closeElement();
         }
         return $this;
     }

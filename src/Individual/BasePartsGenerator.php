@@ -7,7 +7,6 @@ namespace CloudCastle\EquifaxReport\Individual;
 use CloudCastle\EquifaxReport\Libs\Address;
 use CloudCastle\XmlGenerator\XmlGenerator;
 use CloudCastle\EquifaxReport\Report AS R;
-use CloudCastle\EquifaxReport\Individual\Report;
 
 /**
  * Класс BasePartsGenerator
@@ -46,7 +45,7 @@ final class BasePartsGenerator
     private static function getOKATO(Address $addres)
     {
         $okato = 99999999999;
-        if ( ! $addres->country != 643) {
+        if ( ! $addres->country != 643 && $addres->okato) {
             $okato = $addres->okato;
         }
         return $okato;
@@ -78,7 +77,7 @@ final class BasePartsGenerator
     {
         $generator->startElement('addr_fact', [], 'Фактическое место жительства');
         if (md5(json_encode($regAddr)) !== md5(json_encode($factAddr))) {
-            $generator->addElement('sign', 1);
+            //$generator->addElement('sign', 1);
         }
         $generator->addElement('index', $factAddr->index)
             ->addElement('country', $factAddr->country)
@@ -111,6 +110,7 @@ final class BasePartsGenerator
     public static function incapacity($report, XmlGenerator $generator): void
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности');
+        $generator->addElement('code', 1);
         R::$numberOfRecords ++;
         $generator->closeElement();
     }
@@ -142,13 +142,22 @@ final class BasePartsGenerator
 
     public static function addPart($report, $config, XmlGenerator $generator): void
     {
+        $generator
+            ->startElement('add_part')
+            ->startElement('accounting')
+            ->addElement('sign', 1)
+            ->closeElement()
+            ->closeElement();
+    }
+
+    public static function purchaserPrivate($report, XmlGenerator $generator)
+    {
+
         $client = $report->title_part->private;
         $name = $client->getName();
         $document = $client->getDocument();
         $birth = $client->getBirth();
-        $generator
-            ->startElement('add_part')
-            ->startElement('purchaser')
+        $generator->startElement('purchaser')
             ->startElement('private')
             ->addElement('lastname', $name['last'])
             ->addElement('firstname', $name['first'])
@@ -166,10 +175,6 @@ final class BasePartsGenerator
             ->addElement('doc_who', $document['who'])
             ->addElement('doc_department_code', $document['department_code'])
             ->addElement('purchase_date', date('d.m.Y'))
-            ->closeElement()
-            ->closeElement()
-            ->startElement('accounting')
-            ->addElement('sign', 1)
             ->closeElement()
             ->closeElement();
     }
