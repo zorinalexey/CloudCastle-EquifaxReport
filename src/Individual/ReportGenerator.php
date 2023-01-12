@@ -36,7 +36,6 @@ class ReportGenerator
         if ($history) {
             $generator->addComment('Документ, ранее удостоверявший личность');
             $document = $client->history->getDocument();
-            #$generator->addElement('hist_doc_sign', 0);
         } else {
             $generator->addComment('Документ, удостоверяющий личность');
         }
@@ -61,7 +60,6 @@ class ReportGenerator
             $generator->addComment('Предыдущее Имя');
             $document = $client->getDocument();
             $client = $client->history;
-            #$generator->addElement('hist_name_sign', 1);
             $generator->addElement('doc_date', $document['date']);
         } else {
             $generator->addComment('Имя');
@@ -92,6 +90,9 @@ class ReportGenerator
             $this->setIndividualName($client, $generator, true);
             $this->setIndividualDocument($client, $generator, true);
             $generator->closeElement();
+        } else {
+            $generator->startElement('history')
+                ->addElement('hist_name_sign', 0);
         }
         return $this;
     }

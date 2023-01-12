@@ -6,7 +6,7 @@ $config = new CloudCastle\EquifaxConfig\Config('config.json');
 
 $reports = [];
 
-$countReports = 20;
+$countReports = 1;
 
 function getStr(array $array, int $lenght)
 {
@@ -83,9 +83,9 @@ for ($i = 0; $i < $countReports; $i ++ ) {
          */
         ->setInn([
             'inn' => '12345678901',
-            'code' => 2,
-            'ogrnip' => '123456789012345',
-            'regDateIp' => '01.01.2007'
+            #'code' => 2,
+            #'ogrnip' => '123456789012345',
+            #'regDateIp' => '01.01.2007'
         ])
         /*
          * Установка ИНН
@@ -336,10 +336,10 @@ for ($i = 0; $i < $countReports; $i ++ ) {
                      * Признак денежного обязательства субъекта
                      */
                     'sign_deal_cash_subject' => 1,
-                    /*
-                     * Дата прекращения обязательства субъекта по условиям сделки
-                     */
-                    'end_date' => date('d.m.Y', strtotime('+30 days'))
+                /*
+                 * Дата прекращения обязательства субъекта по условиям сделки
+                 */
+                #'end_date' => date('d.m.Y', strtotime('+30 days'))
                 ],
                 /*
                  * Сумма и валюта обязательства
@@ -397,11 +397,11 @@ for ($i = 0; $i < $countReports; $i ++ ) {
                     /*
                      * Дата начала беспроцентного периода
                      */
-                    'grace_date' => date('d.m.Y'),
+                    # 'grace_date' => date('d.m.Y'),
                     /*
                      * Дата окончания беспроцентного периода
                      */
-                    'grace_end_date' => date('d.m.Y', strtotime('+15 days')),
+                    # 'grace_end_date' => date('d.m.Y', strtotime('+15 days')),
                     /*
                      * Дата окончания срока уплаты процентов
                      */

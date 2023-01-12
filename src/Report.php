@@ -127,7 +127,7 @@ final class Report
             $number = '000' . $number;
         }
         $this->fileNumber = (string)$number;
-        $str = $this->config->getPartnerId() . '_FCH_' . date('Ymd') . '_' . $number . '.XML';
+        $str = strtoupper($this->config->getPartnerId() . '_FCH_' . date('Ymd') . '_' . $number . '.XML');
         return $str;
     }
 
