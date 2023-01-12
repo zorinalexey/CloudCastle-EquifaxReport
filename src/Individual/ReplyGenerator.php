@@ -31,10 +31,9 @@ class ReplyGenerator
 {
 
     private ?XmlGenerator $generator;
-    private ?Report $report;
     private ?Client $client;
 
-    public function __construct(Report $report, XmlGenerator $generator, Client $client)
+    public function __construct($report, XmlGenerator $generator, Client $client)
     {
         $this->reply = $report;
         $this->generator = $generator;
@@ -46,74 +45,11 @@ class ReplyGenerator
 
     private function setReply(): void
     {
-        $this->setContract($this->reply, $this->generator);
+        $this->setClientInfo($this->reply->base_part, $this->generator);
+        $this->setContract($this->reply->base_part, $this->generator);
     }
 
-    public static function setAddrReg(Report $report, XmlGenerator $generator): self
-    {
-        $addres = $report->getAddrReg();
-        $generator->startElement('addr_reg', [], 'Регистрация физического лица по месту жительства или пребывания')
-            ->addElement('reg_code', $addres->reg_code)
-            ->addElement('index', $addres->index)
-            ->addElement('country', $addres->country)
-            ->addElement('country_text', $addres->country_text)
-            ->addElement('fias', $addres->fias)
-            ->addElement('okato', $addres->okato)
-            ->addElement('other_statement', $addres->other_statement)
-            ->addElement('street', $addres->street)
-            ->addElement('house', $addres->house)
-            ->addElement('domain', $addres->domain)
-            ->addElement('block', $addres->block)
-            ->addElement('build', $addres->build)
-            ->addElement('apartment', $addres->apartment)
-            ->addElement('reg_date', $addres->reg_date)
-            ->addElement('reg_place', $addres->reg_place)
-            ->addElement('reg_department_code', $addres->reg_department_code)
-            ->closeElement();
-        return $this;
-    }
-
-    private static function setAddrFact(Report $report, XmlGenerator $generator): self
-    {
-        $regAddrres = $report->getAddrReg();
-        $addres = $report->getAddrFact();
-        $generator->startElement('addr_fact', [], 'Фактическое место жительства');
-        if (md5(json_encode($regAddrres)) !== md5(json_encode($addres))) {
-            $generator->addElement('sign', 1);
-        }
-        $generator->addElement('index', $addres->index)
-            ->addElement('country', $addres->country)
-            ->addElement('country_text', $addres->country_text)
-            ->addElement('fias', $addres->fias)
-            ->addElement('okato', $addres->okato)
-            ->addElement('other_statement', $addres->other_statement)
-            ->addElement('street', $addres->street)
-            ->addElement('house', $addres->house)
-            ->addElement('domain', $addres->domain)
-            ->addElement('block', $addres->block)
-            ->addElement('build', $addres->build)
-            ->addElement('apartment', $addres->apartment)
-            ->closeElement();
-        return $this;
-    }
-
-    private static function setContacts(Report $report, XmlGenerator $generator): self
-    {
-        $contacts = $report->getContacts();
-        $phone = $contacts->getPhone();
-        $generator->startElement('contacts', [], 'Контактные данные');
-        if ($phone) {
-            $generator->startElement('phone')
-                ->addElement('number', $phone, [], 'Номер телефона')
-                ->addElement('comment', $contacts->getComment(), [], 'Комментарий')
-                ->closeElement();
-        }
-        $generator->addElement('email', $contacts->getEmail(), [], 'email');
-        $generator->closeElement();
-        return $this;
-    }
-
-    private static function setOgrnIp(Client $client, XmlGenerator $generator): self
+    private function setOgrnIp(Client $client, XmlGenerator $generator): self
     {
         $inn = $client->getInn();
         $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
@@ -128,8 +64,26 @@ class ReplyGenerator
         return $this;
     }
 
+    private function setClientInfo(Report $report, XmlGenerator $generator)
+    {
+        BasePartsGenerator::addrReg($report->getAddrReg(), $generator);
+        BasePartsGenerator::addrFact($report->getAddrReg(), $report->getAddrFact(), $generator);
+        BasePartsGenerator::contacts(
+            $report->getContacts()->getPhone(),
+            $report->getContacts()->getComment(),
+            $report->getContacts()->getEmail(),
+            $generator
+        );
+        $this->setOgrnIp($this->client, $generator);
+        BasePartsGenerator::incapacity($report, $generator);
+        BasePartsGenerator::bankruptcy($report, $generator);
+        BasePartsGenerator::bankruptcyFinish($report, $generator);
+    }
+
     private function setContract(Report $report, XmlGenerator $generator): self
     {
+
+        ReportGenerator::$numberOfRecords ++;
         $contract = $report->getContract();
         $generator->startElement('contract', [], 'Сведения об обязательстве субъекта кредитной истории')
             ->startElement('uid', [], 'Уникальный идентификатор договора (сделки)')
@@ -154,7 +108,6 @@ class ReplyGenerator
     private function setAveragePayment(AveragePayment $average_payment, XmlGenerator $generator)
     {
         if ($average_payment) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('average_payment', [], ' Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета');
             $this->setData($average_payment, $generator);
             $generator->closeElement();
@@ -165,7 +118,6 @@ class ReplyGenerator
     private function setPayments(Payments $payments, XmlGenerator $generator)
     {
         if ($payments) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('payments', [], 'Сведения о внесении платежей');
             $this->setData($payments, $generator);
             $generator->closeElement();
@@ -176,7 +128,6 @@ class ReplyGenerator
     private function setDeptOverdue(DebtOverdue $debt_overdue, XmlGenerator $generator)
     {
         if ($debt_overdue) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
             $this->setData($debt_overdue, $generator);
             $generator->closeElement();
@@ -187,7 +138,6 @@ class ReplyGenerator
     private function setDebtCurrent(DebtCurrent $debt_current, XmlGenerator $generator)
     {
         if ($debt_current) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
             $this->setData($debt_current, $generator);
             $generator->closeElement();
@@ -198,7 +148,6 @@ class ReplyGenerator
     private function setDebt(Debt $debt, XmlGenerator $generator)
     {
         if ($debt) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('debt', [], 'Сведения о задолженности');
             $this->setData($debt, $generator);
             $generator->closeElement();
@@ -209,7 +158,6 @@ class ReplyGenerator
     private function setCredStartDebt(CredStartDebt $cred_start_debt, XmlGenerator $generator)
     {
         if ($cred_start_debt) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства');
             $this->setData($cred_start_debt, $generator);
             $generator->closeElement();
@@ -220,7 +168,6 @@ class ReplyGenerator
     private function setContractChanges(ContractChanges $contract_changes, XmlGenerator $generator)
     {
         if ($contract_changes) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('contract_changes', [], 'Сведения об изменении договора');
             $this->setData($contract_changes, $generator);
             $generator->closeElement();
@@ -231,7 +178,6 @@ class ReplyGenerator
     private function setFullCost(FullCost $full_cost, XmlGenerator $generator): self
     {
         if ($full_cost) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('full_cost', [], 'Полная стоимость потребительского кредита (займа)');
             $this->setData($full_cost, $generator);
             $generator->closeElement();
@@ -242,7 +188,6 @@ class ReplyGenerator
     private function setPaymentTerms(PaymentTerms $payment_terms, XmlGenerator $generator): self
     {
         if ($payment_terms) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('payment_terms', [], 'Сведения об условиях платежей');
             $this->setData($payment_terms, $generator);
             $generator->closeElement();
@@ -253,7 +198,6 @@ class ReplyGenerator
     private function setJointDebtors(JointDebtors $joint_debtors, XmlGenerator $generator)
     {
         if ($joint_debtors) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('joint_debtors');
             $this->setData($joint_debtors, $generator);
             $generator->closeElement();
@@ -264,7 +208,6 @@ class ReplyGenerator
     private function setDeal(Deal $deal, XmlGenerator $generator): self
     {
         if ($deal) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('deal', [], 'Общие сведения о сделке');
             $this->setData($deal, $generator);
             $generator->closeElement();
@@ -275,7 +218,6 @@ class ReplyGenerator
     private function setContractAmount(ContractAmount $contractAmount, XmlGenerator $generator): self
     {
         if ($contractAmount) {
-            ReportGenerator::$numberOfRecords ++;
             $generator->startElement('contract_amount', [], 'Сумма и валюта обязательства');
             $this->setData($contractAmount, $generator);
             $generator->closeElement();

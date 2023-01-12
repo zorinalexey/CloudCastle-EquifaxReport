@@ -85,15 +85,7 @@ class ReportGenerator
 
     private function setIndividualHistory(Client $client, XmlGenerator $generator): self
     {
-        if ($client->history) {
-            $generator->startElement('history');
-            $this->setIndividualName($client, $generator, true);
-            $this->setIndividualDocument($client, $generator, true);
-            $generator->closeElement();
-        } else {
-            $generator->startElement('history')
-                ->addElement('hist_name_sign', 0);
-        }
+        BasePartsGenerator::history($client, $generator);
         return $this;
     }
 

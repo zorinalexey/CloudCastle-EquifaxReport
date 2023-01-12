@@ -83,6 +83,7 @@ final class Report
             }
             $this->setTitlePart($report);
             $this->xml->closeElement();
+            Individual\BasePartsGenerator::addPart($report, $this->config, $this->xml);
         }
         return $this;
     }
@@ -102,7 +103,7 @@ final class Report
             $this->setCommercialInfo($report->title_part->commercial);
         }
         $this->xml->closeElement();
-        new IndividualReplyGenerator($report->title_part->base_part, $this->xml, $report->title_part->private);
+        new IndividualReplyGenerator($report, $this->xml, $report->title_part->private);
     }
 
     public function getFileName(): string
@@ -119,9 +120,9 @@ final class Report
                 $number ++;
             }
         }
-        if ($number > 100 AND $number < 1000) {
+        if ($number >= 100 AND $number < 1000) {
             $number = '0' . $number;
-        } elseif ($number > 10 AND $number < 100) {
+        } elseif ($number >= 10 AND $number < 100) {
             $number = '00' . $number;
         } elseif ($number < 10) {
             $number = '000' . $number;

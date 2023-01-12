@@ -42,13 +42,13 @@ class Report
      * Регистрация физического лица по месту жительства или пребывания
      * @var Address|null
      */
-    private $addr_reg;
+    private ?Address $addr_reg;
 
     /**
      * Фактическое место жительства
      * @var Address|null
      */
-    private $addr_fact;
+    private ?Address $addr_fact;
 
     /**
      * Установить данные об адресе регистрации
