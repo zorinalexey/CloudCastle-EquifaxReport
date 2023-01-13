@@ -68,37 +68,29 @@ class Config
      * @var string|null
      */
     public ?string $path = null;
+    /**
+     * @var PrevFile
+     */
+    public ?PrevFile $prevFile = null;
 
     private function __construct()
     {
+
+
         if (self::$configFile) {
             $config = json_decode(file_get_contents(self::$configFile), true);
             foreach ($config as $key => $value) {
                 $this->$key = $value;
             }
             $this->file_reg_date = date('d.m.Y');
-            $this->file_reg_num = $this->setNumberFile();
         }
-    }
-
-    private function setNumberFile()
-    {
-        if ($this->path) {
-            $this->path .= DIRECTORY_SEPARATOR . date('d.m.Y');
-        }
-        if (!is_dir($this->path)) {
-            mkdir($this->path, 0777, true);
-        }
-        $countStr = (string)count(scandir($this->path));
-        $lenght = strlen($countStr);
-        if ($lenght < 10) {
-            $number = '000' . $countStr;
-        } elseif ($lenght >= 10 && $lenght < 100) {
-            $number = '00' . $countStr;
+        if (!$this->path) {
+            $this->path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'report' . DIRECTORY_SEPARATOR . date('d.m.Y');
         } else {
-            $number = '0' . $countStr;
+            $this->path = dirname($this->path) . DIRECTORY_SEPARATOR . basename($this->path) . DIRECTORY_SEPARATOR . date('d.m.Y');
         }
-        $this->file_reg_num = strtoupper($this->partnerId . '_FCH' . date('Ymd') . '_' . $number . '.XML');
+        $this->prevFile = new PrevFile();
+        $this->date = date('d.m.Y');
     }
 
     public static function instance(): static
@@ -107,6 +99,28 @@ class Config
             self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    public function numberFile()
+    {
+        $countStr = 1;
+        if (!is_dir($this->path)) {
+            mkdir($this->path, 0777, true);
+        }
+        foreach (scandir($this->path) as $value) {
+            if ($value !== '.' and $value !== '..') {
+                $countStr++;
+            }
+        }
+        if ($countStr < 10) {
+            $number = '000' . $countStr;
+        } elseif ($countStr >= 10 && $countStr < 100) {
+            $number = '00' . $countStr;
+        } else {
+            $number = '0' . $countStr;
+        }
+        $this->file_reg_num = $number;
+        return $this->path . DIRECTORY_SEPARATOR . strtoupper($this->partnerId . '_FCH' . date('Ymd') . '_' . $number . '.XML');
     }
 
 }

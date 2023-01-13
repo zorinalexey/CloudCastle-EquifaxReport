@@ -14,5 +14,8 @@ namespace CloudCastle\EquifaxReport\Libs;
  */
 class Incapacity
 {
-
+    public int $code = 1;
+    public ?string $court_decision_date = null;
+    public ?string $court_decision_no = null;
+    public ?string $court_name = null;
 }

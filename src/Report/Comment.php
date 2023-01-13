@@ -33,8 +33,13 @@ class Comment
      */
     public ?string $application_date = null;
 
-    public function __toString(): string
+    public function __toString()
     {
+        foreach ($this as $value) {
+            if ($value === null) {
+                return '';
+            }
+        }
         return json_encode($this);
     }
 }

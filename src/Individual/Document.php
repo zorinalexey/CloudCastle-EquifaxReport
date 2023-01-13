@@ -63,4 +63,16 @@ final class Document
      */
     public ?string $end_date = null;
 
+    /**
+     * Название страны гражданства
+     * @var string|null
+     */
+    public ?string $country_text = null;
+
+    /**
+     * Тип документа
+     * @var string|null
+     */
+    public ?string $type_text = null;
+
 }

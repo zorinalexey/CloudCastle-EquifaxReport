@@ -16,6 +16,5 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "cloud-castle/xml-generator": "^1.0"
   }
 }

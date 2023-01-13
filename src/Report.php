@@ -6,7 +6,11 @@ namespace CloudCastle\EquifaxReport;
 
 
 use CloudCastle\EquifaxReport\Config\Config;
-use CloudCastle\XmlGenerator\XmlGenerator;
+use CloudCastle\EquifaxReport\Individual\Client;
+use CloudCastle\EquifaxReport\Libs\BasePart;
+use CloudCastle\EquifaxReport\Libs\Blocks;
+use CloudCastle\EquifaxReport\Parts\Title;
+use CloudCastle\EquifaxReport\Report\Events;
 
 /**
  * Класс ReportGenerator
@@ -19,20 +23,76 @@ use CloudCastle\XmlGenerator\XmlGenerator;
 final class Report
 
 {
+    const VERSION = '4.0';
+    /**
+     * Количество различных субъектов, по которым выгружены записи в файле
+     * @var int
+     */
+    public static int $subjects_count = 0;
+    /**
+     * Количество записей в файле
+     * @var int
+     */
+    public static int $records_count = 0;
+    public ?BasePart $base_part = null;
+    /**
+     * @var Client|null
+     */
+    public ?Client $client = null;
+    /**
+     * @var Events|null
+     */
+    public ?Events $event = null;
+    /**
+     * @var Config|null
+     */
+    public ?Config $config = null;
 
-    private static XmlGenerator $generator;
-    private static Report $instance;
-
-    public static function instance(): self
+    public function __construct(Client $client, Events $event, Config $config)
     {
-        if (!self::$instance) {
-            self::$instance = new self();
-            self::$generator = new XmlGenerator();
+        $this->client = $client;
+        $this->event = $event;
+        $this->config = $config;
+        $this->base_part = new BasePart();
+        if ($client->inn->ogrnIp) {
+            $this->base_part->ogrnip = $client->inn->ogrnIp;
         }
-        return self::$instance;
     }
 
+
+    /**
+     * @param array $reports
+     * @param Config $config
+     * @return void
+     */
     public static function generate(array $reports, Config $config)
     {
+        $generator = new XmlGenerator($config);
+        $generator->startDocument();
+        $generator->startElement('fch', ['version' => self::VERSION]);
+        Blocks::head($config, $generator);
+        foreach ($reports as $report) {
+            self::$subjects_count++;
+            $generator->startElement('info');
+            $event = $report->event;
+            foreach ($event as $key => $value) {
+                $generator->addAttribute($key, (string)$value);
+            }
+            new Title($report->client, $generator);
+            self::partsGenerate(Events::search($report->event->event), $report, $generator);
+            $generator->closeElement();
+        }
+        Blocks::footer($generator);
+        $generator->closeElement();
+        return $generator->get();
+    }
+
+    private static function partsGenerate(array $parts, Report $report, XmlGenerator $generator)
+    {
+        foreach ($parts as $partName => $partValues) {
+            $generator->startElement($partName);
+            Blocks::partsGenerator($partValues, $report, $generator);
+            $generator->closeElement();
+        }
     }
 }

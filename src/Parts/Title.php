@@ -6,7 +6,7 @@ namespace CloudCastle\EquifaxReport\Parts;
 
 use CloudCastle\EquifaxReport\Individual\Client;
 use CloudCastle\EquifaxReport\Individual\Document;
-use CloudCastle\XmlGenerator\XmlGenerator;
+use CloudCastle\EquifaxReport\XmlGenerator;
 
 /**
  * Класс Title
@@ -49,9 +49,8 @@ final class Title
     private function private(): void
     {
         $this->generator->startElement('private');
-        $this->kski();
         $this->generator->startElement('name')
-            ->addElement('last', $this->client->name)
+            ->addElement('last', $this->client->last)
             ->addElement('first', $this->client->first)
             ->addElement('middle', $this->client->middle)
             ->closeElement();
@@ -60,13 +59,11 @@ final class Title
             ->addElement('date', $this->client->birthDate)
             ->addElement('country', $this->client->birthCountry)
             ->addElement('place', $this->client->birthPlace)
-            ->closeElement()
-            ->startElement('history');
+            ->closeElement();
         $this->setHistory();
         $this->setInn();
         $this->setSnils();
-        $this->generator->closeElement()
-            ->closeElement();
+        $this->generator->closeElement();
     }
 
     private function setDocument(?Document $doc)
@@ -103,8 +100,7 @@ final class Title
                 ->addElement('hist_doc_sign', 0)
                 ->closeElement();
         } else {
-            $this->generator->startElement('history')
-                ->startElement('name')
+            $this->generator->startElement('name')
                 ->addElement('last', $this->client->history->last)
                 ->addElement('first', $this->client->history->first)
                 ->addElement('middle', $this->client->history->middle)
@@ -117,8 +113,12 @@ final class Title
 
     private function setInn()
     {
+        $code = 2;
+        if ($this->client->inn->code) {
+            $code = 1;
+        }
         $this->generator->startElement('inn')
-            ->addElement('code', $this->client->inn->code)
+            ->addElement('code', $code)
             ->addElement('no', $this->client->inn->no)
             ->addElement('ogrnip', $this->client->inn->ogrnIp)
             ->closeElement();

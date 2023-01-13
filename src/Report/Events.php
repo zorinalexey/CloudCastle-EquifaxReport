@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Report;
 
-use CloudCastle\EquifaxReport\Config\Config;
+use CloudCastle\EquifaxReport\Individual\Client;
 
 /**
  * Класс Events
@@ -63,10 +63,22 @@ final class Events
      */
     public ?Comment $comment = null;
 
-    public function __construct(Config $config)
+    public function __construct(Client $client)
     {
-        $this->recnumber = md5(json_encode($config));
+        $this->recnumber = md5(json_encode($client));
         $this->comment = new Comment();
+    }
+
+
+    public static function search(string $event)
+    {
+        $list = require __DIR__ . '/events.php';
+        foreach ($list as $key => $value) {
+            if (mb_strtolower($key) === mb_strtolower($event)) {
+                return $value;
+            }
+        }
+        return null;
     }
 
 }

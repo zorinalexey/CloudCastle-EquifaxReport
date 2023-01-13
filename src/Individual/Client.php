@@ -84,7 +84,6 @@ final class Client
     public function __construct()
     {
         $this->doc = new Document();
-        $this->history = new History();
         $this->inn = new Inn();
     }
 

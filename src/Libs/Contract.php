@@ -4,22 +4,6 @@ declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
-use CloudCastle\EquifaxReport\ReportSetters\Collaterals;
-use CloudCastle\EquifaxReport\ReportSetters\ContractAmount;
-use CloudCastle\EquifaxReport\ReportSetters\ContractChanges;
-use CloudCastle\EquifaxReport\ReportSetters\CredStartDebt;
-use CloudCastle\EquifaxReport\ReportSetters\Deal;
-use CloudCastle\EquifaxReport\ReportSetters\Debt;
-use CloudCastle\EquifaxReport\ReportSetters\DebtCurrent;
-use CloudCastle\EquifaxReport\ReportSetters\DebtOverdue;
-use CloudCastle\EquifaxReport\ReportSetters\FullCost;
-use CloudCastle\EquifaxReport\ReportSetters\Guarantees;
-use CloudCastle\EquifaxReport\ReportSetters\JointDebtors;
-use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSource;
-use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSubject;
-use CloudCastle\EquifaxReport\ReportSetters\Payments;
-use CloudCastle\EquifaxReport\ReportSetters\PaymentTerms;
 
 /**
  * Класс Contract
@@ -33,76 +17,40 @@ class Contract
 {
 
     public ?string $uid = null;
-    public ?Deal $deal;
-    public ?ContractAmount $contract_amount;
-    public ?CredStartDebt $cred_start_debt;
-    public ?JointDebtors $joint_debtors;
-    public ?PaymentTerms $payment_terms;
-    public ?FullCost $full_cost;
-    public ?ContractChanges $contract_changes;
-    public ?Debt $debt;
-    public ?DebtCurrent $debt_current;
-    public ?DebtOverdue $debt_overdue;
-    public ?Payments $payments;
-    public ?AveragePayment $average_payment;
-    public ?MaterialGuaranteeSource $material_guarantee_source;
-    public ?MaterialGuaranteeSubject $material_guarantee_subject;
-    public ?Collaterals $collaterals;
-    public ?Guarantees $guarantees;
+    public ?Deal $deal = null;
+    public ?ContractAmount $contract_amount = null;
+    public ?CredStartDebt $cred_start_debt = null;
+    public ?JointDebtors $joint_debtors = null;
+    public ?PaymentTerms $payment_terms = null;
+    public ?FullCost $full_cost = null;
+    public ?ContractChanges $contract_changes = null;
+    public ?Debt $debt = null;
+    public ?DebtCurrent $debt_current = null;
+    public ?DebtOverdue $debt_overdue = null;
+    public ?Payments $payments = null;
+    public ?AveragePayment $average_payment = null;
+    public ?MaterialGuaranteeSource $material_guarantee_source = null;
+    public ?MaterialGuaranteeSubject $material_guarantee_subject = null;
+    public ?Collaterals $collaterals = null;
+    public ?Guarantees $guarantees = null;
 
-    /**
-     *
-     * @param string $uid
-     * @param array $contract
-     */
-    public function __construct(string $uid, array $contract)
+    public function __construct()
     {
-        $this->uid = $uid;
-        $this->__setDefautValues();
-        $this->__setContractInfo($contract);
+        $this->deal = new Deal();
+        $this->contract_amount = new ContractAmount();
+        $this->cred_start_debt = new CredStartDebt();
+        $this->joint_debtors = new JointDebtors();
+        $this->payment_terms = new PaymentTerms();
+        $this->full_cost = new FullCost();
+        $this->contract_changes = new ContractChanges();
+        $this->debt = new Debt();
+        $this->debt_current = new DebtCurrent();
+        $this->debt_overdue = new DebtOverdue();
+        $this->payments = new Payments();
+        $this->average_payment = new AveragePayment();
+        $this->material_guarantee_source = new MaterialGuaranteeSource();
+        $this->material_guarantee_subject = new MaterialGuaranteeSubject();
+        $this->collaterals = new Collaterals();
+        $this->guarantees = new Guarantees();
     }
-
-    private function __setDefautValues()
-    {
-        $data = [
-            'deal' => [],
-            'contract_amount' => [],
-            'cred_start_debt' => '',
-            'joint_debtors' => 0,
-            'payment_terms' => [],
-            'full_cost' => [],
-            'contract_changes' => [],
-            'debt' => [],
-            'debt_current' => [],
-            'debt_overdue' => [],
-            'payments' => [],
-            'average_payment' => [],
-            'average_payment' => [],
-            'material_guarantee_source' => [],
-            'material_guarantee_subject' => [],
-            'collaterals' => [],
-            'guarantees' => [],
-        ];
-        $this->__setContractInfo($data);
-    }
-
-    private function __setContractInfo(array $contract): void
-    {
-        foreach ($contract as $key => $value) {
-            $className = $this->__getObjName($key);
-            if (class_exists($className)) {
-                $this->$key = new $className($value);
-            }
-        }
-    }
-
-    private function __getObjName(string $key): string
-    {
-        $name = '\CloudCastle\EquifaxReport\ReportSetters\\';
-        foreach (explode('_', $key) as $value) {
-            $name .= ucfirst(strtolower($value));
-        }
-        return $name;
-    }
-
 }

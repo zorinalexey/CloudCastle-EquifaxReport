@@ -33,4 +33,10 @@ final class Inn
      */
     public ?string $ogrnIp = null;
 
+    /**
+     * Дата оскрытия ИП
+     * @var string|null
+     */
+    public ?string $ogrnIpDate = null;
+
 }
