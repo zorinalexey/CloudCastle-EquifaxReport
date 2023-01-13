@@ -114,13 +114,13 @@ class Config
         }
         if ($countStr < 10) {
             $number = '000' . $countStr;
-        } elseif ($countStr >= 10 && $countStr < 100) {
+        } elseif (10 >= $countStr && $countStr < 100) {
             $number = '00' . $countStr;
         } else {
             $number = '0' . $countStr;
         }
         $this->file_reg_num = $number;
-        return $this->path . DIRECTORY_SEPARATOR . strtoupper($this->partnerId . '_FCH' . date('Ymd') . '_' . $number . '.XML');
+        return $this->path . DIRECTORY_SEPARATOR . strtoupper($this->partnerId . '_FCH_' . date('Ymd') . '_' . $number . '.XML');
     }
 
 }

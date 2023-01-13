@@ -7,8 +7,10 @@ namespace CloudCastle\EquifaxReport;
 
 use CloudCastle\EquifaxReport\Config\Config;
 use CloudCastle\EquifaxReport\Individual\Client;
+use CloudCastle\EquifaxReport\Libs\AddPart;
 use CloudCastle\EquifaxReport\Libs\BasePart;
 use CloudCastle\EquifaxReport\Libs\Blocks;
+use CloudCastle\EquifaxReport\Libs\InformationPart;
 use CloudCastle\EquifaxReport\Parts\Title;
 use CloudCastle\EquifaxReport\Report\Events;
 
@@ -35,6 +37,8 @@ final class Report
      */
     public static int $records_count = 0;
     public ?BasePart $base_part = null;
+    public ?AddPart $add_part = null;
+    public ?InformationPart $information_part = null;
     /**
      * @var Client|null
      */
@@ -53,6 +57,8 @@ final class Report
         $this->client = $client;
         $this->event = $event;
         $this->config = $config;
+        $this->add_part = new AddPart();
+        $this->information_part = new InformationPart();
         $this->base_part = new BasePart();
         if ($client->inn->ogrnIp) {
             $this->base_part->ogrnip = $client->inn->ogrnIp;

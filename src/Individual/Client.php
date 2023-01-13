@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Individual;
 
+use CloudCastle\EquifaxReport\Libs\Address;
+
 /**
  * Класс Client
  * @version 0.0.1
@@ -85,6 +87,7 @@ final class Client
     {
         $this->doc = new Document();
         $this->inn = new Inn();
+        $this->addr_reg = new Address();
     }
 
 }
