@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
@@ -14,5 +14,5 @@ namespace CloudCastle\EquifaxReport\Libs;
  */
 class Incapacity
 {
-    
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
@@ -28,6 +28,25 @@ class Contacts
         $this->setComment((string)$phoneComment);
     }
 
+    private function setPhone($phone): void
+    {
+        $this->phone = Format::phone($phone);
+    }
+
+    private function setEmail($email): void
+    {
+        if (preg_match('~^([\w\.-]+)@([\w\.-]+)\.([\w\.-]+)~ui', $email)) {
+            $this->email = $email;
+        }
+    }
+
+    private function setComment($phoneComment): void
+    {
+        if ($phoneComment) {
+            $this->comment = $phoneComment;
+        }
+    }
+
     /**
      *
      * @return string|null
@@ -53,25 +72,6 @@ class Contacts
     public function getComment()
     {
         return $this->comment;
-    }
-
-    private function setPhone($phone): void
-    {
-        $this->phone = Format::phone($phone);
-    }
-
-    private function setEmail($email): void
-    {
-        if (preg_match('~^([\w\.-]+)@([\w\.-]+)\.([\w\.-]+)~ui', $email)) {
-            $this->email = $email;
-        }
-    }
-
-    private function setComment($phoneComment): void
-    {
-        if ($phoneComment) {
-            $this->comment = $phoneComment;
-        }
     }
 
 }

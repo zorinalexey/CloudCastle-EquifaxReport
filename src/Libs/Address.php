@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-use CloudCastle\Helpers\Format;
 use CloudCastle\EquifaxLibrary\CodesOfCountriesAccordingToOKSM;
 use CloudCastle\EquifaxReport\ReportSetters\Helper;
+use CloudCastle\Helpers\Format;
 
 /**
  * Класс Address

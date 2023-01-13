@@ -1,25 +1,25 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-use CloudCastle\EquifaxReport\ReportSetters\Deal;
+use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
+use CloudCastle\EquifaxReport\ReportSetters\Collaterals;
 use CloudCastle\EquifaxReport\ReportSetters\ContractAmount;
-use CloudCastle\EquifaxReport\ReportSetters\JointDebtors;
-use CloudCastle\EquifaxReport\ReportSetters\CredStartDebt;
-use CloudCastle\EquifaxReport\ReportSetters\PaymentTerms;
-use CloudCastle\EquifaxReport\ReportSetters\FullCost;
 use CloudCastle\EquifaxReport\ReportSetters\ContractChanges;
+use CloudCastle\EquifaxReport\ReportSetters\CredStartDebt;
+use CloudCastle\EquifaxReport\ReportSetters\Deal;
 use CloudCastle\EquifaxReport\ReportSetters\Debt;
 use CloudCastle\EquifaxReport\ReportSetters\DebtCurrent;
 use CloudCastle\EquifaxReport\ReportSetters\DebtOverdue;
-use CloudCastle\EquifaxReport\ReportSetters\Payments;
-use CloudCastle\EquifaxReport\ReportSetters\AveragePayment;
+use CloudCastle\EquifaxReport\ReportSetters\FullCost;
+use CloudCastle\EquifaxReport\ReportSetters\Guarantees;
+use CloudCastle\EquifaxReport\ReportSetters\JointDebtors;
 use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSource;
 use CloudCastle\EquifaxReport\ReportSetters\MaterialGuaranteeSubject;
-use CloudCastle\EquifaxReport\ReportSetters\Collaterals;
-use CloudCastle\EquifaxReport\ReportSetters\Guarantees;
+use CloudCastle\EquifaxReport\ReportSetters\Payments;
+use CloudCastle\EquifaxReport\ReportSetters\PaymentTerms;
 
 /**
  * Класс Contract
@@ -62,25 +62,6 @@ class Contract
         $this->__setContractInfo($contract);
     }
 
-    private function __setContractInfo(array $contract): void
-    {
-        foreach ($contract as $key => $value) {
-            $className = $this->__getObjName($key);
-            if (class_exists($className)) {
-                $this->$key = new $className($value);
-            }
-        }
-    }
-
-    private function __getObjName(string $key): string
-    {
-        $name = '\CloudCastle\EquifaxReport\ReportSetters\\';
-        foreach (explode('_', $key) as $value) {
-            $name .= ucfirst(strtolower($value));
-        }
-        return $name;
-    }
-
     private function __setDefautValues()
     {
         $data = [
@@ -103,6 +84,25 @@ class Contract
             'guarantees' => [],
         ];
         $this->__setContractInfo($data);
+    }
+
+    private function __setContractInfo(array $contract): void
+    {
+        foreach ($contract as $key => $value) {
+            $className = $this->__getObjName($key);
+            if (class_exists($className)) {
+                $this->$key = new $className($value);
+            }
+        }
+    }
+
+    private function __getObjName(string $key): string
+    {
+        $name = '\CloudCastle\EquifaxReport\ReportSetters\\';
+        foreach (explode('_', $key) as $value) {
+            $name .= ucfirst(strtolower($value));
+        }
+        return $name;
     }
 
 }

@@ -1,25 +1,21 @@
 {
-    "name": "cloud-castle/equifax-report",
-    "description": "Библиотека для генерации xml файлов кредитных отчетов для БКИ Equifax",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "CloudCastle\\EquifaxReport\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Алексей Зорин",
-            "email": "zorinalexey59292@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "cloud-castle/equifax-library": "^1.0",
-        "cloud-castle/equifax-config": "^1.0",
-        "cloud-castle/xml-generator": "^1.0",
-        "cloud-castle/file-system": "^1.0",
-        "cloud-castle/helpers": "^1.0"
+  "name": "cloud-castle/equifax-report",
+  "description": "Библиотека для генерации xml файлов кредитных отчетов для БКИ Equifax",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "CloudCastle\\EquifaxReport\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Алексей Зорин",
+      "email": "zorinalexey59292@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "cloud-castle/xml-generator": "^1.0"
+  }
 }
