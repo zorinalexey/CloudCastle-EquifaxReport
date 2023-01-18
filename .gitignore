@@ -2,6 +2,7 @@
 /xml/
 /cache/
 /nbproject/
+/report/
 composer.phar
 composer.lock
 index.php
