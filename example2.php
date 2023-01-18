@@ -168,12 +168,6 @@ for ($i = 0; $i < $countReports; $i++) {
     /**
      * Сведения о наличии солидарных должников
      */
-    //$report->base_part->contract->joint_debtors->count = 2;
-    $report->information_part->application->currency = 'RUB';
-    $report->information_part->application->ratio = 1;
-    $report->information_part->application->uid = 'sfdhg4352khj685lk87lk';
-    $report->information_part->application->date = date('m.d.Y');
-
     $reports[] = $report;
 
 }

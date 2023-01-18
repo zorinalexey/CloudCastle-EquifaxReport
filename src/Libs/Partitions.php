@@ -425,14 +425,14 @@ trait Partitions
     public static function application(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('application', [], 'Сведения об обращении субъекта к источнику с предложением совершить сделку')
-            ->addElement('ratio', (int)$report->information_part->application->ratio)
-            ->addElement('sum', (int)$report->information_part->application->sum)
-            ->addElement('currency', (int)$report->information_part->application->currency)
-            ->addElement('uid', (int)$report->information_part->application->uid)
-            ->addElement('date', (int)$report->information_part->application->date)
-            ->addElement('source_type', (int)$report->information_part->application->source_type)
-            ->addElement('way', (int)$report->information_part->application->way)
-            ->addElement('approval_date', (int)$report->information_part->application->approval_date)
+            ->addElement('ratio', $report->information_part->application->ratio)
+            ->addElement('sum', $report->information_part->application->sum)
+            ->addElement('currency', $report->information_part->application->currency)
+            ->addElement('uid', $report->information_part->application->uid)
+            ->addElement('date', $report->information_part->application->date)
+            ->addElement('source_type', $report->information_part->application->source_type)
+            ->addElement('way', $report->information_part->application->way)
+            ->addElement('approval_date', $report->information_part->application->approval_date)
             ->closeElement();
     }
 
@@ -444,12 +444,12 @@ trait Partitions
     public static function credit(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('credit', [], 'Сведения об участии в обязательстве, по которому формируется кредитная история')
-            ->addElement('ratio', (int)$report->information_part->credit->ratio)
-            ->addElement('type', (int)$report->information_part->credit->type)
-            ->addElement('uid', (int)$report->information_part->credit->uid)
-            ->addElement('date', (int)$report->information_part->credit->date)
-            ->addElement('sign_90plus', (int)$report->information_part->credit->sign_90plus)
-            ->addElement('sign_stop_load', (int)$report->information_part->credit->sign_stop_load)
+            ->addElement('ratio', $report->information_part->credit->ratio)
+            ->addElement('type', $report->information_part->credit->type)
+            ->addElement('uid', $report->information_part->credit->uid)
+            ->addElement('date', $report->information_part->credit->date)
+            ->addElement('sign_90plus', $report->information_part->credit->sign_90plus)
+            ->addElement('sign_stop_load', $report->information_part->credit->sign_stop_load)
             ->closeElement();
     }
 
@@ -461,8 +461,8 @@ trait Partitions
     public static function failure(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('failure', [], '')
-            ->addElement('date', (int)$report->information_part->failure->date)
-            ->addElement('reason', (int)$report->information_part->failure->reason)
+            ->addElement('date', $report->information_part->failure->date)
+            ->addElement('reason', $report->information_part->failure->reason)
             ->closeElement();
     }
 
