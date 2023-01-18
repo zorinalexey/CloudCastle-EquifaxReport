@@ -3,6 +3,7 @@
 /cache/
 /nbproject/
 /report/
+/.idea/
 composer.phar
 composer.lock
 index.php

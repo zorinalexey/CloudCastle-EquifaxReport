@@ -2,7 +2,6 @@
 
 date_default_timezone_set('Europe/London');
 
-$start = microtime(true);
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use CloudCastle\EquifaxReport\Config\Config;
@@ -167,7 +166,5 @@ for ($i = 0; $i < $countReports; $i++) {
 }
 
 $file = Report::generate($reports, $config);
-
-$end = microtime(true);
 
 echo $file;
