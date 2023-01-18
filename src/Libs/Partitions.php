@@ -5,9 +5,18 @@ namespace CloudCastle\EquifaxReport\Libs;
 use CloudCastle\EquifaxReport\Config\Config;
 use CloudCastle\EquifaxReport\Report;
 use CloudCastle\EquifaxReport\XmlGenerator;
+use Exception;
 
+/**
+ *
+ */
 trait Partitions
 {
+    /**
+     * @param Config $config
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function head(Config $config, XmlGenerator $generator): void
     {
         $generator->startElement('head')
@@ -25,6 +34,10 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function footer(XmlGenerator $generator): void
     {
         $generator->startElement('footer')
@@ -33,26 +46,36 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function addr_reg(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('addr_reg', [], 'Регистрация физического лица по месту жительства или пребывания')
-            ->addElement('reg_code' , $report->base_part->addr_reg->reg_code)
-            ->addElement('index' , $report->base_part->addr_reg->index)
-            ->addElement('country' , $report->base_part->addr_reg->country)
-            ->addElement('country_text' , $report->base_part->addr_reg->country_text)
-            ->addElement('fias' , $report->base_part->addr_reg->fias)
-            ->addElement('okato' , $report->base_part->addr_reg->okato)
-            ->addElement('street' , $report->base_part->addr_reg->street)
-            ->addElement('house' , $report->base_part->addr_reg->house)
-            ->addElement('domain' , $report->base_part->addr_reg->domain)
-            ->addElement('block' , $report->base_part->addr_reg->block)
-            ->addElement('build' , $report->base_part->addr_reg->build)
-            ->addElement('apartment' , $report->base_part->addr_reg->apartment)
-            ->addElement('reg_place' , $report->base_part->addr_reg->reg_place)
-            ->addElement('reg_department_code' , $report->base_part->addr_reg->reg_department_code)
+            ->addElement('reg_code', $report->base_part->addr_reg->reg_code)
+            ->addElement('index', $report->base_part->addr_reg->index)
+            ->addElement('country', $report->base_part->addr_reg->country)
+            ->addElement('country_text', $report->base_part->addr_reg->country_text)
+            ->addElement('fias', $report->base_part->addr_reg->fias)
+            ->addElement('okato', $report->base_part->addr_reg->okato)
+            ->addElement('street', $report->base_part->addr_reg->street)
+            ->addElement('house', $report->base_part->addr_reg->house)
+            ->addElement('domain', $report->base_part->addr_reg->domain)
+            ->addElement('block', $report->base_part->addr_reg->block)
+            ->addElement('build', $report->base_part->addr_reg->build)
+            ->addElement('apartment', $report->base_part->addr_reg->apartment)
+            ->addElement('reg_place', $report->base_part->addr_reg->reg_place)
+            ->addElement('reg_department_code', $report->base_part->addr_reg->reg_department_code)
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function addr_fact(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('addr_fact', [], 'Фактическое место жительства')
@@ -69,6 +92,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function contacts(Report $report, XmlGenerator $generator): void
     {
         $contacts = $report->base_part->contacts;
@@ -91,6 +119,11 @@ trait Partitions
         }
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function ogrnip(Report $report, XmlGenerator $generator): void
     {
         if ($report->client->inn->ogrnIp) {
@@ -101,6 +134,11 @@ trait Partitions
         }
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function incapacity(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности')
@@ -111,6 +149,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function contract(Report $report, XmlGenerator $generator): void
     {
         Report::$records_count++;
@@ -119,6 +162,11 @@ trait Partitions
         }
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function uid(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('uid')
@@ -126,6 +174,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function deal(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('deal', [], 'Общие сведения о сделке')
@@ -143,6 +196,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function contract_amount(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_amount', [], 'Сумма и валюта обязательства')
@@ -151,6 +209,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function joint_debtors(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('joint_debtors', [], 'Сведения о наличии солидарных должников');
@@ -162,6 +225,11 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function payment_terms(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('payment_terms', [], 'Сведения об условиях платежей')
@@ -177,6 +245,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function full_cost(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('full_cost', [], 'Полная стоимость потребительского кредита (займа)')
@@ -186,6 +259,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function cred_start_debt(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства')
@@ -193,6 +271,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function debt(Report $report, XmlGenerator $generator): void
     {
         $debt = $report->base_part->contract->debt;
@@ -212,6 +295,11 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function debt_current(Report $report, XmlGenerator $generator): void
     {
         $debt = $report->base_part->contract->debt_current;
@@ -224,6 +312,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function debt_overdue(Report $report, XmlGenerator $generator): void
     {
         $debt = $report->base_part->contract->debt_overdue;
@@ -242,6 +335,11 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function payments(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('payments', [], 'Сведения о внесении платежей')
@@ -260,6 +358,11 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function average_payment(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('average_payment', [], 'Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета')
@@ -268,26 +371,45 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function material_guarantee_source(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('material_guarantee_source', [], 'Сведения о неденежном обязательстве источника')
-            ->addElement('material_item', $report->base_part->contract->material_guarantee_source->material_item)
-            ->addElement('item_type', $report->base_part->contract->material_guarantee_source->item_type)
-            ->addElement('material_object', $report->base_part->contract->material_guarantee_source->material_object)
-            ->addElement('material_object_date', $report->base_part->contract->material_guarantee_source->material_object_date)
-            ->closeElement();
+        if ($report->base_part->contract->deal->sign_deal_cash_source !== 1) {
+            $generator->startElement('material_guarantee_source', [], 'Сведения о неденежном обязательстве источника')
+                ->addElement('material_item', $report->base_part->contract->material_guarantee_source->material_item)
+                ->addElement('item_type', $report->base_part->contract->material_guarantee_source->item_type)
+                ->addElement('material_object', $report->base_part->contract->material_guarantee_source->material_object)
+                ->addElement('material_object_date', $report->base_part->contract->material_guarantee_source->material_object_date)
+                ->closeElement();
+        }
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function material_guarantee_subject(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('material_guarantee_subject', [], 'Сведения о неденежном обязательстве субъекта')
-            ->addElement('material_item', $report->base_part->contract->material_guarantee_subject->material_item)
-            ->addElement('material_object', $report->base_part->contract->material_guarantee_subject->material_object)
-            ->addElement('procedure_guarantee', $report->base_part->contract->material_guarantee_subject->procedure_guarantee)
-            ->addElement('procedure_guarantee_fail', $report->base_part->contract->material_guarantee_subject->procedure_guarantee_fail)
-            ->closeElement();
+        if ($report->base_part->contract->deal->sign_deal_cash_subject !== 1) {
+            $generator->startElement('material_guarantee_subject', [], 'Сведения о неденежном обязательстве субъекта')
+                ->addElement('material_item', $report->base_part->contract->material_guarantee_subject->material_item)
+                ->addElement('material_object', $report->base_part->contract->material_guarantee_subject->material_object)
+                ->addElement('procedure_guarantee', $report->base_part->contract->material_guarantee_subject->procedure_guarantee)
+                ->addElement('procedure_guarantee_fail', $report->base_part->contract->material_guarantee_subject->procedure_guarantee_fail)
+                ->closeElement();
+        }
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function accounting(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('accounting', [], 'Сведения об учете обязательства')
@@ -295,41 +417,61 @@ trait Partitions
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function application(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('application', [], 'Сведения об обращении субъекта к источнику с предложением совершить сделку')
-            ->addElement('ratio', (int) $report->information_part->application->ratio)
-            ->addElement('sum', (int) $report->information_part->application->sum)
-            ->addElement('currency', (int) $report->information_part->application->currency)
-            ->addElement('uid', (int) $report->information_part->application->uid)
-            ->addElement('date', (int) $report->information_part->application->date)
-            ->addElement('source_type', (int) $report->information_part->application->source_type)
-            ->addElement('way', (int) $report->information_part->application->way)
-            ->addElement('approval_date', (int) $report->information_part->application->approval_date)
+            ->addElement('ratio', (int)$report->information_part->application->ratio)
+            ->addElement('sum', (int)$report->information_part->application->sum)
+            ->addElement('currency', (int)$report->information_part->application->currency)
+            ->addElement('uid', (int)$report->information_part->application->uid)
+            ->addElement('date', (int)$report->information_part->application->date)
+            ->addElement('source_type', (int)$report->information_part->application->source_type)
+            ->addElement('way', (int)$report->information_part->application->way)
+            ->addElement('approval_date', (int)$report->information_part->application->approval_date)
             ->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function credit(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('credit', [], 'Сведения об участии в обязательстве, по которому формируется кредитная история')
-            ->addElement('ratio', (int) $report->information_part->credit->ratio)
-            ->addElement('type', (int) $report->information_part->credit->type)
-            ->addElement('uid', (int) $report->information_part->credit->uid)
-            ->addElement('date', (int) $report->information_part->credit->date)
-            ->addElement('sign_90plus', (int) $report->information_part->credit->sign_90plus)
-            ->addElement('sign_stop_load', (int) $report->information_part->credit->sign_stop_load)
+            ->addElement('ratio', (int)$report->information_part->credit->ratio)
+            ->addElement('type', (int)$report->information_part->credit->type)
+            ->addElement('uid', (int)$report->information_part->credit->uid)
+            ->addElement('date', (int)$report->information_part->credit->date)
+            ->addElement('sign_90plus', (int)$report->information_part->credit->sign_90plus)
+            ->addElement('sign_stop_load', (int)$report->information_part->credit->sign_stop_load)
             ->closeElement();
     }
 
-    public static function failure(Report $report, XmlGenerator $generator):void
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    public static function failure(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('failure', [], '')
-            ->addElement('date', (int) $report->information_part->failure->date)
-            ->addElement('reason', (int) $report->information_part->failure->reason)
+            ->addElement('date', (int)$report->information_part->failure->date)
+            ->addElement('reason', (int)$report->information_part->failure->reason)
             ->closeElement();
     }
 
-    public static function service_organization(Report $report, XmlGenerator $generator):void
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    public static function service_organization(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('service_organization', [], 'Сведения об обслуживающей организации')
             ->addElement('reg_rus', $report->add_part->service_organization->reg_rus)
@@ -344,6 +486,111 @@ trait Partitions
             ->addElement('issuer_fullname', $report->add_part->service_organization->issuer_fullname)
             ->addElement('issuer_ogrn_no', $report->add_part->service_organization->issuer_ogrn_no)
             ->closeElement();
+    }
+
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     * @throws Exception
+     */
+    public static function collaterals(Report $report, XmlGenerator $generator): void
+    {
+        $collaterals = $report->base_part->contract->collaterals;
+        $generator->startElement('collaterals', [], 'Сведения о залоге');
+        if ($collaterals) {
+            foreach ($collaterals as $collateral) {
+                if ($collateral instanceof Collateral) {
+                    $generator->addElement('item_type', $collateral->item_type);
+                    $generator->addElement('id', $collateral->id);
+                    $generator->addElement('date', $collateral->date);
+                    $generator->addElement('sum', $collateral->sum);
+                    $generator->addElement('currency', $collateral->currency);
+                    $generator->addElement('date_assessment', $collateral->date_assessment);
+                    $generator->addElement('item_burden', $collateral->item_burden);
+                    $generator->addElement('end_date', $collateral->end_date);
+                    $generator->addElement('fact_end_date', $collateral->fact_end_date);
+                    $generator->addElement('end_reason', $collateral->end_reason);
+                } else {
+                    throw new Exception('Unsupported collateral type');
+                }
+            }
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
+
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     * @throws Exception
+     */
+    public static function guarantees(Report $report, XmlGenerator $generator): void
+    {
+        $guarantees = $report->base_part->contract->guarantees;
+        $generator->startElement('guarantees', [], 'Сведения о залоге');
+        if ($guarantees) {
+            foreach ($guarantees as $guarantee) {
+                if ($guarantee instanceof Guarantee) {
+                    $generator->addElement('item_type', $guarantee->item_type);
+                    $generator->addElement('id', $guarantee->id);
+                    $generator->addElement('date', $guarantee->date);
+                    $generator->addElement('sum', $guarantee->sum);
+                    $generator->addElement('currency', $guarantee->currency);
+                    $generator->addElement('date_assessment', $guarantee->date_assessment);
+                    $generator->addElement('item_burden', $guarantee->item_burden);
+                    $generator->addElement('end_date', $guarantee->end_date);
+                    $generator->addElement('fact_end_date', $guarantee->fact_end_date);
+                    $generator->addElement('end_reason', $guarantee->end_reason);
+                } else {
+                    throw new Exception('Unsupported collateral type');
+                }
+            }
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
+
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     * @throws Exception
+     */
+    public static function indie_guarantees(Report $report, XmlGenerator $generator): void
+    {
+        $guarantees = $report->base_part->contract->indie_guarantees;
+        $generator->startElement('indie_guarantees', [], 'Сведения о залоге');
+        if ($guarantees) {
+            foreach ($guarantees as $guarantee) {
+                if ($guarantee instanceof IndieGuarantee) {
+                    $generator->addElement('uid', $guarantee->uid);
+                    $generator->addElement('sum', $guarantee->sum);
+                    $generator->addElement('currency', $guarantee->currency);
+                    $generator->addElement('date', $guarantee->date);
+                    $generator->addElement('end_date', $guarantee->end_date);
+                    $generator->addElement('fact_end_date', $guarantee->fact_end_date);
+                    $generator->addElement('end_reason', $guarantee->end_reason);
+                } else {
+                    throw new Exception('Unsupported collateral type');
+                }
+            }
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
+
+    public static function contract_end(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('contract_end', [], 'Код основания прекращения обязательства')
+            ->addElement('reason', '')
+            ->addElement('date', '')
+            ->closeElement();
+
     }
 
 }

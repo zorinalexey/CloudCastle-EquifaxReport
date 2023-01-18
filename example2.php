@@ -1,5 +1,8 @@
 <?php
 
+date_default_timezone_set('Europe/London');
+
+$start = microtime(true);
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use CloudCastle\EquifaxReport\Config\Config;
@@ -105,6 +108,42 @@ for ($i = 0; $i < $countReports; $i++) {
     $event->action_reason = 'Новый договор. Передача КИ в БКИ';
     $report = new Report($client, $event, $config);
 
+    /**
+     * Регистрация физического лица по месту жительства или пребывания
+     */
+    $report->base_part->addr_reg->reg_code = '1';
+    $report->base_part->addr_reg->index = '123123';
+    $report->base_part->addr_reg->country = 643;
+    $report->base_part->addr_reg->country_text = 'Россия';
+    $report->base_part->addr_reg->fias = '5bc8ef01-ab23-45ef-67bd-a8c5f78a0d2f';
+    $report->base_part->addr_reg->okato = '45000000000';
+    $report->base_part->addr_reg->street = 'Медовая';
+    $report->base_part->addr_reg->house = '125';
+    $report->base_part->addr_reg->domain = '15';
+    $report->base_part->addr_reg->block = '1';
+    $report->base_part->addr_reg->build = '2';
+    $report->base_part->addr_reg->apartment = '10';
+    $report->base_part->addr_reg->reg_date = '01.01.2010';
+    $report->base_part->addr_reg->reg_place = 'УВД г.Москвы';
+    $report->base_part->addr_reg->reg_department_code = '555-555';
+
+    /**
+     * Фактическое место жительства
+     */
+    $report->base_part->addr_reg->index = '123123';
+    $report->base_part->addr_reg->country = 643;
+    $report->base_part->addr_reg->country_text = 'Россия';
+    $report->base_part->addr_reg->fias = 'abcdef01-ab23-45ef-67bd-a8c5f78a0d2e';
+    $report->base_part->addr_reg->okato = '45000000000';
+    $report->base_part->addr_reg->street = 'Содовая';
+    $report->base_part->addr_reg->house = '111';
+    $report->base_part->addr_reg->domain = '10';
+    $report->base_part->addr_reg->block = '14';
+    $report->base_part->addr_reg->build = '27';
+    $report->base_part->addr_reg->apartment = '1053';
+
+    $report->base_part->contacts[ =
+
     $report->base_part->contract->uid = '1234';
     /**
      * Общие сведения о сделке
@@ -129,4 +168,6 @@ for ($i = 0; $i < $countReports; $i++) {
 
 $file = Report::generate($reports, $config);
 
-echo $file;
+$end = microtime(true);
+
+echo $end - $start;

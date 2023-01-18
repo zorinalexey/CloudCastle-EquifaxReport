@@ -93,7 +93,7 @@ class Config
         $this->date = date('d.m.Y');
     }
 
-    public static function instance(): static
+    public static function instance(): self
     {
         if (!self::$instance) {
             self::$instance = new self();

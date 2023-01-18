@@ -15,21 +15,81 @@ namespace CloudCastle\EquifaxReport\Libs;
 class Address
 {
 
+    /**
+     * Код адреса регистрации
+     * @var string|null
+     */
     public ?string $reg_code = null;
+    /**
+     * @var string|null
+     */
     public ?string $index = null;
+    /**
+     * Код страны по ОКСМ
+     * @var int
+     */
     public int $country = 643;
+    /**
+     * Номер адреса в ФИАС
+     * @var string|null
+     */
     public ?string $fias = null;
+    /**
+     * Код населенного пункта по ОКАТО
+     * @var string|null
+     */
     public ?string $okato = null;
+    /**
+     * Иной населенный пункт
+     * @var string|null
+     */
     public ?string $other_statement = null;
+    /**
+     * Улица
+     * @var string|null
+     */
     public ?string $street = null;
+    /**
+     * Дом
+     * @var string|null
+     */
     public ?string $house = null;
+    /**
+     * Владение
+     * @var string|null
+     */
     public ?string $domain = null;
+    /**
+     * Корпус
+     * @var string|null
+     */
     public ?string $block = null;
+    /**
+     * Строение
+     * @var string|null
+     */
     public ?string $build = null;
+    /**
+     * @var string|null
+     */
     public ?string $reg_date = null;
+    /**
+     * @var string|null
+     */
     public ?string $reg_place = null;
+    /**
+     * Помещение (офис)
+     * @var string|null
+     */
     public ?string $apartment = null;
+    /**
+     * @var string|null
+     */
     public ?string $reg_department_code = null;
+    /**
+     * Наименование иной страны
+     * @var string|null
+     */
     public ?string $country_text = null;
 
 }
