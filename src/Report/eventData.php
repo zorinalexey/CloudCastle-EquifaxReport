@@ -1,12 +1,12 @@
 <?php
 return [
     '1.1' => ['information_part' => [
-        'application'
-    ]
+            'application'
+        ]
     ],
     '1.2' => ['information_part' => [
-        'application'
-    ]
+            'application'
+        ]
     ],
     '1.3' => [
         'information_part' => [

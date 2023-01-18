@@ -26,7 +26,7 @@ class Application
      * Запрошенная валюта обязательства
      * @var string|null
      */
-    public ?string $currency = 'RUB';
+    public string $currency = 'RUB';
 
     /**
      * УИд обращения

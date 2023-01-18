@@ -4,6 +4,11 @@ date_default_timezone_set('Europe/London');
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
+/**
+*
+*/
+
+
 use CloudCastle\EquifaxReport\Config\Config;
 use CloudCastle\EquifaxReport\Individual\Client;
 use CloudCastle\EquifaxReport\Report;
@@ -152,14 +157,22 @@ for ($i = 0; $i < $countReports; $i++) {
     $report->base_part->contract->deal->category = '1';
     $report->base_part->contract->deal->type = '1';
     $report->base_part->contract->deal->purpose = '16.3';
+
+    /**
+     * Полная стоимость потребительского кредита (займа)
+     */
+    $report->base_part->contract->full_cost->date = date('m.d.Y');
+    $report->base_part->contract->full_cost->percent = 365;
+    $report->base_part->contract->full_cost->sum = 3000;
+
     /**
      * Сведения о наличии солидарных должников
      */
     //$report->base_part->contract->joint_debtors->count = 2;
-
-
-
-
+    $report->information_part->application->currency = 'RUB';
+    $report->information_part->application->ratio = 1;
+    $report->information_part->application->uid = 'sfdhg4352khj685lk87lk';
+    $report->information_part->application->date = date('m.d.Y');
 
     $reports[] = $report;
 
