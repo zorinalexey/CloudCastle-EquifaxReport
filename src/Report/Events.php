@@ -72,7 +72,7 @@ final class Events
 
     public static function search(string $event)
     {
-        $list = require __DIR__ . '/events.php';
+        $list = require __DIR__ . '/eventData.php';
         foreach ($list as $key => $value) {
             if (mb_strtolower($key) === mb_strtolower($event)) {
                 return $value;

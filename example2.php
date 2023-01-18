@@ -142,7 +142,7 @@ for ($i = 0; $i < $countReports; $i++) {
     $report->base_part->addr_reg->build = '27';
     $report->base_part->addr_reg->apartment = '1053';
 
-    $report->base_part->contacts[ =
+    $report->base_part->contacts;
 
     $report->base_part->contract->uid = '1234';
     /**
@@ -170,4 +170,4 @@ $file = Report::generate($reports, $config);
 
 $end = microtime(true);
 
-echo $end - $start;
+echo $file;
