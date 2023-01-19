@@ -48,10 +48,10 @@ final class Client
     public ?string $birthDate = null;
 
     /**
-     * Страна рожденияtring
-     * @var string|null
+     * Код страны рождения
+     * @var int
      */
-    public ?string $birthCountry = null;
+    public int $birthCountry = 643;
 
     /**
      * Код субъекта кредитной истории

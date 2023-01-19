@@ -3,51 +3,73 @@
 namespace CloudCastle\EquifaxReport\Libs;
 
 /**
- *
+ * Общие сведения о сделке
  */
 class Deal
 {
     /**
-     * @var int|null
+     * Код вида участия в сделке
+     * @var int
      */
-    public ?int $ratio = null;
+    public int $ratio = 1;
+
     /**
+     * Дата совершения сделки
      * @var string|null
      */
     public ?string $date = null;
+
     /**
-     * @var string|null
+     * Код типа сделки
+     * @var int
      */
-    public ?string $category = null;
+    public int $category = 1;
+
     /**
-     * @var string|null
+     * Код вида займа (кредита)
+     * @var int
      */
-    public ?string $type = null;
+    public int $type = 3;
+
     /**
-     * @var string|null
+     * Код цели займа (кредита)
+     * @var float
      */
-    public ?string $purpose = null;
+    public float $purpose = 19;
+
     /**
-     * @var string|null
+     * Признак потребительского кредита (займа)
+     * @var int|null
      */
-    public ?string $sign_credit = null;
+    public int $sign_credit = 1;
+
     /**
-     * @var string|null
+     * Признак использования платежной карты
+     * @var int|null
      */
-    public ?string $sign_credit_card = null;
+    public ?int $sign_credit_card = null;
+
     /**
-     * @var string|null
+     * Признак возникновения обязательства в результате новации
+     * @var int
      */
-    public ?string $sign_renovation = null;
+    public int $sign_renovation = 0;
+
     /**
-     * @var float|int
+     * Признак денежного обязательства источника
+     * @var int
      */
-    public float $sign_deal_cash_source = 1;
+    public int $sign_deal_cash_source = 1;
+
     /**
-     * @var float|int
+     *
+     * Признак денежного обязательства субъекта
+     * @var int
      */
-    public float $sign_deal_cash_subject = 1;
+    public int $sign_deal_cash_subject = 1;
+
     /**
+     * Дата прекращения обязательства субъекта по условиям сделки
      * @var string|null
      */
     public ?string $end_date = null;

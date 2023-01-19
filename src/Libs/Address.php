@@ -90,6 +90,6 @@ class Address
      * Наименование иной страны
      * @var string|null
      */
-    public ?string $country_text = null;
+    public string $country_text = 'Россия';
 
 }

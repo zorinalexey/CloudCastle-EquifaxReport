@@ -16,16 +16,16 @@ final class Document
 {
 
     /**
-     * Страна гражданства
-     * @var string|null
+     * Код страны гражданства
+     * @var int
      */
-    public ?string $country = null;
+    public int $country = 643;
 
     /**
-     * Тип документа удостоверяощего личность
-     * @var string|null
+     * Код типа документа удостоверяющего личность
+     * @var int
      */
-    public ?string $type = null;
+    public int $type = 21;
 
     /**
      * Серия документа

@@ -101,4 +101,32 @@ final class Report
             $generator->closeElement();
         }
     }
+
+    public static function uidGenerate(){
+        $aF09 = [
+            'a', 'b', 'c', 'd', 'e', 'f',
+            'A', 'B', 'C', 'D', 'E', 'F',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        ];
+        $aB89 = ['a', 'b', 'A', 'B', '8', '9'];
+        $uid = self::uidElementGenerator($aF09, 8);
+        $uid .= '-' . self::uidElementGenerator($aF09, 4);
+        $uid .= '-1' . self::uidElementGenerator($aF09, 3);
+        $uid .= '-' . self::uidElementGenerator($aB89, 1);
+        $uid .= self::uidElementGenerator($aF09, 3);
+        $uid .= '-' . self::uidElementGenerator($aF09, 12);
+        $uid .= '-' . self::uidElementGenerator($aF09, 1);
+        return $uid;
+    }
+
+    private static function uidElementGenerator(array $data, int $length)
+    {
+        $element = null;
+        shuffle($data);
+        for ($i = 0; $i < $length; $i++) {
+            shuffle($data);
+            $element .= $data[array_rand($data)];
+        }
+        return $element;
+    }
 }

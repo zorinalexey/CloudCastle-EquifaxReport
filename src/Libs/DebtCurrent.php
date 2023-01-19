@@ -32,4 +32,14 @@ class DebtCurrent
      * @var float|int|null
      */
     public ?float $other_sum = 0;
+
+    /**
+     * @param string|null $date
+     */
+    public function __construct()
+    {
+        $this->date = date('d.m.Y');
+    }
+
+
 }

@@ -4,5 +4,5 @@ namespace CloudCastle\EquifaxReport\Libs;
 
 class JointDebtors
 {
-    public ?int $count = null;
+    public int $count = 0;
 }

@@ -12,11 +12,13 @@ class Payments
      * @var string|null
      */
     public ?string $last_payout_date = null;
+
     /**
      * Сумма последнего внесенного платежа
      * @var float|int
      */
     public float $last_payout_sum = 0;
+
     /**
      * Сумма последнего внесенного платежа по основному долгу
      * @var float|int
@@ -27,11 +29,13 @@ class Payments
      * @var float|int
      */
     public float $last_payout_percent_sum = 0;
+
     /**
      * Сумма последнего внесенного платежа по иным требованиям
      * @var float|int
      */
     public float $last_payout_other_sum = 0;
+
     /**
      * Сумма всех внесенных платежей по обязательству
      * @var float|int
@@ -42,26 +46,31 @@ class Payments
      * @var float|int
      */
     public float $paid_op_sum = 0;
+
     /**
      * Сумма внесенных платежей по процентам
      * @var float|int
      */
     public float $paid_percent_sum = 0;
+
     /**
      * Сумма внесенных платежей по иным требованиям
      * @var float|int
      */
     public float $paid_other_sum = 0;
+
     /**
      * Код соблюдения размера платежей
-     * @var float|int
+     * @var int
      */
-    public float $size_payments_type = 0;
+    public int $size_payments_type = 3;
+
     /**
      * Код соблюдения срока внесения платежей
-     * @var string|null
+     * @var int
      */
-    public ?string $payments_deadline_type = null;
+    public int $payments_deadline_type = 1;
+
     /**
      * Продолжительность просрочки
      * @var int

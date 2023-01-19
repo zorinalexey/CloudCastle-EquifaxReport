@@ -4,7 +4,21 @@ namespace CloudCastle\EquifaxReport\Libs;
 
 class ContractAmount
 {
-    public ?float $sum = null;
+    /**
+     * Сумма обязательства
+     * @var float|int
+     */
+    public float $sum = 0;
+
+    /**
+     * Валюта обязательства
+     * @var string
+     */
     public string $currency = 'RUB';
-    public ?float $security_sum = null;
+
+    /**
+     * Сумма обеспечиваемого обязательства
+     * @var float|int
+     */
+    public float $security_sum = 0;
 }

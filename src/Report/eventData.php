@@ -1,12 +1,12 @@
 <?php
 return [
     '1.1' => ['information_part' => [
-            'application'
-        ]
+        'application'
+    ]
     ],
     '1.2' => ['information_part' => [
-            'application'
-        ]
+        'application'
+    ]
     ],
     '1.3' => [
         'information_part' => [
@@ -15,7 +15,7 @@ return [
         ]
     ],
     '1.4' => [
-        'base_parts' => [
+        'base_part' => [
             'addr_reg',
             'addr_fact',
             'contacts',
@@ -28,25 +28,25 @@ return [
                 'joint_debtors',
                 'payment_terms',
                 'full_cost',
+                'material_guarantee_source',
+                'material_guarantee_subject',
                 'cred_start_debt',
                 'debt',
                 'debt_current',
                 'debt_overdue',
                 'payments',
                 'average_payment',
-                'material_guarantee_source'
             ]
         ],
         'add_part' => [
             'accounting'
         ],
         'information_part' => [
-            'application',
-            'credit'
+            'application'
         ]
     ],
     '1.4.1' => [
-        'base_parts' => [
+        'base_part' => [
             'addr_reg',
             'addr_fact',
             'contacts',
@@ -77,7 +77,7 @@ return [
         ]
     ],
     '1.5' => [
-        'base_parts' => [
+        'base_part' => [
             'addr_reg',
             'addr_fact',
             'contacts',

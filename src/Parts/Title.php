@@ -31,7 +31,7 @@ final class Title
 
     public function generate()
     {
-        $this->generator->startElement('title_parts');
+        $this->generator->startElement('title_part');
         $this->kski();
         $this->private();
         $this->generator->closeElement();

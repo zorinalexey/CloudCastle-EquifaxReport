@@ -14,24 +14,24 @@ class DebtOverdue
     public ?string $date = null;
     /**
      * Сумма просроченной задолженности
-     * @var float|int|null
+     * @var float|int
      */
-    public ?float $sum = 0;
+    public float $sum = 0;
     /**
      * Сумма просроченной задолженности по основному долгу
-     * @var float|int|null
+     * @var float|int
      */
-    public ?float $op_sum = 0;
+    public float $op_sum = 0;
     /**
      * Сумма просроченной задолженности по процентам
-     * @var float|int|null
+     * @var float|int
      */
-    public ?float $percent_sum = 0;
+    public float $percent_sum = 0;
     /**
      * Сумма просроченной задолженности по иным требованиям
-     * @var float|int|null
+     * @var float|int
      */
-    public ?float $other_sum = 0;
+    public float $other_sum = 0;
     /**
      * Дата последнего пропущенного платежа по основному долгу
      * @var string|null

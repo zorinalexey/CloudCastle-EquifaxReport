@@ -17,4 +17,12 @@ class AveragePayment
      * @var string|null
      */
     public ?string $date = null;
+
+    /**
+     * @param string|null $date
+     */
+    public function __construct()
+    {
+        $this->date = date('d.m.Y');
+    }
 }

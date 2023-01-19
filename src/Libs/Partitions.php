@@ -101,11 +101,11 @@ trait Partitions
     {
         $contacts = $report->base_part->contacts;
         if ($contacts) {
-            $generator->startElement('contacts', [], 'Контактные данные');
             foreach ($contacts as $contact) {
+                $generator->startElement('contacts', [], 'Контактные данные');
                 if (isset($contact['phone'])) {
-                    $generator->startElement('phone');
-                    $generator->addElement('number', $contact['phone']);
+                    $generator->startElement('phone')
+                        ->addElement('number', $contact['phone']);
                     if (isset($contact['comment'])) {
                         $generator->addElement('comment', $contact['comment']);
                     }
@@ -114,8 +114,8 @@ trait Partitions
                         $generator->addElement('email', $contact['email']);
                     }
                 }
+                $generator->closeElement();
             }
-            $generator->closeElement();
         }
     }
 
@@ -126,12 +126,15 @@ trait Partitions
      */
     public static function ogrnip(Report $report, XmlGenerator $generator): void
     {
-        if ($report->client->inn->ogrnIp) {
-            $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя')
-                ->addElement('no', $report->client->inn->ogrnIp)
-                ->addElement('date', $report->client->inn->ogrnIpDate)
-                ->closeElement();
+        $lenght = strlen((string)$report->client->inn->ogrnIp);
+        $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
+        if ($report->client->inn->ogrnIp && $lenght === 15) {
+               $generator->addElement('no', $report->client->inn->ogrnIp)
+                ->addElement('date', $report->client->inn->ogrnIpDate);
+        }else{
+            $generator->addElement('sign', 0);
         }
+        $generator->closeElement();
     }
 
     /**
@@ -204,8 +207,9 @@ trait Partitions
     public static function contract_amount(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_amount', [], 'Сумма и валюта обязательства')
-            ->addElement('amount', $report->base_part->contract->contract_amount->sum)
+            ->addElement('sum', $report->base_part->contract->contract_amount->sum)
             ->addElement('currency', $report->base_part->contract->contract_amount->currency)
+            ->addElement('security_sum', $report->base_part->contract->contract_amount->security_sum)
             ->closeElement();
     }
 
@@ -217,7 +221,7 @@ trait Partitions
     public static function joint_debtors(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('joint_debtors', [], 'Сведения о наличии солидарных должников');
-        if ($report->base_part->contract->joint_debtors->count) {
+        if ($report->base_part->contract->joint_debtors->count > 0) {
             $generator->addElement('count', $report->base_part->contract->joint_debtors->count);
         } else {
             $generator->addElement('sign', 0);
@@ -233,16 +237,23 @@ trait Partitions
     public static function payment_terms(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('payment_terms', [], 'Сведения об условиях платежей')
-            ->addElement('op_next_payout_sum', $report->base_part->contract->payment_terms->op_next_payout_sum)
-            ->addElement('op_next_payout_date', $report->base_part->contract->payment_terms->op_next_payout_date)
-            ->addElement('percent_next_payout_sum', $report->base_part->contract->payment_terms->percent_next_payout_sum)
-            ->addElement('percent_next_payout_date', $report->base_part->contract->payment_terms->percent_next_payout_date)
-            ->addElement('regularity', $report->base_part->contract->payment_terms->regularity)
-            ->addElement('min_sum_pay_cc', $report->base_part->contract->payment_terms->min_sum_pay_cc)
-            ->addElement('grace_date', $report->base_part->contract->payment_terms->grace_date)
-            ->addElement('grace_end_date', $report->base_part->contract->payment_terms->grace_end_date)
-            ->addElement('percent_end_date', $report->base_part->contract->payment_terms->percent_end_date)
-            ->closeElement();
+            ->addElement('op_next_payout_sum', $report->base_part->contract->payment_terms->op_next_payout_sum);
+        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 and $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
+            $generator->addElement('op_next_payout_date', $report->base_part->contract->payment_terms->op_next_payout_date);
+        }
+        $generator->addElement('percent_next_payout_sum', $report->base_part->contract->payment_terms->percent_next_payout_sum);
+        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 and $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
+            $generator->addElement('percent_next_payout_date', $report->base_part->contract->payment_terms->percent_next_payout_date)
+                ->addElement('regularity', $report->base_part->contract->payment_terms->regularity)
+                ->addElement('min_sum_pay_cc', $report->base_part->contract->payment_terms->min_sum_pay_cc)
+                ->addElement('grace_date', $report->base_part->contract->payment_terms->grace_date);
+            if ($report->base_part->contract->payment_terms->grace_date) {
+                $generator->addElement('grace_end_date', $report->base_part->contract->payment_terms->grace_end_date);
+            }
+            $generator->addElement('percent_end_date', $report->base_part->contract->payment_terms->percent_end_date);
+
+        }
+        $generator->closeElement();
     }
 
     /**
@@ -303,13 +314,17 @@ trait Partitions
     public static function debt_current(Report $report, XmlGenerator $generator): void
     {
         $debt = $report->base_part->contract->debt_current;
-        $generator->startElement('debt_current', [], 'Сведения о срочной задолженности')
-            ->addElement('date', $report->base_part->contract->debt_current->date)
-            ->addElement('sum', $debt->sum)
-            ->addElement('op_sum', $debt->op_sum)
-            ->addElement('percent_sum', $debt->percent_sum)
-            ->addElement('other_sum', $debt->other_sum)
-            ->closeElement();
+        $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
+        if ($debt->sum > 0) {
+            $generator->addElement('date', $report->base_part->contract->debt_current->date)
+                ->addElement('sum', $debt->sum)
+                ->addElement('op_sum', $debt->op_sum)
+                ->addElement('percent_sum', $debt->percent_sum)
+                ->addElement('other_sum', $debt->other_sum);
+        } else {
+            $generator->addElement('sum', $debt->sum);
+        }
+        $generator->closeElement();
     }
 
     /**
@@ -320,7 +335,7 @@ trait Partitions
     public static function debt_overdue(Report $report, XmlGenerator $generator): void
     {
         $debt = $report->base_part->contract->debt_overdue;
-        $generator->startElement('debt_current', [], 'Сведения о просроченной задолженности');
+        $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
         if ($debt->sum > 0) {
             $generator->addElement('date', $report->base_part->contract->debt_current->date)
                 ->addElement('sum', $debt->sum)
@@ -342,19 +357,24 @@ trait Partitions
      */
     public static function payments(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('payments', [], 'Сведения о внесении платежей')
-            ->addElement('last_payout_date', $report->base_part->contract->payments->last_payout_date)
-            ->addElement('last_payout_sum', $report->base_part->contract->payments->last_payout_sum)
-            ->addElement('last_payout_op_sum', $report->base_part->contract->payments->last_payout_op_sum)
-            ->addElement('last_payout_percent_sum', $report->base_part->contract->payments->last_payout_percent_sum)
-            ->addElement('last_payout_other_sum', $report->base_part->contract->payments->last_payout_other_sum)
-            ->addElement('paid_sum', $report->base_part->contract->payments->paid_sum)
+        $generator->startElement('payments', [], 'Сведения о внесении платежей');
+        if ($report->base_part->contract->payments->last_payout_sum > 0) {
+            $generator->addElement('last_payout_date', $report->base_part->contract->payments->last_payout_date);
+        }
+        $generator->addElement('last_payout_sum', $report->base_part->contract->payments->last_payout_sum);
+        if ($report->base_part->contract->payments->last_payout_sum > 0) {
+            $generator->addElement('last_payout_op_sum', $report->base_part->contract->payments->last_payout_op_sum)
+                ->addElement('last_payout_percent_sum', $report->base_part->contract->payments->last_payout_percent_sum)
+                ->addElement('last_payout_other_sum', $report->base_part->contract->payments->last_payout_other_sum);
+        }
+
+        $generator->addElement('paid_sum', $report->base_part->contract->payments->paid_sum)
             ->addElement('paid_op_sum', $report->base_part->contract->payments->paid_op_sum)
             ->addElement('paid_percent_sum', $report->base_part->contract->payments->paid_percent_sum)
             ->addElement('paid_other_sum', $report->base_part->contract->payments->paid_other_sum)
             ->addElement('size_payments_type', $report->base_part->contract->payments->size_payments_type)
-            ->addElement('size_payments_type', $report->base_part->contract->payments->payments_deadline_type)
-            ->addElement('size_payments_type', $report->base_part->contract->payments->overdue_day)
+            ->addElement('payments_deadline_type', $report->base_part->contract->payments->payments_deadline_type)
+            ->addElement('overdue_day', $report->base_part->contract->payments->overdue_day)
             ->closeElement();
     }
 

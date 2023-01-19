@@ -12,15 +12,15 @@ class Application
 {
     /**
      * Код вида участия в сделке. По справочнику 2.1 - Виды участия в сделке
-     * @var float|int
+     * @var int
      */
-    public float $ratio = 99;
+    public int $ratio = 1;
 
     /**
      * Сумма запрошенного займа (кредита), лизинга или обеспечения
-     * @var float|int|null
+     * @var int|null
      */
-    public ?float $sum = 0;
+    public ?int $sum = 0;
 
     /**
      * Запрошенная валюта обязательства
@@ -42,16 +42,16 @@ class Application
 
     /**
      * Код источника. По справочнику 6.1 - Виды источников
-     * @var float|int
+     * @var int
      */
-    public float $source_type = 0;
+    public int $source_type = 2;
 
     /**
      * Код способа обращения. По справочнику 6.4 - Виды обращений с предложением
      * совершить сделку
-     * @var float|int
+     * @var int
      */
-    public float $way = 0;
+    public int $way = 2;
 
     /**
      * Дата окончания действия одобрения обращения (оферты кредитора)
