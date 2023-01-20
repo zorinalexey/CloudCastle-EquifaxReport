@@ -45,9 +45,9 @@ class Deal
 
     /**
      * Признак использования платежной карты
-     * @var int|null
+     * @var int
      */
-    public ?int $sign_credit_card = null;
+    public int $sign_credit_card = 0;
 
     /**
      * Признак возникновения обязательства в результате новации

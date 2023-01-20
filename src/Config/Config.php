@@ -2,6 +2,8 @@
 
 namespace CloudCastle\EquifaxReport\Config;
 
+use RuntimeException;
+
 class Config
 {
     /**
@@ -103,21 +105,25 @@ class Config
 
     public function numberFile()
     {
-        $countStr = 1;
+        $count = 1;
         if (!is_dir($this->path)) {
-            mkdir($this->path, 0777, true);
+            if (!mkdir($concurrentDirectory = $this->path, 0777, true) && !is_dir($concurrentDirectory)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
         }
         foreach (scandir($this->path) as $value) {
             if ($value !== '.' and $value !== '..') {
-                $countStr++;
+                $count++;
             }
         }
-        if ($countStr < 10) {
-            $number = '000' . $countStr;
-        } elseif (10 >= $countStr && $countStr < 100) {
-            $number = '00' . $countStr;
+        if ($count < 10) {
+            $number = '000' . $count;
+        } elseif ($count >= 10 and $count < 100) {
+            $number = '00' . $count;
+        } elseif ($count >= 100 and $count < 1000) {
+            $number = '0' . $count;
         } else {
-            $number = '0' . $countStr;
+            $number = $count;
         }
         $this->file_reg_num = $number;
         return $this->path . DIRECTORY_SEPARATOR . strtoupper($this->partnerId . '_FCH_' . date('Ymd') . '_' . $number . '.XML');

@@ -28,21 +28,13 @@ return [
                 'joint_debtors',
                 'payment_terms',
                 'full_cost',
-                'material_guarantee_source',
-                'material_guarantee_subject',
-                'cred_start_debt',
-                'debt',
-                'debt_current',
-                'debt_overdue',
-                'payments',
-                'average_payment',
             ]
         ],
         'add_part' => [
             'accounting'
         ],
         'information_part' => [
-            'application'
+           'application',
         ]
     ],
     '1.4.1' => [

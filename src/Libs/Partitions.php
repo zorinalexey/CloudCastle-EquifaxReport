@@ -101,8 +101,8 @@ trait Partitions
     {
         $contacts = $report->base_part->contacts;
         if ($contacts) {
+            $generator->startElement('contacts', [], 'Контактные данные');
             foreach ($contacts as $contact) {
-                $generator->startElement('contacts', [], 'Контактные данные');
                 if (isset($contact['phone'])) {
                     $generator->startElement('phone')
                         ->addElement('number', $contact['phone']);
@@ -110,12 +110,14 @@ trait Partitions
                         $generator->addElement('comment', $contact['comment']);
                     }
                     $generator->closeElement();
-                    if (isset($contact['email'])) {
-                        $generator->addElement('email', $contact['email']);
-                    }
                 }
-                $generator->closeElement();
             }
+            foreach ($contacts as $contact) {
+                if (isset($contact['email'])) {
+                    $generator->addElement('email', $contact['email']);
+                }
+            }
+            $generator->closeElement();
         }
     }
 
@@ -129,9 +131,9 @@ trait Partitions
         $lenght = strlen((string)$report->client->inn->ogrnIp);
         $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
         if ($report->client->inn->ogrnIp && $lenght === 15) {
-               $generator->addElement('no', $report->client->inn->ogrnIp)
+            $generator->addElement('no', $report->client->inn->ogrnIp)
                 ->addElement('date', $report->client->inn->ogrnIpDate);
-        }else{
+        } else {
             $generator->addElement('sign', 0);
         }
         $generator->closeElement();
@@ -157,12 +159,14 @@ trait Partitions
      * @param XmlGenerator $generator
      * @return void
      */
-    public static function contract(Report $report, XmlGenerator $generator): void
+    public static function contract(Report $report, XmlGenerator $generator, array $parts): void
     {
         Report::$records_count++;
-        foreach (self::$itemParts as $partName) {
+        $generator->startElement('contract');
+        foreach ($parts as $partName) {
             self::$partName($report, $generator);
         }
+        $generator->closeElement();
     }
 
     /**

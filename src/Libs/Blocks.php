@@ -9,20 +9,28 @@ class Blocks
 {
     use Partitions;
 
-    protected static array $itemParts = [];
-
-    public static function partsGenerator(array $filds, Report $report, XmlGenerator $generator)
+    public static function partsGenerator(array $fields, Report $report, XmlGenerator $generator)
     {
-        foreach ($filds as $rootPart => $itemPart) {
+        foreach ($fields as $rootPart => $itemPart) {
             if (is_array($itemPart)) {
-                $generator->startElement($rootPart);
-                self::$itemParts = $itemPart;
-                self::$rootPart($report, $generator);
-                $generator->closeElement();
+                self::$rootPart($report, $generator, $itemPart);
             } else {
                 self::$itemPart($report, $generator);
             }
         }
+    }
+
+    private static function base_part(Report $report, XmlGenerator $generator, array $itemParts){
+
+        $generator->startElement('base_part');
+        foreach ($itemParts as $partName=>$itemPart) {
+            if(is_array($itemPart)){
+                self::$partName($report, $generator, $itemPart);
+            }else{
+                self::$itemPart($report, $generator);
+            }
+        }
+        $generator->closeElement();
     }
 
 }

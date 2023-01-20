@@ -41,7 +41,7 @@ final class Title
     {
         if ($this->client->kski) {
             $this->generator->startElement('kski')
-                ->addElement('code', $this->client->kski)
+                ->addElement('code', (string)$this->client->kski)
                 ->closeElement();
         }
     }
@@ -50,15 +50,15 @@ final class Title
     {
         $this->generator->startElement('private');
         $this->generator->startElement('name')
-            ->addElement('last', $this->client->last)
-            ->addElement('first', $this->client->first)
-            ->addElement('middle', $this->client->middle)
+            ->addElement('last', mb_strtoupper((string)$this->client->last))
+            ->addElement('first', mb_strtoupper((string)$this->client->first))
+            ->addElement('middle', mb_strtoupper((string)$this->client->middle))
             ->closeElement();
         $this->setDocument($this->client->doc);
         $this->generator->startElement('birth')
-            ->addElement('date', $this->client->birthDate)
-            ->addElement('country', $this->client->birthCountry)
-            ->addElement('place', $this->client->birthPlace)
+            ->addElement('date', mb_strtoupper((string)$this->client->birthDate))
+            ->addElement('country', mb_strtoupper((string)$this->client->birthCountry))
+            ->addElement('place', mb_strtoupper((string)$this->client->birthPlace))
             ->closeElement();
         $this->setHistory();
         $this->setInn();
@@ -69,15 +69,15 @@ final class Title
     private function setDocument(?Document $doc)
     {
         $this->generator->startElement('doc')
-            ->addElement('country', $doc->country)
-            ->addElement('country_text', $doc->country_text)
-            ->addElement('type', $doc->type)
-            ->addElement('type_text', $doc->type_text)
-            ->addElement('serial', $doc->serial)
-            ->addElement('number', $doc->number)
+            ->addElement('country', mb_strtoupper((string)$doc->country))
+            ->addElement('country_text', mb_strtoupper((string)$doc->country_text))
+            ->addElement('type', mb_strtoupper((string)$doc->type))
+            ->addElement('type_text', mb_strtoupper((string)$doc->type_text))
+            ->addElement('serial', mb_strtoupper((string)$doc->serial))
+            ->addElement('number', mb_strtoupper((string)$doc->number))
             ->addElement('date', $doc->date)
-            ->addElement('who', $doc->who)
-            ->addElement('department_code', $doc->department_code)
+            ->addElement('who', mb_strtoupper((string)$doc->who))
+            ->addElement('department_code', mb_strtoupper((string)$doc->department_code))
             ->addElement('end_date', $doc->end_date)
             ->closeElement();
     }
@@ -101,10 +101,10 @@ final class Title
                 ->closeElement();
         } else {
             $this->generator->startElement('name')
-                ->addElement('last', $this->client->history->last)
-                ->addElement('first', $this->client->history->first)
-                ->addElement('middle', $this->client->history->middle)
-                ->addElement('doc_date', $this->client->doc->date)
+                ->addElement('last', mb_strtoupper((string)$this->client->history->last))
+                ->addElement('first', mb_strtoupper((string)$this->client->history->first))
+                ->addElement('middle', mb_strtoupper((string)$this->client->history->middle))
+                ->addElement('doc_date', mb_strtoupper((string)$this->client->doc->date))
                 ->closeElement();
             $this->setDocument($this->client->history->doc);
         }
@@ -127,7 +127,7 @@ final class Title
     private function setSnils()
     {
         $this->generator->startElement('snils')
-            ->addElement('no', $this->client->snils)
+            ->addElement('no', preg_replace('~([^\d])~', '', $this->client->snils))
             ->closeElement();
     }
 

@@ -102,7 +102,8 @@ final class Report
         }
     }
 
-    public static function uidGenerate(){
+    public static function uidGenerate()
+    {
         $aF09 = [
             'a', 'b', 'c', 'd', 'e', 'f',
             'A', 'B', 'C', 'D', 'E', 'F',
