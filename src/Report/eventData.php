@@ -33,9 +33,9 @@ return [
         'add_part' => [
             'accounting'
         ],
-        //'information_part' => [
-        //   'application',
-        //]
+        'information_part' => [
+           'application',
+        ]
     ],
     '1.4.1' => [
         'base_part' => [
