@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CloudCastle\EquifaxReport\Report;
 
 use CloudCastle\EquifaxReport\Individual\Client;
-use CloudCastle\EquifaxReport\Report;
 
 /**
  * Класс Events
@@ -64,9 +63,9 @@ final class Events
      */
     public ?Comment $comment = null;
 
-    public function __construct()
+    public function __construct(Client $client)
     {
-        $this->recnumber = Report::uidGenerate();
+        $this->recnumber = md5(json_encode($client));
         $this->comment = new Comment();
     }
 

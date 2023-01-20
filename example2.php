@@ -45,7 +45,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /**
      * Если заемщик не является резидентом РФ
      */
-    $client->inn->code = false;
+    //$client->inn->code = false;
 
     $client->last = 'Иванов';
     $client->first = 'Иван';
@@ -62,19 +62,19 @@ for ($i = 0; $i < $countReports; $i++) {
     $client->doc->type = 21;
     $client->doc->serial = '1234';
     $client->doc->number = '12345' . $i;
-    $client->doc->date = '12.12.2000';
+    $client->doc->date = date('d.m.Y', strtotime('12.12.2000'));
     $client->doc->who = 'УВД г. Москвы';
     $client->doc->department_code = '123-456';
 
     /**
-     * Опционально
+     * Опционально дата истечения срока действия документа
      */
-    $client->doc->end_date = '12.12.2040';
+    $client->doc->end_date = date('d.m.Y', strtotime('12.12.2040'));
 
     /**
      * Дата рождения
      */
-    $client->birthDate = '12.12.1980';
+    $client->birthDate = date('d.m.Y', strtotime('12.12.1980'));
 
     /**
      * Код страны рождения (по умолчанию 643 - Россия)
@@ -103,7 +103,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /**
      * Событие для отправки отчета
      */
-    $event = new Events();
+    $event = new Events($client);
     $event->action = 'A';
     $event->event = '1.4';
     $event->action_reason = 'Новый договор. Передача КИ в БКИ';
@@ -181,11 +181,11 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата совершения сделки (свойство обязательно)
      */
-    $report->base_part->contract->deal->date = date('d.m.Y');
+    $report->base_part->contract->deal->date = date('d.m.Y', strtotime('20.12.2022'));
     /*
      * Дата прекращения обязательства субъекта по условиям сделки (свойство обязательно)
      */
-    $report->base_part->contract->deal->end_date = date('d.m.Y', strtotime('+30 day'));
+    $report->base_part->contract->deal->end_date = date('d.m.Y', strtotime('+90 day'));
     /*
      * Код цели займа (кредита) (по умолчанию 19 - Цель не определена)
      */
@@ -230,7 +230,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата расчета полной стоимости кредита (займа)
      */
-    $report->base_part->contract->full_cost->date = date('d.m.Y');
+    $report->base_part->contract->full_cost->date = date('d.m.Y', strtotime('24.01.2023'));
     /*
      * Полная стоимость кредита (займа) в процентах годовых
      */
@@ -286,7 +286,7 @@ for ($i = 0; $i < $countReports; $i++) {
      * периода. В данном свойстве указывается дата начала беспроцентного периода при его наступлении в соответствии
      * с условиями договора.
      */
-    $report->base_part->contract->payment_terms->grace_date = date('d.m.Y');
+    $report->base_part->contract->payment_terms->grace_date = date('d.m.Y', strtotime('01.01.2023'));
     /*
      * Дата окончания беспроцентного периода (свойство не обязательное)
      * Свойство может присутствовать при наличии в договоре займа (кредита) с расходным лимитом беспроцентного
@@ -294,7 +294,7 @@ for ($i = 0; $i < $countReports; $i++) {
      * в соответствии с условиями договора. По окончании беспроцентного периода в данном свойстве
      * указывается фактическая дата его окончания.
      */
-    $report->base_part->contract->payment_terms->grace_date_end = date('d.m.Y', strtotime('+15 days'));
+    $report->base_part->contract->payment_terms->grace_date_end = date('d.m.Y', strtotime('15.01.2023'));
     /*
      * Дата окончания срока уплаты процентов
      * Значение свойства определяется датой, в которую субъект должен полностью погасить требования по
@@ -312,7 +312,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата обращения (Дата когда клиент обратился с предложением совершить сделку)
      */
-    $report->information_part->application->date = date('d.m.Y');
+    $report->information_part->application->date = date('d.m.Y', strtotime('15.12.2022'));
     /*
      * Сумма запрошенного займа (кредита), лизинга или обеспечения
      */

@@ -20,13 +20,14 @@ class Blocks
         }
     }
 
-    private static function base_part(Report $report, XmlGenerator $generator, array $itemParts){
+    private static function base_part(Report $report, XmlGenerator $generator, array $itemParts)
+    {
 
         $generator->startElement('base_part');
-        foreach ($itemParts as $partName=>$itemPart) {
-            if(is_array($itemPart)){
+        foreach ($itemParts as $partName => $itemPart) {
+            if (is_array($itemPart)) {
                 self::$partName($report, $generator, $itemPart);
-            }else{
+            } else {
                 self::$itemPart($report, $generator);
             }
         }

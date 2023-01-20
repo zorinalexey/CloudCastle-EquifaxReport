@@ -58,7 +58,7 @@ final class Document
     public ?string $department_code = null;
 
     /**
-     * дата истечения срока документа
+     * Дата истечения срока документа
      * @var string|null
      */
     public ?string $end_date = null;
