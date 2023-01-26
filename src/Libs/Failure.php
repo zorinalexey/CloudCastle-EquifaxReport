@@ -15,7 +15,7 @@ class Failure
 
     /**
      * Код причины отказа. По справочнику 6.5 - Причины отказа совершить сделку
-     * @var string|null
+     * @var int
      */
-    public ?string $reason = null;
+    public int $reason = 4;
 }
