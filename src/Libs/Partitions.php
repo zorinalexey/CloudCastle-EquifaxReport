@@ -448,16 +448,19 @@ trait Partitions
      */
     public static function application(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('application', [], 'Сведения об обращении субъекта к источнику с предложением совершить сделку')
-            ->addElement('ratio', $report->information_part->application->ratio)
-            ->addElement('sum', $report->information_part->application->sum)
-            ->addElement('currency', $report->information_part->application->currency)
-            ->addElement('uid', $report->information_part->application->uid)
-            ->addElement('date', $report->information_part->application->date)
-            ->addElement('source_type', $report->information_part->application->source_type)
-            ->addElement('way', $report->information_part->application->way)
-            ->addElement('approval_date', $report->information_part->application->approval_date)
-            ->closeElement();
+        if (isset($report->information_part->application)) {
+            $report::$records_count++;
+            $generator->startElement('application', [], 'Сведения об обращении субъекта к источнику с предложением совершить сделку')
+                ->addElement('ratio', $report->information_part->application->ratio)
+                ->addElement('sum', $report->information_part->application->sum)
+                ->addElement('currency', $report->information_part->application->currency)
+                ->addElement('uid', $report->information_part->application->uid)
+                ->addElement('date', $report->information_part->application->date)
+                ->addElement('source_type', $report->information_part->application->source_type)
+                ->addElement('way', $report->information_part->application->way)
+                ->addElement('approval_date', $report->information_part->application->approval_date)
+                ->closeElement();
+        }
     }
 
     /**

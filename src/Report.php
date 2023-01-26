@@ -85,7 +85,7 @@ final class Report
                 $generator->addAttribute($key, (string)$value);
             }
             new Title($report->client, $generator);
-            self::partsGenerate(Events::search($report->event->event), $report, $generator);
+            self::partsGenerate(Events::search($event->event), $report, $generator);
             $generator->closeElement();
         }
         Blocks::footer($generator);
@@ -96,9 +96,7 @@ final class Report
     private static function partsGenerate(array $parts, Report $report, XmlGenerator $generator)
     {
         foreach ($parts as $partName => $partValues) {
-            $generator->startElement($partName);
-            Blocks::partsGenerator($partValues, $report, $generator);
-            $generator->closeElement();
+            Blocks::$partName($report, $generator,$partValues);
         }
     }
 
