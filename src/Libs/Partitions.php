@@ -572,6 +572,7 @@ trait Partitions
             foreach ($collaterals as $collateral) {
                 if ($collateral instanceof Collateral and $collateral->sum > 0) {
                     $sign = false;
+                    $report::$records_count++;
                     $generator->startElement('collateral');
                     $generator->addElement('item_type', $collateral->item_type);
                     $generator->addElement('id', $collateral->id);
@@ -616,6 +617,7 @@ trait Partitions
             foreach ($guarantees as $guarantee) {
                 if ($guarantee instanceof Guarantee and $guarantee->sum > 0) {
                     $sign = false;
+                    $report::$records_count++;
                     $generator->startElement('guarantee');
                     $generator->addElement('uid', $guarantee->uid)
                         ->addElement('sum', $guarantee->sum)
@@ -651,6 +653,7 @@ trait Partitions
             foreach ($guarantees as $guarantee) {
                 if ($guarantee instanceof IndieGuarantee and $guarantee->sum > 0) {
                     $sign = false;
+                    $report::$records_count++;
                     $generator->startElement('indie_guarantee');
                     $generator->addElement('uid', $guarantee->uid)
                         ->addElement('sum', $guarantee->sum)
@@ -696,7 +699,7 @@ trait Partitions
 
     public static function repayment_collateral(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('repayment_collateral', [], '');
+        $generator->startElement('repayment_collateral', [], 'Сведения о погашении требований кредитора по обязательству за счет обеспечения');
         if ($report->base_part->contract->repayment_collateral->sum > 0) {
             $generator->addElement('code', $report->base_part->contract->repayment_collateral->code)
                 ->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->repayment_collateral->date)))
@@ -710,7 +713,7 @@ trait Partitions
 
     public static function collateral_insce(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('collateral_insce', [], '');
+        $generator->startElement('collateral_insce', [], 'Сведения о страховании предмета залога');
         $collateral_insce = $report->base_part->contract->collateral_insce;
         if ($collateral_insce->limit > 0) {
             $generator->addElement('limit', $collateral_insce->limit)

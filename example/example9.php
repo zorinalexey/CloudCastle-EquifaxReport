@@ -122,7 +122,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата заключения договора залога
      */
-    $collateral->date = date('d.m.Y');
+    $collateral->date = date('d.m.Y', strtotime('-7 day'));
     /*
      * Стоимость предмета залога
      */
@@ -202,7 +202,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата прекращения поручительства согласно договору
      */
-    $guarantee->end_date = date('d.m.Y');
+    $guarantee->end_date = date('d.m.Y', time());
     /*
      * Валюта поручительства
      * По справочнику 106. Коды валют по ОКВ
@@ -216,7 +216,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата заключения договора поручительства
      */
-    $guarantee->date = date('d.m.Y');
+    $guarantee->date = date('d.m.Y', strtotime('-7 day'));
     /*
      * УИд договора поручительства
      */
@@ -232,7 +232,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата выдачи независимой гарантии
      */
-    $indie_guarantees->date = date('d.m.Y');
+    $indie_guarantees->date = date('d.m.Y', strtotime('-7 day'));
     /*
      * Сумма независимой гарантии
      */
@@ -293,7 +293,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Дата начала действия страхования
      */
-    $report->base_part->contract->collateral_insce->date = date('d.m.Y');
+    $report->base_part->contract->collateral_insce->date = date('d.m.Y', strtotime('-7 day'));
     /*
      * Признак наличия франшизы
      * По справочнику 4.102. Признак наличия франшизы
