@@ -93,6 +93,8 @@ class Contract
      */
     public array $indie_guarantees = [];
 
+    public ?ContractEnd $contract_end = null;
+
     /**
      *
      */
@@ -112,5 +114,6 @@ class Contract
         $this->average_payment = new AveragePayment();
         $this->material_guarantee_source = new MaterialGuaranteeSource();
         $this->material_guarantee_subject = new MaterialGuaranteeSubject();
+        $this->contract_end = new ContractEnd();
     }
 }

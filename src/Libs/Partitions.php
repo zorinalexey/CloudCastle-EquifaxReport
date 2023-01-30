@@ -105,7 +105,7 @@ trait Partitions
             foreach ($contacts as $contact) {
                 if (isset($contact['phone'])) {
                     $generator->startElement('phone')
-                        ->addElement('number', $contact['phone']);
+                        ->addElement('number', preg_replace('~([^0-9\(\)+])~ui', '', $contact['phone']));
                     if (isset($contact['comment'])) {
                         $generator->addElement('comment', $contact['comment']);
                     }
@@ -188,19 +188,28 @@ trait Partitions
      */
     public static function deal(Report $report, XmlGenerator $generator): void
     {
+        if (isset($report->information_part->credit->type) and $report->information_part->credit->type) {
+            $report->base_part->contract->deal->type = $report->information_part->credit->type;
+        }
         $generator->startElement('deal', [], 'Общие сведения о сделке')
-            ->addElement('ratio', $report->base_part->contract->deal->ratio)
-            ->addElement('date', $report->base_part->contract->deal->date)
-            ->addElement('category', $report->base_part->contract->deal->category)
+            ->addElement('ratio', $report->base_part->contract->deal->ratio);
+        if ($report->base_part->contract->deal->date) {
+            $generator->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->deal->date)));
+        } else {
+            $generator->addElement('date', date('d.m.Y', time()));
+        }
+        $generator->addElement('category', $report->base_part->contract->deal->category)
             ->addElement('type', $report->base_part->contract->deal->type)
             ->addElement('purpose', $report->base_part->contract->deal->purpose)
             ->addElement('sign_credit', $report->base_part->contract->deal->sign_credit)
             ->addElement('sign_credit_card', $report->base_part->contract->deal->sign_credit_card)
             ->addElement('sign_renovation', $report->base_part->contract->deal->sign_renovation)
             ->addElement('sign_deal_cash_source', $report->base_part->contract->deal->sign_deal_cash_source)
-            ->addElement('sign_deal_cash_subject', $report->base_part->contract->deal->sign_deal_cash_subject)
-            ->addElement('end_date', $report->base_part->contract->deal->end_date)
-            ->closeElement();
+            ->addElement('sign_deal_cash_subject', $report->base_part->contract->deal->sign_deal_cash_subject);
+        if ($report->base_part->contract->deal->end_date) {
+            $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->deal->end_date)));
+        }
+        $generator->closeElement();
     }
 
     /**
@@ -269,9 +278,11 @@ trait Partitions
     {
         $generator->startElement('full_cost', [], 'Полная стоимость потребительского кредита (займа)')
             ->addElement('percent', $report->base_part->contract->full_cost->percent)
-            ->addElement('sum', $report->base_part->contract->full_cost->sum)
-            ->addElement('date', $report->base_part->contract->full_cost->date)
-            ->closeElement();
+            ->addElement('sum', $report->base_part->contract->full_cost->sum);
+        if ($report->base_part->contract->deal->end_date) {
+            $generator->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->full_cost->date)));
+        }
+        $generator->closeElement();
     }
 
     /**
@@ -293,6 +304,11 @@ trait Partitions
      */
     public static function debt(Report $report, XmlGenerator $generator): void
     {
+        $report->base_part->contract->debt->sum = (
+            $report->base_part->contract->debt->op_sum +
+            $report->base_part->contract->debt->other_sum +
+            $report->base_part->contract->debt->percent_sum
+        );
         $debt = $report->base_part->contract->debt;
         $generator->startElement('debt', [], 'Сведения о задолженности');
         if ($debt->sum === 0) {
@@ -317,6 +333,11 @@ trait Partitions
      */
     public static function debt_current(Report $report, XmlGenerator $generator): void
     {
+        $report->base_part->contract->debt_current->sum = (
+            $report->base_part->contract->debt_current->percent_sum +
+            $report->base_part->contract->debt_current->other_sum +
+            $report->base_part->contract->debt_current->op_sum
+        );
         $debt = $report->base_part->contract->debt_current;
         $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
         if ($debt->sum > 0) {
@@ -338,6 +359,11 @@ trait Partitions
      */
     public static function debt_overdue(Report $report, XmlGenerator $generator): void
     {
+        $report->base_part->contract->debt_overdue->sum = (
+            $report->base_part->contract->debt_overdue->percent_sum +
+            $report->base_part->contract->debt_overdue->other_sum +
+            $report->base_part->contract->debt_overdue->op_sum
+        );
         $debt = $report->base_part->contract->debt_overdue;
         $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
         if ($debt->sum > 0) {
@@ -361,6 +387,16 @@ trait Partitions
      */
     public static function payments(Report $report, XmlGenerator $generator): void
     {
+        $report->base_part->contract->payments->paid_sum = (
+            $report->base_part->contract->payments->paid_percent_sum +
+            $report->base_part->contract->payments->paid_other_sum +
+            $report->base_part->contract->payments->paid_op_sum
+        );
+        $report->base_part->contract->payments->last_payout_sum = (
+            $report->base_part->contract->payments->last_payout_other_sum +
+            $report->base_part->contract->payments->last_payout_percent_sum +
+            $report->base_part->contract->payments->last_payout_op_sum
+        );
         $generator->startElement('payments', [], 'Сведения о внесении платежей');
         if ($report->base_part->contract->payments->last_payout_sum > 0) {
             $generator->addElement('last_payout_date', $report->base_part->contract->payments->last_payout_date);
@@ -470,6 +506,7 @@ trait Partitions
      */
     public static function credit(Report $report, XmlGenerator $generator): void
     {
+        $report->base_part->contract->deal->type = $report->information_part->credit->type;
         $generator->startElement('credit', [], 'Сведения об участии в обязательстве, по которому формируется кредитная история')
             ->addElement('ratio', $report->information_part->credit->ratio)
             ->addElement('type', $report->information_part->credit->type)
@@ -614,8 +651,8 @@ trait Partitions
     public static function contract_end(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_end', [], 'Код основания прекращения обязательства')
-            ->addElement('reason', '')
-            ->addElement('date', '')
+            ->addElement('reason', $report->base_part->contract->contract_end->reason)
+            ->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->contract_end->date)))
             ->closeElement();
 
     }

@@ -38,7 +38,7 @@ class DebtOverdue
      */
     public ?string $op_miss_payout_date = null;
     /**
-     * Дата последнего пропу щенного платежа по процентам
+     * Дата последнего пропущенного платежа по процентам
      * @var string|null
      */
     public ?string $percent_miss_payout_date = null;

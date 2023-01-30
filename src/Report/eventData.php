@@ -50,13 +50,11 @@ return [
                 'contract_amount',
                 'joint_debtors',
                 'payment_terms',
-                'full_cost',
                 'cred_start_debt',
                 'debt',
                 'debt_current',
                 'debt_overdue',
                 'payments',
-                'average_payment',
                 'material_guarantee_source'
             ]
         ],
@@ -129,8 +127,51 @@ return [
             'credit'
         ]
     ],
-    '2.2' => '',
-    '2.3' => '',
+    '2.2' => [
+        'base_part'=>[
+            'contract'=>[
+                'uid',
+                'deal',
+                'contract_amount',
+                'payment_terms',
+                'full_cost',
+                'cred_start_debt',
+                'debt',
+                'debt_current',
+                'debt_overdue',
+                'payments',
+                'average_payment',
+                'material_guarantee_source',
+            ]
+        ],
+        'information_part'=>[
+            'credit'
+        ]
+    ],
+    '2.3' => [
+        'base_part'=>[
+            'contract'=>[
+                'uid',
+                'deal',
+                'contract_amount',
+                'payment_terms',
+                'full_cost',
+                'cred_start_debt',
+                'debt',
+                'debt_current',
+                'debt_overdue',
+                'payments',
+                'average_payment',
+                'material_guarantee_subject',
+            ]
+        ],
+        'add_part'=>[
+            'accounting'
+        ],
+        'information_part'=>[
+            'credit'
+        ]
+    ],
     '2.4' => [
         'contract' => [
             'uid',
@@ -149,7 +190,26 @@ return [
         ]
     ],
     '2.5' => [
-
+        'base_part' => [
+            'contract'=>[
+                'uid',
+                'deal',
+                'contract_amount',
+                'payment_terms',
+                'full_cost',
+                'cred_start_debt',
+                'debt',
+                'debt_current',
+                'debt_overdue',
+                'payments',
+                'average_payment',
+                'material_guarantee_subject',
+                'contract_end',
+            ]
+        ],
+        'information_part'=>[
+            'credit'
+        ]
     ],
     '2.6' => '',
     '2.8.1' => '',
