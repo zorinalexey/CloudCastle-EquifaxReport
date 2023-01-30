@@ -20,46 +20,57 @@ class Contract
      * @var string|null
      */
     public ?string $uid = null;
+
     /**
      * @var Deal|null
      */
     public ?Deal $deal = null;
+
     /**
      * @var ContractAmount|null
      */
     public ?ContractAmount $contract_amount = null;
+
     /**
      * @var CredStartDebt|null
      */
     public ?CredStartDebt $cred_start_debt = null;
+
     /**
      * @var JointDebtors|null
      */
     public ?JointDebtors $joint_debtors = null;
+
     /**
      * @var PaymentTerms|null
      */
     public ?PaymentTerms $payment_terms = null;
+
     /**
      * @var FullCost|null
      */
     public ?FullCost $full_cost = null;
+
     /**
      * @var ContractChanges|null
      */
     public ?ContractChanges $contract_changes = null;
+
     /**
      * @var Debt|null
      */
     public ?Debt $debt = null;
+
     /**
      * @var DebtCurrent|null
      */
     public ?DebtCurrent $debt_current = null;
+
     /**
      * @var DebtOverdue|null
      */
     public ?DebtOverdue $debt_overdue = null;
+
     /**
      * @var Payments|null
      */
@@ -68,22 +79,25 @@ class Contract
      * @var AveragePayment|null
      */
     public ?AveragePayment $average_payment = null;
+
     /**
      * @var MaterialGuaranteeSource|null
      */
     public ?MaterialGuaranteeSource $material_guarantee_source = null;
+
     /**
      * @var MaterialGuaranteeSubject|null
      */
     public ?MaterialGuaranteeSubject $material_guarantee_subject = null;
+
     /**
      * Сведения о залоге
      * @var array
      */
     public array $collaterals = [];
+
     /**
      * Сведения о поручительстве
-     * @var Guarantee|null
      */
     public array $guarantees = [];
 
@@ -93,7 +107,29 @@ class Contract
      */
     public array $indie_guarantees = [];
 
+    /**
+     * Прекращение обязательства
+     * @var ContractEnd|null
+     */
     public ?ContractEnd $contract_end = null;
+
+    /**
+     * Сведения о возмещении принципалом гаранту выплаченной суммы
+     * @var GuaranteeReturn|null
+     */
+    public ?GuaranteeReturn $guarantee_return = null;
+
+    /**
+     * Сведения о погашении требований кредитора по обязательству за счет обеспечения
+     * @var RepaymentCollateral|null
+     */
+    public ?RepaymentCollateral $repayment_collateral = null;
+
+    /**
+     * Сведения о страховании предмета залога
+     * @var CollateralInsce|null
+     */
+    public ?CollateralInsce $collateral_insce = null;
 
     /**
      *
@@ -115,5 +151,8 @@ class Contract
         $this->material_guarantee_source = new MaterialGuaranteeSource();
         $this->material_guarantee_subject = new MaterialGuaranteeSubject();
         $this->contract_end = new ContractEnd();
+        $this->guarantee_return = new GuaranteeReturn();
+        $this->repayment_collateral = new RepaymentCollateral();
+        $this->collateral_insce = new CollateralInsce();
     }
 }

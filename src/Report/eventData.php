@@ -34,7 +34,7 @@ return [
             'accounting'
         ],
         'information_part' => [
-           'application',
+            'application',
         ]
     ],
     '1.4.1' => [
@@ -128,8 +128,8 @@ return [
         ]
     ],
     '2.2' => [
-        'base_part'=>[
-            'contract'=>[
+        'base_part' => [
+            'contract' => [
                 'uid',
                 'deal',
                 'contract_amount',
@@ -144,13 +144,13 @@ return [
                 'material_guarantee_source',
             ]
         ],
-        'information_part'=>[
+        'information_part' => [
             'credit'
         ]
     ],
     '2.3' => [
-        'base_part'=>[
-            'contract'=>[
+        'base_part' => [
+            'contract' => [
                 'uid',
                 'deal',
                 'contract_amount',
@@ -165,33 +165,35 @@ return [
                 'material_guarantee_subject',
             ]
         ],
-        'add_part'=>[
+        'add_part' => [
             'accounting'
         ],
-        'information_part'=>[
+        'information_part' => [
             'credit'
         ]
     ],
     '2.4' => [
-        'contract' => [
-            'uid',
-            'collaterals' => [
-                'collateral'
-            ],
-            'guarantees' => [
-                'guarantee'
-            ],
-            'indie_guarantees' => [
-                'indie_guarantee'
-            ],
-            'collateral_insce',
-            'repayment_collateral',
-            'guarantee_return'
+        'base_part' => [
+            'contract' => [
+                'uid',
+                'collaterals' => [
+                    'collateral'
+                ],
+                'guarantees' => [
+                    'guarantee'
+                ],
+                'indie_guarantees' => [
+                    'indie_guarantee'
+                ],
+                'collateral_insce',
+                'repayment_collateral',
+                'guarantee_return'
+            ]
         ]
     ],
     '2.5' => [
         'base_part' => [
-            'contract'=>[
+            'contract' => [
                 'uid',
                 'deal',
                 'contract_amount',
@@ -207,7 +209,7 @@ return [
                 'contract_end',
             ]
         ],
-        'information_part'=>[
+        'information_part' => [
             'credit'
         ]
     ],

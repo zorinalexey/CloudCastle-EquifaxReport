@@ -39,7 +39,8 @@ class IndieGuarantee
     public ?string $fact_end_date = null;
     /**
      * Код причины прекращения независимой гарантии
-     * @var string|null
+     * По справочнику 4.2. Причины прекращения обеспечения
+     * @var int
      */
-    public ?string $end_reason = null;
+    public int $end_reason = 1;
 }

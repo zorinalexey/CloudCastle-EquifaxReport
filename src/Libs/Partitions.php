@@ -163,8 +163,13 @@ trait Partitions
     {
         Report::$records_count++;
         $generator->startElement('contract');
-        foreach ($parts as $partName) {
-            self::$partName($report, $generator);
+        foreach ($parts as $partName => $partValue) {
+            if (is_string($partValue)) {
+                self::$partValue($report, $generator);
+            } else {
+                self::$partName($report, $generator);
+            }
+
         }
         $generator->closeElement();
     }
@@ -560,26 +565,37 @@ trait Partitions
      */
     public static function collaterals(Report $report, XmlGenerator $generator): void
     {
+        $sign = true;
         $collaterals = $report->base_part->contract->collaterals;
         $generator->startElement('collaterals', [], 'Сведения о залоге');
         if ($collaterals) {
             foreach ($collaterals as $collateral) {
-                if ($collateral instanceof Collateral) {
+                if ($collateral instanceof Collateral and $collateral->sum > 0) {
+                    $sign = false;
+                    $generator->startElement('collateral');
                     $generator->addElement('item_type', $collateral->item_type);
                     $generator->addElement('id', $collateral->id);
-                    $generator->addElement('date', $collateral->date);
+                    if ($collateral->date) {
+                        $generator->addElement('date', date('d.m.Y', strtotime($collateral->date)));
+                    }
                     $generator->addElement('sum', $collateral->sum);
                     $generator->addElement('currency', $collateral->currency);
                     $generator->addElement('date_assessment', $collateral->date_assessment);
                     $generator->addElement('item_burden', $collateral->item_burden);
-                    $generator->addElement('end_date', $collateral->end_date);
-                    $generator->addElement('fact_end_date', $collateral->fact_end_date);
+                    if ($collateral->end_date) {
+                        $generator->addElement('end_date', date('d.m.Y', strtotime($collateral->end_date)));
+                    }
+                    if ($collateral->fact_end_date) {
+                        $generator->addElement('fact_end_date', date('d.m.Y', strtotime($collateral->fact_end_date)));
+                    }
                     $generator->addElement('end_reason', $collateral->end_reason);
+                    $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported collateral type');
+                    throw new Exception('Unsupported Collateral type');
                 }
             }
-        } else {
+        }
+        if ($sign) {
             $generator->addElement('sign', 0);
         }
         $generator->closeElement();
@@ -593,26 +609,28 @@ trait Partitions
      */
     public static function guarantees(Report $report, XmlGenerator $generator): void
     {
+        $sign = true;
         $guarantees = $report->base_part->contract->guarantees;
-        $generator->startElement('guarantees', [], 'Сведения о залоге');
+        $generator->startElement('guarantees', [], 'Сведения о поручительстве');
         if ($guarantees) {
             foreach ($guarantees as $guarantee) {
-                if ($guarantee instanceof Guarantee) {
-                    $generator->addElement('item_type', $guarantee->item_type);
-                    $generator->addElement('id', $guarantee->id);
-                    $generator->addElement('date', $guarantee->date);
-                    $generator->addElement('sum', $guarantee->sum);
-                    $generator->addElement('currency', $guarantee->currency);
-                    $generator->addElement('date_assessment', $guarantee->date_assessment);
-                    $generator->addElement('item_burden', $guarantee->item_burden);
-                    $generator->addElement('end_date', $guarantee->end_date);
-                    $generator->addElement('fact_end_date', $guarantee->fact_end_date);
-                    $generator->addElement('end_reason', $guarantee->end_reason);
+                if ($guarantee instanceof Guarantee and $guarantee->sum > 0) {
+                    $sign = false;
+                    $generator->startElement('guarantee');
+                    $generator->addElement('uid', $guarantee->uid)
+                        ->addElement('sum', $guarantee->sum)
+                        ->addElement('currency', $guarantee->currency)
+                        ->addElement('date', date('d.m.Y', strtotime($guarantee->date)))
+                        ->addElement('end_date', date('d.m.Y', strtotime($guarantee->end_date)))
+                        ->addElement('fact_end_date', date('d.m.Y', strtotime($guarantee->fact_end_date)))
+                        ->addElement('end_reason', $guarantee->end_reason);
+                    $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported collateral type');
+                    throw new Exception('Unsupported Guarantee type');
                 }
             }
-        } else {
+        }
+        if ($sign) {
             $generator->addElement('sign', 0);
         }
         $generator->closeElement();
@@ -626,23 +644,28 @@ trait Partitions
      */
     public static function indie_guarantees(Report $report, XmlGenerator $generator): void
     {
+        $sign = true;
         $guarantees = $report->base_part->contract->indie_guarantees;
-        $generator->startElement('indie_guarantees', [], 'Сведения о залоге');
+        $generator->startElement('indie_guarantees', [], 'Сведения о независимой гарантии');
         if ($guarantees) {
             foreach ($guarantees as $guarantee) {
-                if ($guarantee instanceof IndieGuarantee) {
-                    $generator->addElement('uid', $guarantee->uid);
-                    $generator->addElement('sum', $guarantee->sum);
-                    $generator->addElement('currency', $guarantee->currency);
-                    $generator->addElement('date', $guarantee->date);
-                    $generator->addElement('end_date', $guarantee->end_date);
-                    $generator->addElement('fact_end_date', $guarantee->fact_end_date);
-                    $generator->addElement('end_reason', $guarantee->end_reason);
+                if ($guarantee instanceof IndieGuarantee and $guarantee->sum > 0) {
+                    $sign = false;
+                    $generator->startElement('indie_guarantee');
+                    $generator->addElement('uid', $guarantee->uid)
+                        ->addElement('sum', $guarantee->sum)
+                        ->addElement('currency', $guarantee->currency)
+                        ->addElement('date', date('d.m.Y', strtotime($guarantee->date)))
+                        ->addElement('end_date', date('d.m.Y', strtotime($guarantee->end_date)))
+                        ->addElement('fact_end_date', date('d.m.Y', strtotime($guarantee->fact_end_date)))
+                        ->addElement('end_reason', $guarantee->end_reason);
+                    $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported collateral type');
+                    throw new Exception('Unsupported IndieGuarantee type');
                 }
             }
-        } else {
+        }
+        if ($sign) {
             $generator->addElement('sign', 0);
         }
         $generator->closeElement();
@@ -657,4 +680,49 @@ trait Partitions
 
     }
 
+    public static function guarantee_return(Report $report, XmlGenerator $generator): void
+    {
+        $guarantee = $report->base_part->contract->guarantee_return;
+        $generator->startElement('guarantee_return', [], 'Сведения о возмещении принципалом гаранту выплаченной суммы');
+        if ($guarantee->returning_sum > 0) {
+            $generator->addElement('returning_sum', $guarantee->returning_sum)
+                ->addElement('principal_sum', $guarantee->principal_sum)
+                ->addElement('return_correct', $guarantee->return_correct);
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
+
+    public static function repayment_collateral(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('repayment_collateral', [], '');
+        if ($report->base_part->contract->repayment_collateral->sum > 0) {
+            $generator->addElement('code', $report->base_part->contract->repayment_collateral->code)
+                ->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->repayment_collateral->date)))
+                ->addElement('sum', $report->base_part->contract->repayment_collateral->sum);
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
+
+
+    public static function collateral_insce(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('collateral_insce', [], '');
+        $collateral_insce = $report->base_part->contract->collateral_insce;
+        if ($collateral_insce->limit > 0) {
+            $generator->addElement('limit', $collateral_insce->limit)
+                ->addElement('currency', $collateral_insce->currency)
+                ->addElement('franchise', $collateral_insce->franchise)
+                ->addElement('date', $collateral_insce->date)
+                ->addElement('end_date', $collateral_insce->end_date)
+                ->addElement('fact_end_date', $collateral_insce->fact_end_date)
+                ->addElement('end_reason', $collateral_insce->end_reason);
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
 }

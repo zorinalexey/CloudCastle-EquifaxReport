@@ -1,6 +1,6 @@
 <?php
 
-define('ROOT', dirname(__DIR__). DIRECTORY_SEPARATOR);
+define('ROOT', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 date_default_timezone_set('Europe/London');
 
 require_once ROOT . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
@@ -10,7 +10,7 @@ use CloudCastle\EquifaxReport\Individual\Client;
 use CloudCastle\EquifaxReport\Report;
 use CloudCastle\EquifaxReport\Report\Events;
 
-Config::$configFile = ROOT.'config.json';
+Config::$configFile = ROOT . 'config.json';
 $config = Config::instance();
 
 $countReports = 1;

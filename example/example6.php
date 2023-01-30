@@ -105,7 +105,7 @@ for ($i = 0; $i < $countReports; $i++) {
     $event->action = 'A';
     $event->event = '2.2';
     $event->action_reason = 'Субъекту передана сумма займа (кредита) либо субъект '
-    .'стал принципалом по гарантии или поручителем по сделке, кроме договора лизинга';
+        . 'стал принципалом по гарантии или поручителем по сделке, кроме договора лизинга';
     $report = new Report($client, $event, $config);
 
     /*
@@ -336,7 +336,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Сумма просроченной задолженности по иным требованиям
      */
-    $report->base_part->contract->debt_overdue->percent_sum = 0 ;
+    $report->base_part->contract->debt_overdue->percent_sum = 0;
     /*
      * Дата последнего пропущенного платежа по процентам
      */

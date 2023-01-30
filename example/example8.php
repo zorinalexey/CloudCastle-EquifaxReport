@@ -335,7 +335,7 @@ for ($i = 0; $i < $countReports; $i++) {
     /*
      * Сумма просроченной задолженности по иным требованиям
      */
-    $report->base_part->contract->debt_overdue->percent_sum = 0 ;
+    $report->base_part->contract->debt_overdue->percent_sum = 0;
     /*
      * Дата последнего пропущенного платежа по процентам
      */

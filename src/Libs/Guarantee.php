@@ -39,7 +39,8 @@ class Guarantee
     public ?string $fact_end_date = null;
     /**
      * Код причины прекращения поручительства
-     * @var string|null
+     * По справочнику 4.2. Причины прекращения обеспечения
+     * @var int
      */
-    public ?float $end_reason = null;
+    public int $end_reason = 1;
 }

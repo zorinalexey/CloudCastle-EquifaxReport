@@ -93,10 +93,10 @@ final class Report
         return $generator->get();
     }
 
-    private static function partsGenerate(array $parts, Report $report, XmlGenerator $generator)
+    protected static function partsGenerate(array $parts, Report $report, XmlGenerator $generator)
     {
         foreach ($parts as $partName => $partValues) {
-            Blocks::$partName($report, $generator,$partValues);
+            Blocks::$partName($report, $generator, $partValues);
         }
     }
 

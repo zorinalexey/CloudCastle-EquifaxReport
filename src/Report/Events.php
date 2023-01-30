@@ -65,7 +65,7 @@ final class Events
 
     public function __construct(Client $client)
     {
-        $this->recnumber = md5(json_encode($client).random_int(0, 999999999));
+        $this->recnumber = md5(json_encode($client) . random_int(0, 999999999));
         $this->comment = new Comment();
     }
 
