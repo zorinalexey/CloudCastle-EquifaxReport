@@ -118,24 +118,24 @@ return [
     '2.1' => [
         'base_part' => [
             'contract' => [
-                'uid', //
-                'deal', //
-                'contract_amount', //
-                'joint_debtors', //
-                'payment_terms', //
-                'full_cost', //
-                'contract_changes', //
-                'cred_start_debt', //
-                'debt', //
-                'debt_current', //
-                'debt_overdue',  //
-                'payments', //
-                'average_payment', //
-                'material_guarantee_subject' //
+                'uid',
+                'deal',
+                'contract_amount',
+                'joint_debtors',
+                'payment_terms',
+                'full_cost',
+                'contract_changes',
+                'cred_start_debt',
+                'debt',
+                'debt_current',
+                'debt_overdue',
+                'payments',
+                'average_payment',
+                'material_guarantee_subject'
             ]
         ],
         'add_part' => [
-            'accounting', //
+            'accounting',
         ]
     ],
     '2.2' => [
