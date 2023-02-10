@@ -190,7 +190,6 @@ for ($i = 0; $i < $countReports; $i++) {
      * Дата изменения договора
      */
     $report->base_part->contract->contract_changes->date = date('d.m.Y');
-
     /*
      * Код вида изменения договора
      * По справочнику 3.1. Виды изменения договора.
@@ -201,7 +200,6 @@ for ($i = 0; $i < $countReports; $i++) {
      * 3 - Прочие изменения
      */
     $report->base_part->contract->contract_changes->type = 3;
-
     /*
      * Код специального изменения договора.
      * // Если contract_changes.type = 1 – По справочнику 3.2. Виды льготного периода;
@@ -269,7 +267,6 @@ for ($i = 0; $i < $countReports; $i++) {
      * По умолчанию равна значению $report->base_part->contract->deal->end_date
      */
     $report->base_part->contract->contract_changes->end_date = date('d.m.Y', strtotime('+30 days'));
-
 
     // Сумма и валюта обязательства
     /*
@@ -605,8 +602,6 @@ for ($i = 0; $i < $countReports; $i++) {
      * 0 - Во всех других случаях
      */
     $report->information_part->credit->sign_stop_load = 0;
-
-
     $reports[] = $report;
 
 }
