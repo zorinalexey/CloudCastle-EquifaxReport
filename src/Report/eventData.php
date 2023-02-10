@@ -82,7 +82,7 @@ return [
         ]
     ],
     '1.6' => [
-        'base_parts' => [
+        'base_part' => [
             'contract' => [
                 'collection'
             ]
@@ -95,7 +95,7 @@ return [
 
     ],
     '1.9' => [
-        'base_parts' => [
+        'base_part' => [
             'addr_reg',
             'addr_fact',
             'contacts',
@@ -103,28 +103,37 @@ return [
         ]
     ],
     '1.10' => [
-        'base_parts' => [
+        'base_part' => [
             'incapacity',
         ]
     ],
     '1.12' => [
-        'base_parts' => [
+        'base_part' => [
             'bankruptcy',
             'bankruptcy_finish'
         ]
     ],
     '2.1' => [
-        'base_parts' => [
+        'base_part' => [
             'contract' => [
-                'uid',
-                'deal',
-                'joint_debtors',
-                'contract_changes',
+                'uid', //
+                'deal', //
+                'contract_amount', //
+                'joint_debtors', //
+                'payment_terms', //
+                'full_cost', //
+                'contract_changes', //
+                'cred_start_debt', //
+                'debt', //
+                'debt_current', //
+                'debt_overdue',  //
+                'payments', //
+                'average_payment', //
+                'material_guarantee_subject' //
             ]
         ],
         'add_part' => [
-            'accounting',
-            'credit'
+            'accounting', //
         ]
     ],
     '2.2' => [

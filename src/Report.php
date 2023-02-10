@@ -69,9 +69,9 @@ final class Report
     /**
      * @param array $reports
      * @param Config $config
-     * @return void
+     * @return string
      */
-    public static function generate(array $reports, Config $config)
+    public static function generate(array $reports, Config $config):string
     {
         $generator = new XmlGenerator($config);
         $generator->startDocument();
@@ -93,7 +93,13 @@ final class Report
         return $generator->get();
     }
 
-    protected static function partsGenerate(array $parts, Report $report, XmlGenerator $generator)
+    /**
+     * @param array $parts
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    private static function partsGenerate(array $parts, self $report, XmlGenerator $generator): void
     {
         foreach ($parts as $partName => $partValues) {
             Blocks::$partName($report, $generator, $partValues);

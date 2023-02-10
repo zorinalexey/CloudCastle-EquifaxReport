@@ -2,6 +2,9 @@
 
 namespace CloudCastle\EquifaxReport\Libs;
 
+/**
+ * Сумма и валюта обязательства
+ */
 class ContractAmount
 {
     /**

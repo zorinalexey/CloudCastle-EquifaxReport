@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport;
 use CloudCastle\EquifaxReport\Config\Config;
 use XMLWriter;
 
-class XmlGenerator
+final class XmlGenerator
 {
 
 
@@ -35,9 +35,9 @@ class XmlGenerator
 
     /**
      * Получить результат генерации xml
-     * @return
+     * @return string
      */
-    public function get()
+    public function get():string
     {
         self::$xml->endDocument();
         self::$xml->outputMemory(true);
@@ -52,9 +52,9 @@ class XmlGenerator
      * @param string|null $comment Комментарий элемента
      * @return self
      */
-    public function addElement($name, $content, array $attribites = [], $comment = null): self
+    public function addElement(string $name, $content, array $attribites = [], $comment = null): self
     {
-        if ($name and $content !== null) {
+        if ($name && $content !== null) {
             $this->startElement($name, $attribites, $comment);
             self::$xml->text((string)$content);
             $this->closeElement();

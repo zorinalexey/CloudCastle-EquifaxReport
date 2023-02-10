@@ -17,75 +17,91 @@ class Contract
 {
 
     /**
+     * Уникальный идентификатор договора (сделки)
      * @var string|null
      */
     public ?string $uid = null;
 
     /**
+     * Общие сведения о сделке
      * @var Deal|null
      */
     public ?Deal $deal = null;
 
     /**
+     * Сумма и валюта обязательства
      * @var ContractAmount|null
      */
     public ?ContractAmount $contract_amount = null;
 
     /**
+     * Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства
      * @var CredStartDebt|null
      */
     public ?CredStartDebt $cred_start_debt = null;
 
     /**
+     * Сведения о наличии солидарных должников
      * @var JointDebtors|null
      */
     public ?JointDebtors $joint_debtors = null;
 
     /**
+     * Сведения об условиях платежей
      * @var PaymentTerms|null
      */
     public ?PaymentTerms $payment_terms = null;
 
     /**
+     * Полная стоимость потребительского кредита (займа)
      * @var FullCost|null
      */
     public ?FullCost $full_cost = null;
 
     /**
+     * Сведения об изменении договора
      * @var ContractChanges|null
      */
     public ?ContractChanges $contract_changes = null;
 
     /**
+     * Сведения о задолженности
      * @var Debt|null
      */
     public ?Debt $debt = null;
 
     /**
+     * Сведения о срочной задолженности
      * @var DebtCurrent|null
      */
     public ?DebtCurrent $debt_current = null;
 
     /**
+     * Сведения о просроченной задолженности
      * @var DebtOverdue|null
      */
     public ?DebtOverdue $debt_overdue = null;
 
     /**
+     * Сведения о внесении платежей
      * @var Payments|null
      */
     public ?Payments $payments = null;
+
     /**
+     * Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета
      * @var AveragePayment|null
      */
     public ?AveragePayment $average_payment = null;
 
     /**
+     * Сведения о неденежном обязательстве источника
      * @var MaterialGuaranteeSource|null
      */
     public ?MaterialGuaranteeSource $material_guarantee_source = null;
 
     /**
+     * Сведения о неденежном обязательстве субъекта
      * @var MaterialGuaranteeSubject|null
      */
     public ?MaterialGuaranteeSubject $material_guarantee_subject = null;
@@ -131,9 +147,6 @@ class Contract
      */
     public ?CollateralInsce $collateral_insce = null;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->deal = new Deal();

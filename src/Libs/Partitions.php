@@ -728,4 +728,27 @@ trait Partitions
         }
         $generator->closeElement();
     }
+
+
+    public static function contract_changes(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('contract_changes', [], 'Сведения об изменении договора');
+        if ($date = $report->base_part->contract->contract_changes->date) {
+            $generator->addElement('date', date('d.m.Y', strtotime($date)))
+                ->addElement('type', $report->base_part->contract->contract_changes->type)
+                ->addElement('special_type', $report->base_part->contract->contract_changes->special_type)
+                ->addElement('type_text', $report->base_part->contract->contract_changes->type_text);
+            if ($report->base_part->contract->contract_changes->end_date) {
+                $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->end_date)));
+            }
+            if ($report->base_part->contract->contract_changes->finish_date) {
+                $generator->addElement('finish_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->finish_date)));
+            }
+            $generator->addElement('finish', $report->base_part->contract->contract_changes->finish)
+                ->addElement('currency_price', $report->base_part->contract->contract_changes->currency_price);
+        } else {
+            $generator->addElement('sign', 0);
+        }
+        $generator->closeElement();
+    }
 }
