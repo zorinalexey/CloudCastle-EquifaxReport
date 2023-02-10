@@ -266,8 +266,9 @@ for ($i = 0; $i < $countReports; $i++) {
     $report->base_part->contract->contract_changes->apply_date = date('d.m.Y');
     /*
      * Дата планового прекращения действия изменения договора
+     * По умолчанию равна значению $report->base_part->contract->deal->end_date
      */
-    $report->base_part->contract->contract_changes->end_date = $report->base_part->contract->deal->end_date;
+    $report->base_part->contract->contract_changes->end_date = date('d.m.Y', strtotime('+30 days'));
 
 
     // Сумма и валюта обязательства

@@ -738,14 +738,23 @@ trait Partitions
                 ->addElement('type', $report->base_part->contract->contract_changes->type)
                 ->addElement('special_type', $report->base_part->contract->contract_changes->special_type)
                 ->addElement('type_text', $report->base_part->contract->contract_changes->type_text);
+            if($report->base_part->contract->contract_changes->apply_date){
+                $generator->addElement('apply_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->apply_date)));
+            }else{
+                $generator->addElement('apply_date', date('d.m.Y'));
+            }
             if ($report->base_part->contract->contract_changes->end_date) {
                 $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->end_date)));
+            }else{
+                $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->deal->end_date)));
             }
-            if ($report->base_part->contract->contract_changes->finish_date) {
-                $generator->addElement('finish_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->finish_date)));
+            if($report->base_part->contract->contract_changes->finish){
+                $generator->addElement('finish', $report->base_part->contract->contract_changes->finish);
+                if ($report->base_part->contract->contract_changes->finish_date) {
+                    $generator->addElement('finish_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->finish_date)));
+                }
             }
-            $generator->addElement('finish', $report->base_part->contract->contract_changes->finish)
-                ->addElement('currency_price', $report->base_part->contract->contract_changes->currency_price);
+            $generator->addElement('currency_price', $report->base_part->contract->contract_changes->currency_price);
         } else {
             $generator->addElement('sign', 0);
         }
