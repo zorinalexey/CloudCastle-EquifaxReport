@@ -37,7 +37,7 @@ final class XmlGenerator
      * Получить результат генерации xml
      * @return string
      */
-    public function get():string
+    public function get(): string
     {
         self::$xml->endDocument();
         self::$xml->outputMemory(true);

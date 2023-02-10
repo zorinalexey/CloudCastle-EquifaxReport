@@ -25,7 +25,7 @@ use CloudCastle\EquifaxReport\Report\Events;
 final class Report
 
 {
-    const VERSION = '4.0';
+    public const VERSION = '4.0';
     /**
      * Количество различных субъектов, по которым выгружены записи в файле
      * @var int
@@ -71,7 +71,7 @@ final class Report
      * @param Config $config
      * @return string
      */
-    public static function generate(array $reports, Config $config):string
+    public static function generate(array $reports, Config $config): string
     {
         $generator = new XmlGenerator($config);
         $generator->startDocument();
@@ -106,6 +106,9 @@ final class Report
         }
     }
 
+    /**
+     * @return string
+     */
     public static function uidGenerate(): string
     {
         $command = __DIR__ . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . 'uidgen';

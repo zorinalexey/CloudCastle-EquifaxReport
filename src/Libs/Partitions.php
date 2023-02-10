@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 use CloudCastle\EquifaxReport\Config\Config;
 use CloudCastle\EquifaxReport\Report;
 use CloudCastle\EquifaxReport\XmlGenerator;
-use Exception;
+use RuntimeException;
 
 /**
  *
@@ -128,9 +128,9 @@ trait Partitions
      */
     public static function ogrnip(Report $report, XmlGenerator $generator): void
     {
-        $lenght = strlen((string)$report->client->inn->ogrnIp);
+        $length = strlen((string)$report->client->inn->ogrnIp);
         $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
-        if ($report->client->inn->ogrnIp && $lenght === 15) {
+        if ($report->client->inn->ogrnIp && $length === 15) {
             $generator->addElement('no', $report->client->inn->ogrnIp)
                 ->addElement('date', $report->client->inn->ogrnIpDate);
         } else {
@@ -157,6 +157,7 @@ trait Partitions
     /**
      * @param Report $report
      * @param XmlGenerator $generator
+     * @param array $parts
      * @return void
      */
     public static function contract(Report $report, XmlGenerator $generator, array $parts): void
@@ -193,7 +194,7 @@ trait Partitions
      */
     public static function deal(Report $report, XmlGenerator $generator): void
     {
-        if (isset($report->information_part->credit->type) and $report->information_part->credit->type) {
+        if (isset($report->information_part->credit->type) && $report->information_part->credit->type) {
             $report->base_part->contract->deal->type = $report->information_part->credit->type;
         }
         $generator->startElement('deal', [], 'Общие сведения о сделке')
@@ -201,7 +202,7 @@ trait Partitions
         if ($report->base_part->contract->deal->date) {
             $generator->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->deal->date)));
         } else {
-            $generator->addElement('date', date('d.m.Y', time()));
+            $generator->addElement('date', date('d.m.Y'));
         }
         $generator->addElement('category', $report->base_part->contract->deal->category)
             ->addElement('type', $report->base_part->contract->deal->type)
@@ -256,11 +257,11 @@ trait Partitions
     {
         $generator->startElement('payment_terms', [], 'Сведения об условиях платежей')
             ->addElement('op_next_payout_sum', $report->base_part->contract->payment_terms->op_next_payout_sum);
-        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 and $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
+        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 && $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
             $generator->addElement('op_next_payout_date', $report->base_part->contract->payment_terms->op_next_payout_date);
         }
         $generator->addElement('percent_next_payout_sum', $report->base_part->contract->payment_terms->percent_next_payout_sum);
-        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 and $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
+        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 && $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
             $generator->addElement('percent_next_payout_date', $report->base_part->contract->payment_terms->percent_next_payout_date)
                 ->addElement('regularity', $report->base_part->contract->payment_terms->regularity)
                 ->addElement('min_sum_pay_cc', $report->base_part->contract->payment_terms->min_sum_pay_cc)
@@ -570,7 +571,7 @@ trait Partitions
         $generator->startElement('collaterals', [], 'Сведения о залоге');
         if ($collaterals) {
             foreach ($collaterals as $collateral) {
-                if ($collateral instanceof Collateral and $collateral->sum > 0) {
+                if ($collateral instanceof Collateral && $collateral->sum > 0) {
                     $sign = false;
                     $report::$records_count++;
                     $generator->startElement('collateral');
@@ -592,7 +593,7 @@ trait Partitions
                     $generator->addElement('end_reason', $collateral->end_reason);
                     $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported Collateral type');
+                    throw new RuntimeException('Unsupported Collateral type');
                 }
             }
         }
@@ -615,7 +616,7 @@ trait Partitions
         $generator->startElement('guarantees', [], 'Сведения о поручительстве');
         if ($guarantees) {
             foreach ($guarantees as $guarantee) {
-                if ($guarantee instanceof Guarantee and $guarantee->sum > 0) {
+                if ($guarantee instanceof Guarantee && $guarantee->sum > 0) {
                     $sign = false;
                     $report::$records_count++;
                     $generator->startElement('guarantee');
@@ -628,7 +629,7 @@ trait Partitions
                         ->addElement('end_reason', $guarantee->end_reason);
                     $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported Guarantee type');
+                    throw new RuntimeException('Unsupported Guarantee type');
                 }
             }
         }
@@ -651,7 +652,7 @@ trait Partitions
         $generator->startElement('indie_guarantees', [], 'Сведения о независимой гарантии');
         if ($guarantees) {
             foreach ($guarantees as $guarantee) {
-                if ($guarantee instanceof IndieGuarantee and $guarantee->sum > 0) {
+                if ($guarantee instanceof IndieGuarantee && $guarantee->sum > 0) {
                     $sign = false;
                     $report::$records_count++;
                     $generator->startElement('indie_guarantee');
@@ -664,7 +665,7 @@ trait Partitions
                         ->addElement('end_reason', $guarantee->end_reason);
                     $generator->closeElement();
                 } else {
-                    throw new Exception('Unsupported IndieGuarantee type');
+                    throw new RuntimeException('Unsupported IndieGuarantee type');
                 }
             }
         }
@@ -674,6 +675,11 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function contract_end(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_end', [], 'Код основания прекращения обязательства')
@@ -683,6 +689,11 @@ trait Partitions
 
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function guarantee_return(Report $report, XmlGenerator $generator): void
     {
         $guarantee = $report->base_part->contract->guarantee_return;
@@ -697,6 +708,11 @@ trait Partitions
         $generator->closeElement();
     }
 
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function repayment_collateral(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('repayment_collateral', [], 'Сведения о погашении требований кредитора по обязательству за счет обеспечения');
@@ -710,7 +726,11 @@ trait Partitions
         $generator->closeElement();
     }
 
-
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function collateral_insce(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('collateral_insce', [], 'Сведения о страховании предмета залога');
@@ -729,7 +749,11 @@ trait Partitions
         $generator->closeElement();
     }
 
-
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
     public static function contract_changes(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_changes', [], 'Сведения об изменении договора');
@@ -738,17 +762,17 @@ trait Partitions
                 ->addElement('type', $report->base_part->contract->contract_changes->type)
                 ->addElement('special_type', $report->base_part->contract->contract_changes->special_type)
                 ->addElement('type_text', $report->base_part->contract->contract_changes->type_text);
-            if($report->base_part->contract->contract_changes->apply_date){
+            if ($report->base_part->contract->contract_changes->apply_date) {
                 $generator->addElement('apply_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->apply_date)));
-            }else{
+            } else {
                 $generator->addElement('apply_date', date('d.m.Y'));
             }
             if ($report->base_part->contract->contract_changes->end_date) {
                 $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->end_date)));
-            }else{
+            } else {
                 $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->deal->end_date)));
             }
-            if($report->base_part->contract->contract_changes->finish){
+            if ($report->base_part->contract->contract_changes->finish) {
                 $generator->addElement('finish', $report->base_part->contract->contract_changes->finish);
                 if ($report->base_part->contract->contract_changes->finish_date) {
                     $generator->addElement('finish_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->finish_date)));
