@@ -20,16 +20,12 @@
     "ext-xml": "*",
     "ext-xmlwriter": "*"
   },
-  "post-package-install": [
-    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-  ],
-  "post-update-cmd": [
-    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-  ],
-  "post-autoload-dump": [
-    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-  ],
-  "post-package-update": [
-    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-  ]
+  "scripts": {
+    "post-package-install": [
+      "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
+    ],
+    "post-package-update": [
+      "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
+    ]
+  }
 }
