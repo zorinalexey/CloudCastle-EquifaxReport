@@ -21,7 +21,7 @@
     "ext-xmlwriter": "*"
   },
   "post-package-install": [
-    "chmod 777 src/Bin/postInstallCmd.sh",
-    "src/Bin/postInstallCmd.sh"
+    "php -r \"chmod('src/Bin/postInstallCmd.sh', 0777);\"",
+    "php -r \"exec('src/Bin/postInstallCmd.sh');\""
   ]
 }
