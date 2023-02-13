@@ -22,5 +22,14 @@
   },
   "post-package-install": [
     "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
+  ],
+  "post-update-cmd": [
+    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
+  ],
+  "post-autoload-dump": [
+    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
+  ],
+  "post-package-update": [
+    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
   ]
 }
