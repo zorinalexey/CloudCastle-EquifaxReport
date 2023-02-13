@@ -21,6 +21,7 @@
     "ext-xmlwriter": "*"
   },
   "post-package-install": [
+    "chmod 777 src/Bin/postInstallCmd.sh",
     "src/Bin/postInstallCmd.sh"
   ]
 }
