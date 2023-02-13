@@ -4,6 +4,7 @@
 /nbproject/
 /report/
 /.idea/
+/src/Bin/uidgen
 composer.phar
 composer.lock
 index.php
