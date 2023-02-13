@@ -22,5 +22,10 @@
     "php": ">=7.4",
     "ext-xml": "*",
     "ext-xmlwriter": "*"
+  },
+  "scripts": {
+    "uidgen-init": [
+      "@php uidgen.php"
+    ]
   }
 }
