@@ -6,7 +6,10 @@
   "autoload": {
     "psr-4": {
       "CloudCastle\\EquifaxReport\\": "src/"
-    }
+    },
+    "files": [
+      "uidgen.php"
+    ]
   },
   "authors": [
     {
@@ -19,13 +22,5 @@
     "php": ">=7.4",
     "ext-xml": "*",
     "ext-xmlwriter": "*"
-  },
-  "scripts": {
-    "post-package-install": [
-      "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-    ],
-    "post-package-update": [
-      "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
-    ]
   }
 }

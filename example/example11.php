@@ -104,7 +104,7 @@ for ($i = 0; $i < $countReports; $i++) {
     $event = new Events($client);
     $event->action = 'A';
     $event->event = '1.5';
-    $event->action_reason = 'Для принудительного исполнения передано требование о взыскании долга по '.
+    $event->action_reason = 'Для принудительного исполнения передано требование о взыскании долга по ' .
         'алиментам, платы за жилое помещение, коммунальные услуги или услуги связи';
 
     $report = new Report($client, $event, $config);
