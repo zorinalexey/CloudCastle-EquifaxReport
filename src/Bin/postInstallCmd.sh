@@ -1,7 +1,9 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
-cd src/Bin/uidgen_src
+cd $(pwd)/uidgen_src
 make
-cp src/Bin/uidgen_src/uidgen src/Bin/uidgen
-rm src/Bin/uidgen_src/*.o
-rm src/Bin/uidgen_src/uidgen
+cd ../
+cp $(pwd)/uidgen_src/uidgen $(pwd)/uidgen
+rm $(pwd)/uidgen_src/uidgen
+rm $(pwd)/uidgen_src/*.o
+chmod 777 $(pwd)/uidgen
