@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-cd $(pwd)/uidgen_src
+dir=$(pwd)/src/Bin//uidgen_src
+cd $dir
 make
 cd ../
 cp $(pwd)/uidgen_src/uidgen $(pwd)/uidgen

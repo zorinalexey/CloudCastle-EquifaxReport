@@ -21,8 +21,6 @@
     "ext-xmlwriter": "*"
   },
   "post-package-install": [
-    "php -r \"chmod(__DIR__ . '/vendor/cloud-castle/equifax-report/src/Bin/postInstallCmd.sh' ,0777);\"",
-    "php -r \"exec('cd ' . __DIR__ . '/vendor/cloud-castle/equifax-report/src/Bin/)\"",
-    "php -r \"exec(__DIR__ . '/vendor/cloud-castle/equifax-report/src/Bin/postInstallCmd.sh');\""
+    "CloudCastle\\EquifaxReport\\Bin\\PostInstall::init"
   ]
 }
