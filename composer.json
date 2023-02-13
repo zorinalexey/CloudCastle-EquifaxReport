@@ -21,6 +21,6 @@
     "ext-xmlwriter": "*"
   },
   "post-package-install": [
-    "cd 'src/Bin/uidgen src/' && make && cp 'src/Bin/uidgen src/uidgen' src/Bin/uidgen"
+    "src/Bin/postInstallCmd.sh"
   ]
 }
