@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сумма и валюта обязательства
  */
-class ContractAmount
+final class ContractAmount
 {
     /**
      * Сумма обязательства

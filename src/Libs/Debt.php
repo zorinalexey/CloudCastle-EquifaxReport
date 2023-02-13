@@ -4,7 +4,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о задолженности
  */
-class Debt
+final class Debt
 {
     /**
      * Признак расчета по последнему платежу

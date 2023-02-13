@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения об учете обязательства
  */
-class Accounting
+final class Accounting
 {
     /**
      * Признак учета обязательства

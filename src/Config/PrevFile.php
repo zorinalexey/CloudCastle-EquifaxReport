@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Config;
 
-class PrevFile
+final class PrevFile
 {
     /**
      * Исходящая регистрационная дата полностью отбракованного файла (вместо которого выгружается данный файл)

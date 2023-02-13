@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о просроченной задолженности
  */
-class DebtOverdue
+final class DebtOverdue
 {
     /**
      * Дата возникновения просроченной задолженности

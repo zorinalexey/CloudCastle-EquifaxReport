@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о наличии солидарных должников
  */
-class JointDebtors
+final class JointDebtors
 {
     /**
      * Число солидарных должников

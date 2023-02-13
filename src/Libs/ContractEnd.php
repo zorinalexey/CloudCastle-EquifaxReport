@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Прекращение обязательства
  */
-class ContractEnd
+final class ContractEnd
 {
 
     /**

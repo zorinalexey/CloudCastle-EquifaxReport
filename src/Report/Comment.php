@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Report;
 
-class Comment
+final class Comment
 {
     /**
      * Дата события, вследствие которого формируется запись кредитной истории

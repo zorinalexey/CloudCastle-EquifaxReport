@@ -6,7 +6,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Информационная часть кредитной истории
  */
-class InformationPart
+final class InformationPart
 {
     /**
      * Сведения об обращении субъекта к источнику с предложением совершить сделку

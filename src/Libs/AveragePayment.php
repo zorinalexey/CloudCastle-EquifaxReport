@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета
  */
-class AveragePayment
+final class AveragePayment
 {
     /**
      * Величина среднемесячного платежа

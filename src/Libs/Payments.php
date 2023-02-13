@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о внесении платежей
  */
-class Payments
+final class Payments
 {
     /**
      * Дата последнего внесенного платежа

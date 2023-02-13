@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-class BasePart
+final class BasePart
 {
     public ?Address $addr_reg = null;
     public ?Address $addr_fact = null;

@@ -13,7 +13,7 @@ namespace CloudCastle\EquifaxReport\Libs;
  * @author Зорин Алексей <zorinalexey59292@gmail.com>
  * @copyright 2022 разработчик Зорин Алексей Евгеньевич.
  */
-class Contract
+final class Contract
 {
 
     /**
@@ -147,6 +147,13 @@ class Contract
      */
     public ?CollateralInsce $collateral_insce = null;
 
+    /**
+     * Сведения о взыскании долга по алиментам, платы за жилое помещение,
+     * коммунальные услуги или услуги связи
+     * @var Collection|null
+     */
+    public ?Collection $collection = null;
+
     public function __construct()
     {
         $this->deal = new Deal();
@@ -167,5 +174,7 @@ class Contract
         $this->guarantee_return = new GuaranteeReturn();
         $this->repayment_collateral = new RepaymentCollateral();
         $this->collateral_insce = new CollateralInsce();
+        $this->collection = new Collection();
+
     }
 }

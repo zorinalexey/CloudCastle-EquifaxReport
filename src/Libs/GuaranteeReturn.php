@@ -6,7 +6,7 @@ namespace CloudCastle\EquifaxReport\Libs;
  * Сведения о возмещении принципалом гаранту выплаченной суммы-
  */
 
-class GuaranteeReturn
+final class GuaranteeReturn
 {
     /**
      * Сумма, подлежащая возмещению

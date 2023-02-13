@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о срочной задолженности
  */
-class DebtCurrent
+final class DebtCurrent
 {
     /**
      * Дата возникновения срочной задолженности

@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Дополнительная (закрытая) часть кредитной истории
  */
-class AddPart
+final class AddPart
 {
     /**
      * Сведения об учете обязательства

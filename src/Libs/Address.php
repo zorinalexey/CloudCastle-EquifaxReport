@@ -12,7 +12,7 @@ namespace CloudCastle\EquifaxReport\Libs;
  * @author Зорин Алексей <zorinalexey59292@gmail.com>
  * @copyright 2022 разработчик Зорин Алексей Евгеньевич.
  */
-class Address
+final class Address
 {
 
     /**

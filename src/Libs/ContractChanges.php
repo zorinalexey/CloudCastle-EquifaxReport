@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения об изменении договора
  */
-class ContractChanges
+final class ContractChanges
 {
     /**
      * Дата изменения договора

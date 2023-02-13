@@ -4,7 +4,7 @@ namespace CloudCastle\EquifaxReport\Config;
 
 use RuntimeException;
 
-class Config
+final class Config
 {
     /**
      * Путь к JSON файлу конфигурации

@@ -4,7 +4,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Полная стоимость потребительского кредита (займа)
  */
-class FullCost
+final class FullCost
 {
     /**
      * Полная стоимость кредита (займа) в процентах годовых

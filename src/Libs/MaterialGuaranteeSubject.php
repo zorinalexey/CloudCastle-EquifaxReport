@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о неденежном обязательстве субъекта
  */
-class MaterialGuaranteeSubject
+final class MaterialGuaranteeSubject
 {
 
     /**

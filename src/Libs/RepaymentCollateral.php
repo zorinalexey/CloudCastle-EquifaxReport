@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о погашении требований кредитора по обязательству за счет обеспечения
  */
-class RepaymentCollateral
+final class RepaymentCollateral
 {
     /**
      * Код использованного обеспечения

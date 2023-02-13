@@ -8,7 +8,7 @@ use CloudCastle\EquifaxReport\XmlGenerator;
 /**
  *
  */
-class Blocks
+final class Blocks
 {
     use Partitions;
 

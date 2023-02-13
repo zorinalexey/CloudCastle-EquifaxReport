@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о независимой гарантии
  */
-class IndieGuarantee
+final class IndieGuarantee
 {
     /**
      * УИд независимой гарантии

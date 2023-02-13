@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения об условиях платежей
  */
-class PaymentTerms
+final class PaymentTerms
 {
     /**
      * Сумма ближайшего следующего платежа по основному долгу

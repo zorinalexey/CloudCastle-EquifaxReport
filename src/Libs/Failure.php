@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения об отказе источника от предложения совершить сделку
  */
-class Failure
+final class Failure
 {
     /**
      * Дата отказа

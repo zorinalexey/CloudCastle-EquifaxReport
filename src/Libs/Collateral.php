@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о залогах
  */
-class Collateral
+final class Collateral
 {
     /**
      * Код предмета залога

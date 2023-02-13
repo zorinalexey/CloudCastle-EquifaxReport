@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-class ServiceOrganization
+final class ServiceOrganization
 {
     public int $reg_rus = 1;
     public ?string $fullname = null;

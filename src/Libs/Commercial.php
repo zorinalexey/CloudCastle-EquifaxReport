@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-class Commercial
+final class Commercial
 {
 
 }

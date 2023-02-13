@@ -8,7 +8,7 @@ namespace CloudCastle\EquifaxReport\Libs;
  * предложением
  * совершить сделку
  */
-class Application
+final class Application
 {
     /**
      * Код вида участия в сделке. По справочнику 2.1 - Виды участия в сделке

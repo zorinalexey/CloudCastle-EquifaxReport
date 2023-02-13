@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о страховании предмета залога
  */
-class CollateralInsce
+final class CollateralInsce
 {
     /**
      * Лимит страховых выплат

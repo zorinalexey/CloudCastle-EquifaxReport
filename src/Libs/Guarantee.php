@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Сведения о поручительстве
  */
-class Guarantee
+final class Guarantee
 {
     /**
      * УИд договора поручительства

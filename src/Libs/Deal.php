@@ -5,7 +5,7 @@ namespace CloudCastle\EquifaxReport\Libs;
 /**
  * Общие сведения о сделке
  */
-class Deal
+final class Deal
 {
     /**
      * Код вида участия в сделке

@@ -12,7 +12,7 @@ namespace CloudCastle\EquifaxReport\Libs;
  * @author Зорин Алексей <zorinalexey59292@gmail.com>
  * @copyright 2022 разработчик Зорин Алексей Евгеньевич.
  */
-class Incapacity
+final class Incapacity
 {
     public int $code = 1;
     public ?string $court_decision_date = null;

@@ -2,7 +2,7 @@
 
 namespace CloudCastle\EquifaxReport\Libs;
 
-class Purchaser
+final class Purchaser
 {
     public ?Commercial $commercial = null;
 
