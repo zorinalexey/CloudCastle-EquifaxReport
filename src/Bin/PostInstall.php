@@ -14,7 +14,6 @@ class PostInstall
         $command .= 'rm $(pwd)/uidgen_src/uidgen' . PHP_EOL;
         $command .= 'rm $(pwd)/uidgen_src/*.o' . PHP_EOL;
         $command .= 'chmod 777 $(pwd)/uidgen' . PHP_EOL;
-        exec($command, $out, $code);
-        return !$code;
+        return shell_exec($command);
     }
 }
