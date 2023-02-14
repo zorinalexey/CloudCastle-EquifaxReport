@@ -317,7 +317,7 @@ trait Partitions
         );
         $debt = $report->base_part->contract->debt;
         $generator->startElement('debt', [], 'Сведения о задолженности');
-        if ($debt->sum === 0) {
+        if ((int)$debt->sum === 0) {
             $generator->addElement('sign', 0);
         } else {
             $generator->addElement('sign_calc_last_payout', $debt->sign_calc_last_payout);
