@@ -41,7 +41,7 @@ trait Partitions
     public static function footer(XmlGenerator $generator): void
     {
         $generator->startElement('footer')
-            ->addElement('subjects_count', Report::$subjects_count)
+            ->addElement('subjects_count', count(Report::$subjects_count))
             ->addElement('records_count', Report::$records_count)
             ->closeElement();
     }

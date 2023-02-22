@@ -30,7 +30,7 @@ final class Report
      * Количество различных субъектов, по которым выгружены записи в файле
      * @var int
      */
-    public static int $subjects_count = 0;
+    public static array $subjects_count = [];
     /**
      * Количество записей в файле
      * @var int
@@ -78,7 +78,10 @@ final class Report
         $generator->startElement('fch', ['version' => self::VERSION]);
         Blocks::head($config, $generator);
         foreach ($reports as $report) {
-            self::$subjects_count++;
+            $uidSubject = md5(json_encode($report->client));
+            if(!isset(self::$subjects_count[$uidSubject])){
+                self::$subjects_count[$uidSubject] = 1;
+            }
             $generator->startElement('info');
             $event = $report->event;
             foreach ($event as $key => $value) {
