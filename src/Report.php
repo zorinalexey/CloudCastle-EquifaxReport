@@ -80,12 +80,12 @@ final class Report
             $generator->startElement('fch', ['version' => self::VERSION]);
             Blocks::head($config, $generator);
             foreach ($reports as $report) {
-                $inn = new Inn($report->client->snils);
-                $snils = new Snils($report->client->inn->no);
+                $inn = new Inn($report->client->inn->no);
+                $snils = new Snils($report->client->snils);
                 if($inn->verify() && $snils->verify()) {
                     $uidSubject = md5(json_encode($report->client));
                     if (!isset(self::$subjects_count[$uidSubject])) {
-                        self::$subjects_count[$uidSubject] = 1;
+                        self::$subjects_count[$uidSubject] = true;
                     }
                     $generator->startElement('info');
                     $event = $report->event;
