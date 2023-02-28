@@ -122,9 +122,6 @@ final class Report
      */
     public static function uidGenerate(): string
     {
-        //$command = __DIR__ . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . 'uidgen';
-        //$uid = shell_exec($command);
-        //return trim($uid);
         return (new Uidgen())->getUidHash();
     }
 }
