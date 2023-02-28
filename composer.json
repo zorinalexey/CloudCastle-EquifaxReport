@@ -19,6 +19,6 @@
     "php": ">=7.4",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
-    "cloud-castle/equifax-check-docks": "^2.1.2"
+    "cloud-castle/equifax-check-docks": "^2.2"
   }
 }
