@@ -21,7 +21,8 @@
   "require": {
     "php": ">=7.4",
     "ext-xml": "*",
-    "ext-xmlwriter": "*"
+    "ext-xmlwriter": "*",
+    "cloud-castle/equifax-check-docks": "^2.0"
   },
   "scripts": {
     "uidgen-init": [

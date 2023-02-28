@@ -13,6 +13,8 @@ use CloudCastle\EquifaxReport\Libs\Blocks;
 use CloudCastle\EquifaxReport\Libs\InformationPart;
 use CloudCastle\EquifaxReport\Parts\Title;
 use CloudCastle\EquifaxReport\Report\Events;
+use CluodCastle\Check\Inn\Inn;
+use CluodCastle\Check\Snils\Snils;
 
 /**
  * Класс ReportGenerator
@@ -28,7 +30,7 @@ final class Report
     public const VERSION = '4.0';
     /**
      * Количество различных субъектов, по которым выгружены записи в файле
-     * @var int
+     * @var array
      */
     public static array $subjects_count = [];
     /**
@@ -73,27 +75,31 @@ final class Report
      */
     public static function generate(array $reports, Config $config): string
     {
-        $generator = new XmlGenerator($config);
-        $generator->startDocument();
-        $generator->startElement('fch', ['version' => self::VERSION]);
-        Blocks::head($config, $generator);
-        foreach ($reports as $report) {
-            $uidSubject = md5(json_encode($report->client));
-            if(!isset(self::$subjects_count[$uidSubject])){
-                self::$subjects_count[$uidSubject] = 1;
+            $generator = new XmlGenerator($config);
+            $generator->startDocument();
+            $generator->startElement('fch', ['version' => self::VERSION]);
+            Blocks::head($config, $generator);
+            foreach ($reports as $report) {
+                $inn = new Inn($report->client->snils);
+                $snils = new Snils($report->client->inn->no);
+                if($inn->verify() && $snils->verify()) {
+                    $uidSubject = md5(json_encode($report->client));
+                    if (!isset(self::$subjects_count[$uidSubject])) {
+                        self::$subjects_count[$uidSubject] = 1;
+                    }
+                    $generator->startElement('info');
+                    $event = $report->event;
+                    foreach ($event as $key => $value) {
+                        $generator->addAttribute($key, (string)$value);
+                    }
+                    new Title($report->client, $generator);
+                    self::partsGenerate(Events::search($event->event), $report, $generator);
+                    $generator->closeElement();
+                }
             }
-            $generator->startElement('info');
-            $event = $report->event;
-            foreach ($event as $key => $value) {
-                $generator->addAttribute($key, (string)$value);
-            }
-            new Title($report->client, $generator);
-            self::partsGenerate(Events::search($event->event), $report, $generator);
+            Blocks::footer($generator);
             $generator->closeElement();
-        }
-        Blocks::footer($generator);
-        $generator->closeElement();
-        return $generator->get();
+            return $generator->get();
     }
 
     /**

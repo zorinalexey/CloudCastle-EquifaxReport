@@ -3,6 +3,7 @@
 namespace CloudCastle\EquifaxReport;
 
 use CloudCastle\EquifaxReport\Config\Config;
+use RuntimeException;
 use XMLWriter;
 
 final class XmlGenerator
@@ -23,12 +24,14 @@ final class XmlGenerator
 
     /**
      * Запустить генерацию документа
-     * @param string $version Версия документа
-     * @param string $encoding Кодировка документа
+     * @param string|null $version Версия документа
+     * @param string|null $encoding Кодировка документа
      * @return self
      */
-    public function startDocument(string $version = '1.0', string $encoding = 'utf-8'): self
+    public function startDocument(?string $version = null, ?string $encoding = null): self
     {
+        $encoding ??= 'utf-8';
+        $version ??= '1.0';
         self::$xml->startDocument($version, $encoding);
         return $this;
     }
@@ -39,6 +42,9 @@ final class XmlGenerator
      */
     public function get(): string
     {
+        if(!Report::$subjects_count) {
+            throw new RuntimeException('Нет корректных событий для формирования xml');
+        }
         self::$xml->endDocument();
         self::$xml->outputMemory(true);
         return $this->file;
