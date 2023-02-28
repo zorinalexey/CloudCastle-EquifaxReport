@@ -15,6 +15,7 @@ use CloudCastle\EquifaxReport\Parts\Title;
 use CloudCastle\EquifaxReport\Report\Events;
 use CluodCastle\Check\Inn\Inn;
 use CluodCastle\Check\Snils\Snils;
+use CluodCastle\Check\Uid\Uidgen;
 
 /**
  * Класс ReportGenerator
@@ -116,12 +117,14 @@ final class Report
     }
 
     /**
+     * Получить uid
      * @return string
      */
     public static function uidGenerate(): string
     {
-        $command = __DIR__ . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . 'uidgen';
-        $uid = shell_exec($command);
-        return trim($uid);
+        //$command = __DIR__ . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . 'uidgen';
+        //$uid = shell_exec($command);
+        //return trim($uid);
+        return (new Uidgen())->getUidHash();
     }
 }

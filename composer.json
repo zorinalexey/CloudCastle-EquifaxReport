@@ -6,10 +6,7 @@
   "autoload": {
     "psr-4": {
       "CloudCastle\\EquifaxReport\\": "src/"
-    },
-    "files": [
-      "uidgen.php"
-    ]
+    }
   },
   "authors": [
     {
@@ -22,11 +19,6 @@
     "php": ">=7.4",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
-    "cloud-castle/equifax-check-docks": "^2.0"
-  },
-  "scripts": {
-    "uidgen-init": [
-      "@php uidgen.php"
-    ]
+    "cloud-castle/equifax-check-docks": "^2.1.2"
   }
 }
