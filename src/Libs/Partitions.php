@@ -3,6 +3,7 @@
 namespace CloudCastle\EquifaxReport\Libs;
 
 use CloudCastle\EquifaxReport\Config\Config;
+use CloudCastle\EquifaxReport\PurchaserException;
 use CloudCastle\EquifaxReport\Report;
 use CloudCastle\EquifaxReport\XmlGenerator;
 use RuntimeException;
@@ -21,17 +22,30 @@ trait Partitions
     {
         $generator->startElement('head')
             ->addElement('source_inn', $config->inn)
-            ->addElement('source_ogrn', $config->ogrn)
-            ->addElement('date', $config->date)
-            ->addElement('file_reg_date', $config->file_reg_date)
-            ->addElement('file_reg_num', $config->file_reg_num);
+            ->addElement('source_ogrn', $config->ogrn);
+        self::setDateField('date', $config->date, $generator);
+        self::setDateField('file_reg_date', $config->file_reg_date, $generator);
+        $generator->addElement('file_reg_num', $config->file_reg_num);
         if ($config->prevFile->file_reg_num && $config->prevFile->file_reg_date) {
             $generator->startElement('prev_file')
-                ->addElement('file_reg_num', $config->prevFile->file_reg_num)
-                ->addElement('file_reg_date', $config->prevFile->file_reg_date)
-                ->closeElement();
+                ->addElement('file_reg_num', $config->prevFile->file_reg_num);
+            self::setDateField('file_reg_date', $config->prevFile->file_reg_date, $generator);
+            $generator->closeElement();
         }
         $generator->closeElement();
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string|null $date
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    private static function setDateField(string $fieldName, ?string $date, XmlGenerator $generator): void
+    {
+        if ($date) {
+            $generator->addElement($fieldName, date('d.m.Y', strtotime($date)));
+        }
     }
 
     /**
@@ -78,18 +92,46 @@ trait Partitions
      */
     public static function addr_fact(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('addr_fact', [], 'Фактическое место жительства')
-            ->addElement('index', $report->base_part->addr_fact->index)
-            ->addElement('country', $report->base_part->addr_fact->country)
-            ->addElement('fias', $report->base_part->addr_fact->fias)
-            ->addElement('okato', $report->base_part->addr_fact->okato)
-            ->addElement('street', $report->base_part->addr_fact->street)
-            ->addElement('house', $report->base_part->addr_fact->house)
-            ->addElement('domain', $report->base_part->addr_fact->domain)
-            ->addElement('block', $report->base_part->addr_fact->block)
-            ->addElement('build', $report->base_part->addr_fact->build)
-            ->addElement('apartment', $report->base_part->addr_fact->apartment)
-            ->closeElement();
+        $mdReg = md5(print_r(self::getAddr($report->base_part->addr_reg), true));
+        $mdFact = md5(print_r(self::getAddr($report->base_part->addr_fact), true));
+        $generator->startElement('addr_fact', [], 'Фактическое место жительства');
+        if ($mdReg === $mdFact) {
+            $generator->addElement('sign', 0);
+        } else {
+            $generator->addElement('index', $report->base_part->addr_fact->index)
+                ->addElement('country', $report->base_part->addr_fact->country)
+                ->addElement('country_text', $report->base_part->addr_fact->country_text)
+                ->addElement('fias', $report->base_part->addr_fact->fias)
+                ->addElement('okato', $report->base_part->addr_fact->okato)
+                ->addElement('street', $report->base_part->addr_fact->street)
+                ->addElement('house', $report->base_part->addr_fact->house)
+                ->addElement('domain', $report->base_part->addr_fact->domain)
+                ->addElement('block', $report->base_part->addr_fact->block)
+                ->addElement('build', $report->base_part->addr_fact->build)
+                ->addElement('apartment', $report->base_part->addr_fact->apartment);
+        }
+        $generator->closeElement();
+    }
+
+    /**
+     * @param Address $addr
+     * @return array
+     */
+    private static function getAddr(Address $addr): array
+    {
+        $data = [];
+        $data[] = $addr->build;
+        $data[] = $addr->index;
+        $data[] = $addr->apartment;
+        $data[] = $addr->block;
+        $data[] = $addr->country;
+        $data[] = $addr->country_text;
+        $data[] = $addr->domain;
+        $data[] = $addr->fias;
+        $data[] = $addr->house;
+        $data[] = $addr->other_statement;
+        $data[] = $addr->street;
+        return $data;
     }
 
     /**
@@ -131,8 +173,8 @@ trait Partitions
         $length = strlen((string)$report->client->inn->ogrnIp);
         $generator->startElement('ogrnip', [], 'Государственная регистрация в качестве индивидуального предпринимателя');
         if ($report->client->inn->ogrnIp && $length === 15) {
-            $generator->addElement('no', $report->client->inn->ogrnIp)
-                ->addElement('date', $report->client->inn->ogrnIpDate);
+            $generator->addElement('no', $report->client->inn->ogrnIp);
+            self::setDateField('date', $report->client->inn->ogrnIpDate, $generator);
         } else {
             $generator->addElement('sign', 0);
         }
@@ -147,11 +189,13 @@ trait Partitions
     public static function incapacity(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности')
-            ->addElement('code', $report->base_part->incapacity->code)
-            ->addElement('court_decision_date', $report->base_part->incapacity->court_decision_date)
-            ->addElement('court_decision_no', $report->base_part->incapacity->court_decision_no)
-            ->addElement('court_name', $report->base_part->incapacity->court_name)
-            ->closeElement();
+            ->addElement('code', $report->base_part->incapacity->code);
+        if($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2){
+            self::setDateField('court_decision_date', $report->base_part->incapacity->court_decision_date, $generator);
+            $generator->addElement('court_decision_no', $report->base_part->incapacity->court_decision_no)
+                ->addElement('court_name', $report->base_part->incapacity->court_name);
+        }
+        $generator->closeElement();
     }
 
     /**
@@ -200,9 +244,9 @@ trait Partitions
         $generator->startElement('deal', [], 'Общие сведения о сделке')
             ->addElement('ratio', $report->base_part->contract->deal->ratio);
         if ($report->base_part->contract->deal->date) {
-            $generator->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->deal->date)));
+            self::setDateField('date', $report->base_part->contract->deal->date, $generator);
         } else {
-            $generator->addElement('date', date('d.m.Y'));
+            self::setDateField('date', date('d.m.Y'), $generator);
         }
         $generator->addElement('category', $report->base_part->contract->deal->category)
             ->addElement('type', $report->base_part->contract->deal->type)
@@ -213,7 +257,7 @@ trait Partitions
             ->addElement('sign_deal_cash_source', $report->base_part->contract->deal->sign_deal_cash_source)
             ->addElement('sign_deal_cash_subject', $report->base_part->contract->deal->sign_deal_cash_subject);
         if ($report->base_part->contract->deal->end_date) {
-            $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->deal->end_date)));
+            self::setDateField('end_date', $report->base_part->contract->deal->end_date, $generator);
         }
         $generator->closeElement();
     }
@@ -230,6 +274,7 @@ trait Partitions
             ->addElement('currency', $report->base_part->contract->contract_amount->currency)
             ->addElement('security_sum', $report->base_part->contract->contract_amount->security_sum)
             ->closeElement();
+        $report->information_part->application->sum = $report->base_part->contract->contract_amount->sum;
     }
 
     /**
@@ -258,18 +303,18 @@ trait Partitions
         $generator->startElement('payment_terms', [], 'Сведения об условиях платежей')
             ->addElement('op_next_payout_sum', $report->base_part->contract->payment_terms->op_next_payout_sum);
         if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 && $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
-            $generator->addElement('op_next_payout_date', $report->base_part->contract->payment_terms->op_next_payout_date);
+            self::setDateField('op_next_payout_date', $report->base_part->contract->payment_terms->op_next_payout_date, $generator);
         }
         $generator->addElement('percent_next_payout_sum', $report->base_part->contract->payment_terms->percent_next_payout_sum);
-        if ($report->base_part->contract->payment_terms->op_next_payout_sum > 0 && $report->base_part->contract->payment_terms->percent_next_payout_sum > 0) {
-            $generator->addElement('percent_next_payout_date', $report->base_part->contract->payment_terms->percent_next_payout_date)
-                ->addElement('regularity', $report->base_part->contract->payment_terms->regularity)
-                ->addElement('min_sum_pay_cc', $report->base_part->contract->payment_terms->min_sum_pay_cc)
-                ->addElement('grace_date', $report->base_part->contract->payment_terms->grace_date);
+        if (($report->base_part->contract->payment_terms->op_next_payout_sum + $report->base_part->contract->payment_terms->percent_next_payout_sum) > 0) {
+            self::setDateField('percent_next_payout_date', $report->base_part->contract->payment_terms->percent_next_payout_date, $generator);
+            $generator->addElement('regularity', $report->base_part->contract->payment_terms->regularity);
+            $generator->addElement('min_sum_pay_cc', $report->base_part->contract->payment_terms->min_sum_pay_cc);
+            self::setDateField('grace_date', $report->base_part->contract->payment_terms->grace_date, $generator);
             if ($report->base_part->contract->payment_terms->grace_date) {
-                $generator->addElement('grace_end_date', $report->base_part->contract->payment_terms->grace_end_date);
+                self::setDateField('grace_end_date', $report->base_part->contract->payment_terms->grace_end_date, $generator);
             }
-            $generator->addElement('percent_end_date', $report->base_part->contract->payment_terms->percent_end_date);
+            self::setDateField('percent_end_date', $report->base_part->contract->payment_terms->percent_end_date, $generator);
 
         }
         $generator->closeElement();
@@ -286,8 +331,11 @@ trait Partitions
             ->addElement('percent', $report->base_part->contract->full_cost->percent)
             ->addElement('sum', $report->base_part->contract->full_cost->sum);
         if ($report->base_part->contract->deal->end_date) {
-            $generator->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->full_cost->date)));
+            $report->information_part->application->approval_date = $report->base_part->contract->deal->end_date;
+            self::setDateField('date', $report->base_part->contract->full_cost->date?:date('d.m.Y H:i:s'), $generator);
         }
+        $report->information_part->application->date = $report->base_part->contract->deal->date;
+        $report->information_part->application->uid = $report->base_part->contract->uid;
         $generator->closeElement();
     }
 
@@ -298,9 +346,9 @@ trait Partitions
      */
     public static function cred_start_debt(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства')
-            ->addElement('date', $report->base_part->contract->cred_start_debt->date)
-            ->closeElement();
+        $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства');
+        self::setDateField('date', $report->base_part->contract->cred_start_debt->date, $generator);
+        $generator->closeElement();
     }
 
     /**
@@ -321,13 +369,13 @@ trait Partitions
             $generator->addElement('sign', 0);
         } else {
             $generator->addElement('sign_calc_last_payout', $debt->sign_calc_last_payout);
-            $generator->addElement('calc_date', $debt->calc_date);
-            $generator->addElement('first_sum', $debt->first_sum);
-            $generator->addElement('sum', $debt->sum);
-            $generator->addElement('op_sum', $debt->op_sum);
-            $generator->addElement('percent_sum', $debt->percent_sum);
-            $generator->addElement('other_sum', $debt->other_sum);
-            $generator->addElement('sign_unaccepted_grace_period', $debt->sign_unaccepted_grace_period);
+            self::setDateField('calc_date', $debt->calc_date, $generator);
+            $generator->addElement('first_sum', $debt->first_sum)
+                ->addElement('sum', $debt->sum)
+                ->addElement('op_sum', $debt->op_sum)
+                ->addElement('percent_sum', $debt->percent_sum)
+                ->addElement('other_sum', $debt->other_sum)
+                ->addElement('sign_unaccepted_grace_period', $debt->sign_unaccepted_grace_period);
         }
         $generator->closeElement();
     }
@@ -347,8 +395,8 @@ trait Partitions
         $debt = $report->base_part->contract->debt_current;
         $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
         if ($debt->sum > 0) {
-            $generator->addElement('date', $report->base_part->contract->debt_current->date)
-                ->addElement('sum', $debt->sum)
+            self::setDateField('date', $report->base_part->contract->debt_current->date, $generator);
+            $generator->addElement('sum', $debt->sum)
                 ->addElement('op_sum', $debt->op_sum)
                 ->addElement('percent_sum', $debt->percent_sum)
                 ->addElement('other_sum', $debt->other_sum);
@@ -373,13 +421,13 @@ trait Partitions
         $debt = $report->base_part->contract->debt_overdue;
         $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
         if ($debt->sum > 0) {
-            $generator->addElement('date', $report->base_part->contract->debt_current->date)
-                ->addElement('sum', $debt->sum)
+            self::setDateField('date', $report->base_part->contract->debt_current->date, $generator);
+            $generator->addElement('sum', $debt->sum)
                 ->addElement('op_sum', $debt->op_sum)
                 ->addElement('percent_sum', $debt->percent_sum)
-                ->addElement('other_sum', $debt->other_sum)
-                ->addElement('op_miss_payout_date', $debt->op_miss_payout_date)
-                ->addElement('percent_miss_payout_date', $debt->percent_miss_payout_date);
+                ->addElement('other_sum', $debt->other_sum);
+            self::setDateField('op_miss_payout_date', $debt->op_miss_payout_date, $generator);
+            self::setDateField('percent_miss_payout_date', $debt->percent_miss_payout_date, $generator);
         } else {
             $generator->addElement('sum', $debt->sum);
         }
@@ -405,7 +453,7 @@ trait Partitions
         );
         $generator->startElement('payments', [], 'Сведения о внесении платежей');
         if ($report->base_part->contract->payments->last_payout_sum > 0) {
-            $generator->addElement('last_payout_date', $report->base_part->contract->payments->last_payout_date);
+            self::setDateField('last_payout_date', $report->base_part->contract->payments->last_payout_date, $generator);
         }
         $generator->addElement('last_payout_sum', $report->base_part->contract->payments->last_payout_sum);
         if ($report->base_part->contract->payments->last_payout_sum > 0) {
@@ -413,7 +461,6 @@ trait Partitions
                 ->addElement('last_payout_percent_sum', $report->base_part->contract->payments->last_payout_percent_sum)
                 ->addElement('last_payout_other_sum', $report->base_part->contract->payments->last_payout_other_sum);
         }
-
         $generator->addElement('paid_sum', $report->base_part->contract->payments->paid_sum)
             ->addElement('paid_op_sum', $report->base_part->contract->payments->paid_op_sum)
             ->addElement('paid_percent_sum', $report->base_part->contract->payments->paid_percent_sum)
@@ -432,9 +479,9 @@ trait Partitions
     public static function average_payment(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('average_payment', [], 'Величина среднемесячного платежа по договору займа (кредита) и дата ее расчета')
-            ->addElement('sum', $report->base_part->contract->average_payment->sum)
-            ->addElement('date', $report->base_part->contract->average_payment->date)
-            ->closeElement();
+            ->addElement('sum', $report->base_part->contract->average_payment->sum);
+        self::setDateField('date', $report->base_part->contract->average_payment->date, $generator);
+        $generator->closeElement();
     }
 
     /**
@@ -496,12 +543,12 @@ trait Partitions
                 ->addElement('ratio', $report->information_part->application->ratio)
                 ->addElement('sum', $report->information_part->application->sum)
                 ->addElement('currency', $report->information_part->application->currency)
-                ->addElement('uid', $report->information_part->application->uid)
-                ->addElement('date', $report->information_part->application->date)
-                ->addElement('source_type', $report->information_part->application->source_type)
-                ->addElement('way', $report->information_part->application->way)
-                ->addElement('approval_date', $report->information_part->application->approval_date)
-                ->closeElement();
+                ->addElement('uid', $report->information_part->application->uid);
+            self::setDateField('date', $report->information_part->application->date, $generator);
+            $generator->addElement('source_type', $report->information_part->application->source_type)
+                ->addElement('way', $report->information_part->application->way);
+            self::setDateField('approval_date', $report->information_part->application->approval_date, $generator);
+            $generator->closeElement();
         }
     }
 
@@ -516,9 +563,9 @@ trait Partitions
         $generator->startElement('credit', [], 'Сведения об участии в обязательстве, по которому формируется кредитная история')
             ->addElement('ratio', $report->information_part->credit->ratio)
             ->addElement('type', $report->information_part->credit->type)
-            ->addElement('uid', $report->information_part->credit->uid)
-            ->addElement('date', $report->information_part->credit->date)
-            ->addElement('sign_90plus', $report->information_part->credit->sign_90plus)
+            ->addElement('uid', $report->information_part->credit->uid);
+        self::setDateField('date', $report->information_part->credit->date, $generator);
+        $generator->addElement('sign_90plus', $report->information_part->credit->sign_90plus)
             ->addElement('sign_stop_load', $report->information_part->credit->sign_stop_load)
             ->closeElement();
     }
@@ -530,9 +577,9 @@ trait Partitions
      */
     public static function failure(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('failure', [], '')
-            ->addElement('date', $report->information_part->failure->date)
-            ->addElement('reason', $report->information_part->failure->reason)
+        $generator->startElement('failure', [], '');
+        self::setDateField('date', $report->information_part->failure->date, $generator);
+        $generator->addElement('reason', $report->information_part->failure->reason)
             ->closeElement();
     }
 
@@ -577,19 +624,13 @@ trait Partitions
                     $generator->startElement('collateral');
                     $generator->addElement('item_type', $collateral->item_type);
                     $generator->addElement('id', $collateral->id);
-                    if ($collateral->date) {
-                        $generator->addElement('date', date('d.m.Y', strtotime($collateral->date)));
-                    }
+                    self::setDateField('date', $collateral->date, $generator);
                     $generator->addElement('sum', $collateral->sum);
                     $generator->addElement('currency', $collateral->currency);
                     $generator->addElement('date_assessment', $collateral->date_assessment);
                     $generator->addElement('item_burden', $collateral->item_burden);
-                    if ($collateral->end_date) {
-                        $generator->addElement('end_date', date('d.m.Y', strtotime($collateral->end_date)));
-                    }
-                    if ($collateral->fact_end_date) {
-                        $generator->addElement('fact_end_date', date('d.m.Y', strtotime($collateral->fact_end_date)));
-                    }
+                    self::setDateField('end_date', $collateral->end_date, $generator);
+                    self::setDateField('fact_end_date', $collateral->fact_end_date, $generator);
                     $generator->addElement('end_reason', $collateral->end_reason);
                     $generator->closeElement();
                 } else {
@@ -622,11 +663,11 @@ trait Partitions
                     $generator->startElement('guarantee');
                     $generator->addElement('uid', $guarantee->uid)
                         ->addElement('sum', $guarantee->sum)
-                        ->addElement('currency', $guarantee->currency)
-                        ->addElement('date', date('d.m.Y', strtotime($guarantee->date)))
-                        ->addElement('end_date', date('d.m.Y', strtotime($guarantee->end_date)))
-                        ->addElement('fact_end_date', date('d.m.Y', strtotime($guarantee->fact_end_date)))
-                        ->addElement('end_reason', $guarantee->end_reason);
+                        ->addElement('currency', $guarantee->currency);
+                    self::setDateField('date', $guarantee->date, $generator);
+                    self::setDateField('end_date', $guarantee->end_date, $generator);
+                    self::setDateField('fact_end_date', $guarantee->fact_end_date, $generator);
+                    $generator->addElement('end_reason', $guarantee->end_reason);
                     $generator->closeElement();
                 } else {
                     throw new RuntimeException('Unsupported Guarantee type');
@@ -658,11 +699,11 @@ trait Partitions
                     $generator->startElement('indie_guarantee');
                     $generator->addElement('uid', $guarantee->uid)
                         ->addElement('sum', $guarantee->sum)
-                        ->addElement('currency', $guarantee->currency)
-                        ->addElement('date', date('d.m.Y', strtotime($guarantee->date)))
-                        ->addElement('end_date', date('d.m.Y', strtotime($guarantee->end_date)))
-                        ->addElement('fact_end_date', date('d.m.Y', strtotime($guarantee->fact_end_date)))
-                        ->addElement('end_reason', $guarantee->end_reason);
+                        ->addElement('currency', $guarantee->currency);
+                    self::setDateField('date', $guarantee->date, $generator);
+                    self::setDateField('end_date', $guarantee->end_date, $generator);
+                    self::setDateField('fact_end_date', $guarantee->fact_end_date, $generator);
+                    $generator->addElement('end_reason', $guarantee->end_reason);
                     $generator->closeElement();
                 } else {
                     throw new RuntimeException('Unsupported IndieGuarantee type');
@@ -683,9 +724,9 @@ trait Partitions
     public static function contract_end(Report $report, XmlGenerator $generator): void
     {
         $generator->startElement('contract_end', [], 'Код основания прекращения обязательства')
-            ->addElement('reason', $report->base_part->contract->contract_end->reason)
-            ->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->contract_end->date)))
-            ->closeElement();
+            ->addElement('reason', $report->base_part->contract->contract_end->reason);
+        self::setDateField('date', $report->base_part->contract->contract_end->date, $generator);
+        $generator->closeElement();
 
     }
 
@@ -717,9 +758,9 @@ trait Partitions
     {
         $generator->startElement('repayment_collateral', [], 'Сведения о погашении требований кредитора по обязательству за счет обеспечения');
         if ($report->base_part->contract->repayment_collateral->sum > 0) {
-            $generator->addElement('code', $report->base_part->contract->repayment_collateral->code)
-                ->addElement('date', date('d.m.Y', strtotime($report->base_part->contract->repayment_collateral->date)))
-                ->addElement('sum', $report->base_part->contract->repayment_collateral->sum);
+            $generator->addElement('code', $report->base_part->contract->repayment_collateral->code);
+            self::setDateField('date', $report->base_part->contract->repayment_collateral->date, $generator);
+            $generator->addElement('sum', $report->base_part->contract->repayment_collateral->sum);
         } else {
             $generator->addElement('sign', 0);
         }
@@ -738,11 +779,10 @@ trait Partitions
         if ($collateral_insce->limit > 0) {
             $generator->addElement('limit', $collateral_insce->limit)
                 ->addElement('currency', $collateral_insce->currency)
-                ->addElement('franchise', $collateral_insce->franchise)
-                ->addElement('date', $collateral_insce->date)
-                ->addElement('end_date', $collateral_insce->end_date)
-                ->addElement('fact_end_date', $collateral_insce->fact_end_date)
-                ->addElement('end_reason', $collateral_insce->end_reason);
+                ->addElement('franchise', $collateral_insce->franchise);
+            self::setDateField('date', $collateral_insce->date, $generator);
+            self::setDateField('fact_end_date', $collateral_insce->fact_end_date, $generator);
+            $generator->addElement('end_reason', $collateral_insce->end_reason);
         } else {
             $generator->addElement('sign', 0);
         }
@@ -758,25 +798,24 @@ trait Partitions
     {
         $generator->startElement('contract_changes', [], 'Сведения об изменении договора');
         if ($date = $report->base_part->contract->contract_changes->date) {
-            $generator->addElement('date', date('d.m.Y', strtotime($date)))
-                ->addElement('type', $report->base_part->contract->contract_changes->type)
+            self::setDateField('date', $date, $generator);
+            $report->base_part->contract->deal->end_date = $date;
+            $generator->addElement('type', $report->base_part->contract->contract_changes->type)
                 ->addElement('special_type', $report->base_part->contract->contract_changes->special_type)
                 ->addElement('type_text', $report->base_part->contract->contract_changes->type_text);
             if ($report->base_part->contract->contract_changes->apply_date) {
-                $generator->addElement('apply_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->apply_date)));
+                self::setDateField('apply_date', $report->base_part->contract->contract_changes->apply_date, $generator);
             } else {
-                $generator->addElement('apply_date', date('d.m.Y'));
+                self::setDateField('apply_date', date('d.m.Y'), $generator);
             }
             if ($report->base_part->contract->contract_changes->end_date) {
-                $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->end_date)));
+                self::setDateField('end_date', $report->base_part->contract->contract_changes->end_date, $generator);
             } else {
-                $generator->addElement('end_date', date('d.m.Y', strtotime($report->base_part->contract->deal->end_date)));
+                self::setDateField('end_date', $report->base_part->contract->deal->end_date, $generator);
             }
             if ($report->base_part->contract->contract_changes->finish) {
                 $generator->addElement('finish', $report->base_part->contract->contract_changes->finish);
-                if ($report->base_part->contract->contract_changes->finish_date) {
-                    $generator->addElement('finish_date', date('d.m.Y', strtotime($report->base_part->contract->contract_changes->finish_date)));
-                }
+                self::setDateField('finish_date', $report->base_part->contract->contract_changes->finish_date, $generator);
             }
             $generator->addElement('currency_price', $report->base_part->contract->contract_changes->currency_price);
         } else {
@@ -784,4 +823,125 @@ trait Partitions
         }
         $generator->closeElement();
     }
+
+    /**
+     * Сведения о судебном споре или требовании по обязательству
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    public static function court(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('court', [], 'Сведения о судебном споре или требовании по обязательству');
+        if ($report->base_part->court->litigation) {
+            $generator->addElement('sign', 0);
+        }
+        if ($report->base_part->court->dispute_case && !$report->base_part->court->litigation) {
+            $generator->addElement('dispute_case', 0);
+        }
+        if (!$report->base_part->court->dispute_case && !$report->base_part->court->litigation) {
+            $generator->startElement('court_act', [], 'Сведения о судебном акте');
+            self::setDateField('date', $report->base_part->court->court_act->date, $generator);
+            $generator->addElement('no', $report->base_part->court->court_act->no)
+                ->addElement('resolution', $report->base_part->court->court_act->resolution)
+                ->addElement('accepted', (int)$report->base_part->court->court_act->accepted)
+                ->closeElement();
+        }
+        $generator->closeElement();
+    }
+
+    /**
+     * Сведения о прекращении передачи информации по обязательству
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    public static function stop_load(Report $report, XmlGenerator $generator): void
+    {
+        $generator->startElement('stop_load', [], 'Сведения о прекращении передачи информации по обязательству')
+            ->addElement('code', $report->base_part->contract->stop_load->code);
+        self::setDateField('date', $report->base_part->contract->stop_load->date, $generator);
+        $generator->closeElement();
+    }
+
+    /**
+     * @param Report $report
+     * @param XmlGenerator $generator
+     * @return void
+     * @throws PurchaserException
+     */
+    public static function purchaser(Report $report, XmlGenerator $generator): void
+    {
+        $commercial = false;
+        $private = false;
+        foreach ($report->add_part->purchaser->commercial as $value) {
+            if ($value) {
+                $commercial = true;
+            }
+        }
+        foreach ($report->add_part->purchaser->private as $value) {
+            if ($value) {
+                $private = true;
+            }
+        }
+        $generator->startElement('purchaser', [], 'Сведения о приобретателе прав');
+        if ($commercial) {
+            self::purchaser_commercial($report->add_part->purchaser->commercial, $generator);
+        } elseif ($private) {
+            self::purchaser_private($report->add_part->purchaser->private, $generator);
+        } else {
+            throw new PurchaserException('неопределено одно из свойств ' .
+                '(commercial, private) или определены сразу все свойства. Поведение не допустимо');
+        }
+        $generator->closeElement();
+    }
+
+    /**
+     * @param Commercial $commercial
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    private static function purchaser_commercial(Commercial $commercial, XmlGenerator $generator): void
+    {
+        $generator->startElement('commercial', [], 'Сведения о приобретателе прав - юридическом лице')
+            ->addElement('type', $commercial->type ?: 99)
+            ->addElement('reg_rus', (int)$commercial->reg_rus)
+            ->addElement('fullname', $commercial->fullname)
+            ->addElement('shortname', $commercial->shortname)
+            ->addElement('othername', $commercial->othername)
+            ->addElement('lei', $commercial->lei)
+            ->addElement('ogrn_no', $commercial->ogrn_no)
+            ->addElement('inn_code', $commercial->inn_code ?: 1)
+            ->addElement('inn_no', $commercial->inn_no);
+        self::setDateField('purchase_date', $commercial->purchase_date, $generator);
+        $generator->closeElement();
+    }
+
+    /**
+     * @param PrivatePurchaser $private
+     * @param XmlGenerator $generator
+     * @return void
+     */
+    private static function purchaser_private(PrivatePurchaser $private, XmlGenerator $generator): void
+    {
+        $generator->startElement('private', [], 'Сведения о приобретателе прав - физическом лице')
+            ->addElement('lastname', $private->lastname)
+            ->addElement('firstname', $private->firstname)
+            ->addElement('middlename', $private->middlename);
+        self::setDateField('birthday', $private->birthday, $generator);
+        $generator->addElement('birthplace', $private->birthplace)
+            ->addElement('inn_code', $private->inn_code ?: 1)
+            ->addElement('inn_no', $private->inn_no)
+            ->addElement('snils', $private->snils)
+            ->addElement('doc_type', $private->doc_type ?: 21)
+            ->addElement('doc_type_text', $private->doc_type_text)
+            ->addElement('doc_serial', $private->doc_serial)
+            ->addElement('doc_number', $private->doc_number);
+        self::setDateField('doc_date', $private->doc_date, $generator);
+        $generator->addElement('doc_who', $private->doc_who)
+            ->addElement('doc_department_code', preg_replace('~(\D)~u', '', $private->doc_department_code));
+        self::setDateField('purchase_date', $private->purchase_date, $generator);
+        $generator->closeElement();
+    }
+
 }

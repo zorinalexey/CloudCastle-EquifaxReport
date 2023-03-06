@@ -10,7 +10,7 @@ final class FullCost
      * Полная стоимость кредита (займа) в процентах годовых
      * @var float|null
      */
-    public ?float $percent = null;
+    public ?float $percent = 365;
 
     /**
      * Полная стоимость кредита (займа) в денежном выражении

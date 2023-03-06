@@ -154,6 +154,12 @@ final class Contract
      */
     public ?Collection $collection = null;
 
+    /**
+     * Сведения о прекращении передачи информации по обязательству
+     * @var StopLoad|null
+     */
+    public ?StopLoad $stop_load = null;
+
     public function __construct()
     {
         $this->deal = new Deal();
@@ -175,6 +181,6 @@ final class Contract
         $this->repayment_collateral = new RepaymentCollateral();
         $this->collateral_insce = new CollateralInsce();
         $this->collection = new Collection();
-
+        $this->stop_load = new StopLoad();
     }
 }

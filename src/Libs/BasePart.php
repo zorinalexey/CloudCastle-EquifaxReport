@@ -10,6 +10,7 @@ final class BasePart
     public ?string $ogrnip = null;
     public ?Incapacity $incapacity = null;
     public ?Contract $contract = null;
+    public ?Court $court = null;
 
     public function __construct()
     {
@@ -17,5 +18,6 @@ final class BasePart
         $this->addr_fact = new Address();
         $this->incapacity = new Incapacity();
         $this->contract = new Contract();
+        $this->court = new Court();
     }
 }

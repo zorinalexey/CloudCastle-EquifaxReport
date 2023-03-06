@@ -19,7 +19,7 @@ final class Address
      * Код адреса регистрации
      * @var string|null
      */
-    public ?string $reg_code = null;
+    public ?int $reg_code = null;
     /**
      * @var string|null
      */

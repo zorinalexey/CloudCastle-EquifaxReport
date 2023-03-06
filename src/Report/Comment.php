@@ -15,6 +15,7 @@ final class Comment
      * @var string|null
      */
     public ?string $contract_date = null;
+
     /**
      * Тип договора (сделки)
      * @var string|null
@@ -33,13 +34,29 @@ final class Comment
      */
     public ?string $application_date = null;
 
+    /**
+     * uid (Уникальный идентификатор договора (сделки))
+     * @var string|null
+     */
+    public ?string $contract_no = null;
+
     public function __toString()
     {
-        foreach ($this as $value) {
-            if ($value === null) {
-                return '';
+        $data = [];
+        foreach ($this AS $key => $value){
+            if($value && $key !== 'application_date' && $key !== 'event_date'){
+                $data[$key] = $value;
+            }
+            if($key === 'application_date'){
+                $data[$key] = date('d.m.Y H:i:s', strtotime($value));
+            }
+            if($key === 'event_date'){
+                $data[$key] = date('d.m.Y', strtotime($value));
             }
         }
-        return json_encode($this);
+        if($data){
+            return json_encode((object)$data);
+        }
+        return null;
     }
 }

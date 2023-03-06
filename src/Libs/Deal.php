@@ -73,4 +73,10 @@ final class Deal
      * @var string|null
      */
     public ?string $end_date = null;
+
+    public function __construct()
+    {
+        $this->end_date = date('d.m.Y', strtotime('+30 days'));
+        $this->date = date('d.m.Y');
+    }
 }
