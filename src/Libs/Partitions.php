@@ -190,7 +190,7 @@ trait Partitions
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности')
             ->addElement('code', $report->base_part->incapacity->code);
-        if($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2){
+        if ($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2) {
             self::setDateField('court_decision_date', $report->base_part->incapacity->court_decision_date, $generator);
             $generator->addElement('court_decision_no', $report->base_part->incapacity->court_decision_no)
                 ->addElement('court_name', $report->base_part->incapacity->court_name);
@@ -332,7 +332,7 @@ trait Partitions
             ->addElement('sum', $report->base_part->contract->full_cost->sum);
         if ($report->base_part->contract->deal->end_date) {
             $report->information_part->application->approval_date = $report->base_part->contract->deal->end_date;
-            self::setDateField('date', $report->base_part->contract->full_cost->date?:date('d.m.Y H:i:s'), $generator);
+            self::setDateField('date', $report->base_part->contract->full_cost->date ?: date('d.m.Y H:i:s'), $generator);
         }
         $report->information_part->application->date = $report->base_part->contract->deal->date;
         $report->information_part->application->uid = $report->base_part->contract->uid;
