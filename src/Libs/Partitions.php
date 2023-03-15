@@ -190,7 +190,7 @@ trait Partitions
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности')
             ->addElement('code', $report->base_part->incapacity->code);
-        if ($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2) {
+        if($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2){
             self::setDateField('court_decision_date', $report->base_part->incapacity->court_decision_date, $generator);
             $generator->addElement('court_decision_no', $report->base_part->incapacity->court_decision_no)
                 ->addElement('court_name', $report->base_part->incapacity->court_name);
@@ -229,6 +229,8 @@ trait Partitions
         $generator->startElement('uid')
             ->addElement('id', $report->base_part->contract->uid)
             ->closeElement();
+        $report->information_part->credit->uid = $report->base_part->contract->uid;
+        $report->information_part->application->uid = $report->base_part->contract->uid;
     }
 
     /**
@@ -238,9 +240,6 @@ trait Partitions
      */
     public static function deal(Report $report, XmlGenerator $generator): void
     {
-        if (isset($report->information_part->credit->type) && $report->information_part->credit->type) {
-            $report->base_part->contract->deal->type = $report->information_part->credit->type;
-        }
         $generator->startElement('deal', [], 'Общие сведения о сделке')
             ->addElement('ratio', $report->base_part->contract->deal->ratio);
         if ($report->base_part->contract->deal->date) {
@@ -260,6 +259,13 @@ trait Partitions
             self::setDateField('end_date', $report->base_part->contract->deal->end_date, $generator);
         }
         $generator->closeElement();
+        if(!$report->information_part->application->ratio) {
+            $report->information_part->application->ratio = $report->base_part->contract->deal->ratio;
+        }
+        if($report->base_part->contract->deal->category = 1){
+            $report->information_part->credit->type = $report->base_part->contract->deal->type;
+        }
+        $report->information_part->credit->date = $report->base_part->contract->deal->date;
     }
 
     /**
@@ -332,7 +338,7 @@ trait Partitions
             ->addElement('sum', $report->base_part->contract->full_cost->sum);
         if ($report->base_part->contract->deal->end_date) {
             $report->information_part->application->approval_date = $report->base_part->contract->deal->end_date;
-            self::setDateField('date', $report->base_part->contract->full_cost->date ?: date('d.m.Y H:i:s'), $generator);
+            self::setDateField('date', $report->base_part->contract->full_cost->date?:date('d.m.Y H:i:s'), $generator);
         }
         $report->information_part->application->date = $report->base_part->contract->deal->date;
         $report->information_part->application->uid = $report->base_part->contract->uid;
@@ -349,6 +355,7 @@ trait Partitions
         $generator->startElement('cred_start_debt', [], 'Сведения о передаче финансирования субъекту или возникновения обеспечения исполнения обязательства');
         self::setDateField('date', $report->base_part->contract->cred_start_debt->date, $generator);
         $generator->closeElement();
+        $report->information_part->credit->date = $report->base_part->contract->cred_start_debt->date;
     }
 
     /**
@@ -377,6 +384,7 @@ trait Partitions
                 ->addElement('other_sum', $debt->other_sum)
                 ->addElement('sign_unaccepted_grace_period', $debt->sign_unaccepted_grace_period);
         }
+        $report->base_part->contract->full_cost->sum = $report->base_part->contract->debt->sum;
         $generator->closeElement();
     }
 
@@ -404,6 +412,10 @@ trait Partitions
             $generator->addElement('sum', $debt->sum);
         }
         $generator->closeElement();
+        $report->base_part->contract->average_payment->sum = $report->base_part->contract->debt_current->sum;
+        if(!$report->base_part->contract->average_payment->date){
+            $report->base_part->contract->average_payment->date = $report->base_part->contract->debt_current->date;
+        }
     }
 
     /**
@@ -469,6 +481,9 @@ trait Partitions
             ->addElement('payments_deadline_type', $report->base_part->contract->payments->payments_deadline_type)
             ->addElement('overdue_day', $report->base_part->contract->payments->overdue_day)
             ->closeElement();
+        if($report->base_part->contract->payments->overdue_day >= 90){
+            $report->information_part->credit->sign_90plus = 1;
+        }
     }
 
     /**

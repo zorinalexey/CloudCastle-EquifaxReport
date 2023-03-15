@@ -76,31 +76,27 @@ final class Report
      */
     public static function generate(array $reports, Config $config): string
     {
-            $generator = new XmlGenerator($config);
-            $generator->startDocument();
-            $generator->startElement('fch', ['version' => self::VERSION]);
-            Blocks::head($config, $generator);
-            foreach ($reports as $report) {
-                $inn = new Inn($report->client->inn->no);
-                $snils = new Snils($report->client->snils);
-                if($inn->verify() && $snils->verify()) {
-                    $uidSubject = md5(json_encode($report->client));
-                    if (!isset(self::$subjects_count[$uidSubject])) {
-                        self::$subjects_count[$uidSubject] = true;
-                    }
-                    $generator->startElement('info');
-                    $event = $report->event;
-                    foreach ($event as $key => $value) {
-                        $generator->addAttribute($key, (string)$value);
-                    }
-                    new Title($report->client, $generator);
-                    self::partsGenerate(Events::search($event->event), $report, $generator);
-                    $generator->closeElement();
-                }
+        $generator = new XmlGenerator($config);
+        $generator->startDocument();
+        $generator->startElement('fch', ['version' => self::VERSION]);
+        Blocks::head($config, $generator);
+        foreach ($reports as $report) {
+            $uidSubject = md5(json_encode($report->client));
+            if (!isset(self::$subjects_count[$uidSubject])) {
+                self::$subjects_count[$uidSubject] = true;
             }
-            Blocks::footer($generator);
+            $generator->startElement('info');
+            $event = $report->event;
+            foreach ($event as $key => $value) {
+                $generator->addAttribute($key, (string)$value);
+            }
+            new Title($report->client, $generator);
+            self::partsGenerate(Events::search($event->event), $report, $generator);
             $generator->closeElement();
-            return $generator->get();
+        }
+        Blocks::footer($generator);
+        $generator->closeElement();
+        return $generator->get();
     }
 
     /**

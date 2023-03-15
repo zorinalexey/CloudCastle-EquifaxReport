@@ -7,6 +7,8 @@ namespace CloudCastle\EquifaxReport\Parts;
 use CloudCastle\EquifaxReport\Individual\Client;
 use CloudCastle\EquifaxReport\Individual\Document;
 use CloudCastle\EquifaxReport\XmlGenerator;
+use CluodCastle\Check\Inn\Inn;
+use CluodCastle\Check\Snils\Snils;
 
 /**
  * Класс Title
@@ -113,22 +115,28 @@ final class Title
 
     private function setInn()
     {
-        $code = 2;
-        if ($this->client->inn->code) {
-            $code = 1;
+        $inn = new Inn($this->client->inn->no);
+        if($inn->verify()) {
+            $code = 2;
+            if ($this->client->inn->code) {
+                $code = 1;
+            }
+            $this->generator->startElement('inn')
+                ->addElement('code', $code)
+                ->addElement('no', $this->client->inn->no)
+                ->addElement('ogrnip', $this->client->inn->ogrnIp)
+                ->closeElement();
         }
-        $this->generator->startElement('inn')
-            ->addElement('code', $code)
-            ->addElement('no', $this->client->inn->no)
-            ->addElement('ogrnip', $this->client->inn->ogrnIp)
-            ->closeElement();
     }
 
     private function setSnils()
     {
-        $this->generator->startElement('snils')
-            ->addElement('no', preg_replace('~([^\d])~', '', $this->client->snils))
-            ->closeElement();
+        $snils = new Snils($this->client->snils);
+        if($snils->verify()) {
+            $this->generator->startElement('snils')
+                ->addElement('no', preg_replace('~([^\d])~', '', $this->client->snils))
+                ->closeElement();
+        }
     }
 
 }
