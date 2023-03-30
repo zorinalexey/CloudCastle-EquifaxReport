@@ -67,10 +67,12 @@ trait Partitions
      */
     public static function addr_reg(Report $report, XmlGenerator $generator): void
     {
-        $generator->startElement('addr_reg', [], 'Регистрация физического лица по месту жительства или пребывания')
-            ->addElement('reg_code', $report->base_part->addr_reg->reg_code)
-            ->addElement('index', $report->base_part->addr_reg->index)
-            ->addElement('country', $report->base_part->addr_reg->country)
+        $generator->startElement('addr_reg', [], 'Регистрация физического лица по месту жительства или пребывания');
+        $generator->addElement('reg_code', $report->base_part->addr_reg->reg_code);
+        if ($report->base_part->addr_reg->reg_code !== 3 && $report->base_part->addr_reg->index) {
+            $generator->addElement('index', $report->base_part->addr_reg->index);
+        }
+        $generator->addElement('country', $report->base_part->addr_reg->country)
             ->addElement('country_text', $report->base_part->addr_reg->country_text)
             ->addElement('fias', $report->base_part->addr_reg->fias)
             ->addElement('okato', $report->base_part->addr_reg->okato)
@@ -92,14 +94,16 @@ trait Partitions
      */
     public static function addr_fact(Report $report, XmlGenerator $generator): void
     {
-        $mdReg = md5(print_r(self::getAddr($report->base_part->addr_reg), true));
-        $mdFact = md5(print_r(self::getAddr($report->base_part->addr_fact), true));
+        $mdReg = self::md5Addr($report->base_part->addr_reg);
+        $mdFact = self::md5Addr($report->base_part->addr_fact);
         $generator->startElement('addr_fact', [], 'Фактическое место жительства');
-        if ($mdReg === $mdFact) {
+        if ($mdReg == $mdFact) {
             $generator->addElement('sign', 0);
         } else {
-            $generator->addElement('index', $report->base_part->addr_fact->index)
-                ->addElement('country', $report->base_part->addr_fact->country)
+            if ($report->base_part->addr_reg->index) {
+                $generator->addElement('index', $report->base_part->addr_reg->index);
+            }
+            $generator->addElement('country', $report->base_part->addr_fact->country)
                 ->addElement('country_text', $report->base_part->addr_fact->country_text)
                 ->addElement('fias', $report->base_part->addr_fact->fias)
                 ->addElement('okato', $report->base_part->addr_fact->okato)
@@ -117,21 +121,13 @@ trait Partitions
      * @param Address $addr
      * @return array
      */
-    private static function getAddr(Address $addr): array
+    private static function md5Addr(Address $addr): string
     {
         $data = [];
-        $data[] = $addr->build;
-        $data[] = $addr->index;
-        $data[] = $addr->apartment;
-        $data[] = $addr->block;
-        $data[] = $addr->country;
-        $data[] = $addr->country_text;
-        $data[] = $addr->domain;
-        $data[] = $addr->fias;
-        $data[] = $addr->house;
-        $data[] = $addr->other_statement;
+        $data[] = $addr->okato;
         $data[] = $addr->street;
-        return $data;
+        $data[] = $addr->house;
+        return md5(print_r($data, true));
     }
 
     /**
@@ -190,7 +186,7 @@ trait Partitions
     {
         $generator->startElement('incapacity', [], 'Сведения о дееспособности')
             ->addElement('code', $report->base_part->incapacity->code);
-        if($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2){
+        if ($report->base_part->incapacity->code !== 1 && $report->base_part->incapacity->code !== 2) {
             self::setDateField('court_decision_date', $report->base_part->incapacity->court_decision_date, $generator);
             $generator->addElement('court_decision_no', $report->base_part->incapacity->court_decision_no)
                 ->addElement('court_name', $report->base_part->incapacity->court_name);
@@ -259,10 +255,10 @@ trait Partitions
             self::setDateField('end_date', $report->base_part->contract->deal->end_date, $generator);
         }
         $generator->closeElement();
-        if(!$report->information_part->application->ratio) {
+        if (!$report->information_part->application->ratio) {
             $report->information_part->application->ratio = $report->base_part->contract->deal->ratio;
         }
-        if($report->base_part->contract->deal->category = 1){
+        if ($report->base_part->contract->deal->category = 1) {
             $report->information_part->credit->type = $report->base_part->contract->deal->type;
         }
         $report->information_part->credit->date = $report->base_part->contract->deal->date;
@@ -338,7 +334,7 @@ trait Partitions
             ->addElement('sum', $report->base_part->contract->full_cost->sum);
         if ($report->base_part->contract->deal->end_date) {
             $report->information_part->application->approval_date = $report->base_part->contract->deal->end_date;
-            self::setDateField('date', $report->base_part->contract->full_cost->date?:date('d.m.Y H:i:s'), $generator);
+            self::setDateField('date', $report->base_part->contract->full_cost->date ?: date('d.m.Y H:i:s'), $generator);
         }
         $report->information_part->application->date = $report->base_part->contract->deal->date;
         $report->information_part->application->uid = $report->base_part->contract->uid;
@@ -365,12 +361,13 @@ trait Partitions
      */
     public static function debt(Report $report, XmlGenerator $generator): void
     {
-        $report->base_part->contract->debt->sum = (
-            $report->base_part->contract->debt->op_sum +
-            $report->base_part->contract->debt->other_sum +
-            $report->base_part->contract->debt->percent_sum
-        );
         $debt = $report->base_part->contract->debt;
+        $debt_current = $report->base_part->contract->debt_current;
+        $debt_overdue = $report->base_part->contract->debt_overdue;
+        $debt->op_sum = (float)($debt_current->op_sum + $debt_overdue->op_sum);
+        $debt->percent_sum = (float)($debt_current->percent_sum + $debt_overdue->percent_sum);
+        $debt->other_sum = (float)($debt_current->other_sum + $debt_overdue->other_sum);
+        $debt->sum = (float)($debt->op_sum + $debt->percent_sum + $debt->other_sum);
         $generator->startElement('debt', [], 'Сведения о задолженности');
         if ((int)$debt->sum === 0) {
             $generator->addElement('sign', 0);
@@ -395,12 +392,8 @@ trait Partitions
      */
     public static function debt_current(Report $report, XmlGenerator $generator): void
     {
-        $report->base_part->contract->debt_current->sum = (
-            $report->base_part->contract->debt_current->percent_sum +
-            $report->base_part->contract->debt_current->other_sum +
-            $report->base_part->contract->debt_current->op_sum
-        );
         $debt = $report->base_part->contract->debt_current;
+        $debt->sum = (float)($debt->op_sum + $debt->percent_sum + $debt->other_sum);
         $generator->startElement('debt_current', [], 'Сведения о срочной задолженности');
         if ($debt->sum > 0) {
             self::setDateField('date', $report->base_part->contract->debt_current->date, $generator);
@@ -413,7 +406,7 @@ trait Partitions
         }
         $generator->closeElement();
         $report->base_part->contract->average_payment->sum = $report->base_part->contract->debt_current->sum;
-        if(!$report->base_part->contract->average_payment->date){
+        if (!$report->base_part->contract->average_payment->date) {
             $report->base_part->contract->average_payment->date = $report->base_part->contract->debt_current->date;
         }
     }
@@ -425,15 +418,11 @@ trait Partitions
      */
     public static function debt_overdue(Report $report, XmlGenerator $generator): void
     {
-        $report->base_part->contract->debt_overdue->sum = (
-            $report->base_part->contract->debt_overdue->percent_sum +
-            $report->base_part->contract->debt_overdue->other_sum +
-            $report->base_part->contract->debt_overdue->op_sum
-        );
         $debt = $report->base_part->contract->debt_overdue;
+        $debt->sum = (float)($debt->op_sum + $debt->percent_sum + $debt->other_sum);
         $generator->startElement('debt_overdue', [], 'Сведения о просроченной задолженности');
         if ($debt->sum > 0) {
-            self::setDateField('date', $report->base_part->contract->debt_current->date, $generator);
+            self::setDateField('date', $report->base_part->contract->debt_overdue->date, $generator);
             $generator->addElement('sum', $debt->sum)
                 ->addElement('op_sum', $debt->op_sum)
                 ->addElement('percent_sum', $debt->percent_sum)
@@ -481,7 +470,7 @@ trait Partitions
             ->addElement('payments_deadline_type', $report->base_part->contract->payments->payments_deadline_type)
             ->addElement('overdue_day', $report->base_part->contract->payments->overdue_day)
             ->closeElement();
-        if($report->base_part->contract->payments->overdue_day >= 90){
+        if ($report->base_part->contract->payments->overdue_day >= 90) {
             $report->information_part->credit->sign_90plus = 1;
         }
     }

@@ -52,15 +52,15 @@ final class Title
     {
         $this->generator->startElement('private');
         $this->generator->startElement('name')
-            ->addElement('last', mb_strtoupper((string)$this->client->last))
-            ->addElement('first', mb_strtoupper((string)$this->client->first))
-            ->addElement('middle', mb_strtoupper((string)$this->client->middle))
+            ->addElement('last', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->last)))
+            ->addElement('first', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->first)))
+            ->addElement('middle', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->middle)))
             ->closeElement();
         $this->setDocument($this->client->doc);
         $this->generator->startElement('birth')
-            ->addElement('date', mb_strtoupper((string)$this->client->birthDate))
-            ->addElement('country', mb_strtoupper((string)$this->client->birthCountry))
-            ->addElement('place', mb_strtoupper((string)$this->client->birthPlace))
+            ->addElement('date', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->birthDate)))
+            ->addElement('country', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->birthCountry)))
+            ->addElement('place', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->birthPlace)))
             ->closeElement();
         $this->setHistory();
         $this->setInn();
@@ -71,15 +71,15 @@ final class Title
     private function setDocument(?Document $doc)
     {
         $this->generator->startElement('doc')
-            ->addElement('country', mb_strtoupper((string)$doc->country))
-            ->addElement('country_text', mb_strtoupper((string)$doc->country_text))
-            ->addElement('type', mb_strtoupper((string)$doc->type))
-            ->addElement('type_text', mb_strtoupper((string)$doc->type_text))
-            ->addElement('serial', mb_strtoupper((string)$doc->serial))
-            ->addElement('number', mb_strtoupper((string)$doc->number))
+            ->addElement('country', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->country)))
+            ->addElement('country_text', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->country_text)))
+            ->addElement('type', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->type)))
+            ->addElement('type_text', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->type_text)))
+            ->addElement('serial', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->serial)))
+            ->addElement('number', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->number)))
             ->addElement('date', $doc->date)
-            ->addElement('who', mb_strtoupper((string)$doc->who))
-            ->addElement('department_code', mb_strtoupper((string)$doc->department_code))
+            ->addElement('who', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->who)))
+            ->addElement('department_code', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$doc->department_code)))
             ->addElement('end_date', $doc->end_date)
             ->closeElement();
     }
@@ -103,10 +103,10 @@ final class Title
                 ->closeElement();
         } else {
             $this->generator->startElement('name')
-                ->addElement('last', mb_strtoupper((string)$this->client->history->last))
-                ->addElement('first', mb_strtoupper((string)$this->client->history->first))
-                ->addElement('middle', mb_strtoupper((string)$this->client->history->middle))
-                ->addElement('doc_date', mb_strtoupper((string)$this->client->doc->date))
+                ->addElement('last', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->history->last)))
+                ->addElement('first', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->history->first)))
+                ->addElement('middle', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->history->middle)))
+                ->addElement('doc_date', mb_strtoupper(str_replace(["\n", "\t", "  "], ' ', (string)$this->client->doc->date)))
                 ->closeElement();
             $this->setDocument($this->client->history->doc);
         }
